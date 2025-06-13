@@ -1,17 +1,19 @@
-// lib/firebase.ts
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAZHQriFdHqg5ZeH4QJUQbTprGJbvOsxSY",
-  authDomain: "plataforma-rafael-ia.firebaseapp.com",
-  projectId: "plataforma-rafael-ia",
-  storageBucket: "plataforma-rafael-ia.firebasestorage.app",
-  messagingSenderId: "809509362117",
-  appId: "1:809509362117:web:fca11617f3cb85173b13ac"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// Mantém o usuário logado mesmo após recarregar
+setPersistence(auth, browserLocalPersistence);
 
 export { auth };
