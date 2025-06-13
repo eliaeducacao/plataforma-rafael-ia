@@ -14,16 +14,17 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-
-    // ✅ IMPORTANTE: agora que usamos `src/`, baseUrl deve apontar para ela
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"]
     },
-
     "types": ["next/types/global"],
     "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "src"],
+  "include": [
+    "next-env.d.ts",
+    "src",
+    "src/firebase"
+  ],
   "exclude": ["node_modules"]
 }
