@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/firebaseAdmin'
 
-export async function GET(_request: Request) {
+export async function GET() {
   // 1) Referência ao documento "teste" na coleção "ping"
   const ref = db.collection('ping').doc('teste')
 
