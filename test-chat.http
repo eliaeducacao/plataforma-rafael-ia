@@ -1,0 +1,7 @@
+### Teste de Chat Completion
+POST http://localhost:3010/api/chat
+Content-Type: application/json
+
+{
+  "mensagem": "Olá, tudo bem?"
+}
