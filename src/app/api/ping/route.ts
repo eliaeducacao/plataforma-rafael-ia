@@ -1,14 +1,18 @@
 // src/app/api/ping/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server'
+import { db }           from '@/lib/firebaseAdmin'  // caminho para o arquivo acima
 
-export async function GET(request: Request) {
-  console.log('> PROJECT_ID:', process.env.FIREBASE_PROJECT_ID);
-  console.log('> CLIENT_EMAIL:', process.env.FIREBASE_CLIENT_EMAIL);
-  console.log('> PRIVATE_KEY ok?', !!process.env.FIREBASE_PRIVATE_KEY);
+export async function GET(_request: Request) {
+  // 1) Referência ao documento "teste" na coleção "ping"
+  const ref = db.collection('ping').doc('teste')
 
-  return NextResponse.json({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKeyLoaded: !!process.env.FIREBASE_PRIVATE_KEY,
-  });
+  // 2) Grava um objeto simples com timestamp
+  await ref.set({ ok: true, ts: Date.now() })
+
+  // 3) Lê de volta
+  const snap = await ref.get()
+  const data = snap.data()
+
+  // 4) Retorna JSON para o cliente
+  return NextResponse.json({ success: data })
 }
