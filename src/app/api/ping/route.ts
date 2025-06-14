@@ -1,6 +1,6 @@
 // src/app/api/ping/route.ts
 import { NextResponse } from 'next/server'
-import { db }           from '@/lib/firebaseAdmin'  // caminho para o arquivo acima
+import { db } from '@/lib/firebaseAdmin'
 
 export async function GET(_request: Request) {
   // 1) Referência ao documento "teste" na coleção "ping"
