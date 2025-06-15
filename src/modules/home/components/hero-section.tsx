@@ -16,8 +16,9 @@ const HeroSection = () => {
             </div>
 
             <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight animate-slide-up">
-              A Revolução da Advocacia com
-              <span className="text-primary block">IA Começa Aqui</span>
+              A otimização da sua
+              <span className="text-primary"> rotina jurídica </span>
+              começa aqui
             </h1>
 
             <p
