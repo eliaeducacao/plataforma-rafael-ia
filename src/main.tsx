@@ -5,7 +5,7 @@ import { Route, Switch } from 'wouter';
 
 import './index.css';
 
-import HomePage from './pages/home';
+import HomePage from '@/modules/home/pages/home';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
