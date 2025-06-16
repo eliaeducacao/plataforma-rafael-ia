@@ -3,6 +3,8 @@ import { Button } from '@/shared/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import Logo from './logo';
 
+import { navigate } from 'wouter/use-browser-location';
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -41,7 +43,7 @@ const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" className="text-foreground hover:text-primary">
+            <Button variant="ghost" className="text-foreground hover:text-primary" onClick={() => navigate('/login')}>
               Login
             </Button>
             <Button className="text-primary-foreground">Acessar Biblioteca</Button>
@@ -85,6 +87,7 @@ const Header = () => {
                 <Button
                   variant="ghost"
                   className="text-foreground hover:text-primary justify-start"
+                  onClick={() => navigate('/login')}
                 >
                   Login
                 </Button>
