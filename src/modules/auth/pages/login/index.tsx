@@ -3,8 +3,8 @@ import { useLocation } from 'wouter';
 import { LoginForm } from '@/modules/auth/components/login-form';
 
 export function LoginPage() {
-  const [loading, setLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading] = useState(false);
+  const [isAuthenticated] = useState(false);
   const [, setLocation] = useLocation();
 
   useEffect(() => {

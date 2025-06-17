@@ -1,6 +1,6 @@
 import { z } from "zod/v4-mini";
 
-const envSchema = z.object({
+export const envSchema = z.object({
   VITE_SUPABASE_URL: z.url({
     message: "URL do Supabase inválida"
   }),
@@ -30,6 +30,5 @@ const envSchema = z.object({
     message: "Chave da API OpenAI é obrigatória"
   }),
 });
-
 
 export const env = import.meta.env;
