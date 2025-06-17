@@ -1,13 +1,22 @@
 import { useState } from 'react';
-import { useAuth } from '@/modules/auth/context/auth-context';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
-  const { signIn, loading, error } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signIn(email);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      await console.log(e);
+    } catch (err) {
+      setError('Ocorreu um erro ao enviar o código de acesso');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,4 +56,4 @@ export function LoginForm() {
       </div>
     </div>
   );
-} 
+}

@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { LoginForm } from '@/modules/auth/components/login-form';
-import { useAuth } from '@/modules/auth/context/auth-context';
 
 export function LoginPage() {
-  const { isAuthenticated, loading } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [, setLocation] = useLocation();
 
   useEffect(() => {
@@ -37,4 +37,4 @@ export function LoginPage() {
       </div>
     </div>
   );
-} 
+}
