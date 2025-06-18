@@ -1,4 +1,36 @@
-import type { Department, Report } from "@/modules/chat/types"
+// Definindo os tipos localmente já que não existem em @/modules/chat/types
+interface Department {
+  id: string
+  name: string
+  description: string
+  agents: Agent[]
+}
+
+interface Report {
+  // Definir propriedades conforme necessário
+}
+
+interface Agent {
+  id: string
+  name: string
+  description: string
+  conversations: Conversation[]
+}
+
+interface Conversation {
+  id: string
+  title: string
+  messages: Message[]
+}
+
+interface Message {
+  id: string
+  content: string
+  sender: "user" | "ai"
+  timestamp: string
+  chart?: boolean
+  report?: boolean
+}
 
 export const departments: Department[] = [
   {

@@ -1,4 +1,4 @@
-import { FileText, Scale, Calendar, BookOpen, FileCheck, Brain } from 'lucide-react';
+import { FileText, Scale, Calendar, BookOpen, FileCheck, Brain, } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 
 export const agents = [
@@ -36,7 +36,7 @@ export const agents = [
   },
   {
     icon: FileCheck,
-    name: 'Agente de Contratos',
+    name: 'Agente Contratos',
     specialty: 'Elaboração e Revisão Contratual',
     description:
       'Criação, revisão e análise de contratos com identificação de cláusulas críticas e sugestões',
@@ -52,8 +52,7 @@ export const agents = [
   },
 ];
 
-const AgentLibrary = () => {
-
+function AgentLibrary() {
   return (
     <section id="agentes" className="py-20 bg-background">
       <div className="container mx-auto px-6">
