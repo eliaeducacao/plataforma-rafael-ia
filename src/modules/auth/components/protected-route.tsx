@@ -9,7 +9,7 @@ type ProtectedRouteProps = {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen">
+      <div className="flex h-screen w-screen">
         <AppSidebar />
         <main className="flex-1 overflow-auto">
           {children}
