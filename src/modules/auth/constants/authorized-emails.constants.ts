@@ -1,0 +1,1 @@
+export const AUTHORIZED_EMAILS = ['henriquecostapsilva@gmail.com', 'rafael@lefoco.com.br', 'laires@lefoco.com']
