@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { LoginForm } from '@/modules/auth/components/login-form';
 
-export function LoginPage() {
+export default function LoginPage() {
   const [loading] = useState(false);
   const [isAuthenticated] = useState(false);
   const [, setLocation] = useLocation();
@@ -32,7 +32,7 @@ export function LoginPage() {
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <LoginForm />
       </div>
     </div>
