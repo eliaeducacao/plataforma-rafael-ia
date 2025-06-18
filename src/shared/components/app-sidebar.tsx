@@ -45,12 +45,12 @@ const data = {
     },
     {
       title: "Biblioteca de Agentes",
-      url: "#",
+      url: "/agents",
       icon: IconListDetails,
     },
     {
       title: "Chats",
-      url: "#",
+      url: "/chats",
       icon: IconMessageCircle,
     },
     // {

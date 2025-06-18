@@ -8,6 +8,10 @@ import {
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar"
 
+import { useLocation } from "wouter"
+
+import { cn } from "@/shared/lib/utils"
+
 export function NavMain({
   items,
 }: {
@@ -17,6 +21,8 @@ export function NavMain({
     icon?: Icon
   }[]
 }) {
+  const [location, setLocation] = useLocation()
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -34,7 +40,11 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuButton 
+                tooltip={item.title}
+                onClick={() => setLocation(item.url)}
+                className={cn(item.url === location ? "!bg-primary/10 !text-primary" : "")}
+              >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </SidebarMenuButton>
