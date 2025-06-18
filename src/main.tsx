@@ -10,7 +10,7 @@ import '@/index.css';
 import HomePage from '@/modules/home/pages/home';
 import LoginPage from '@/modules/auth/pages/login';
 import ChatPage from '@/modules/chat/pages';
-import AgentsPage from '@/modules/agents/pages';
+import AgentsPage from '@/modules/agents-library/pages';
 
 import { ProtectedRoute } from '@/modules/auth/components/protected-route';
 import { AuthProvider } from '@/modules/auth/contexts/auth-context';
@@ -29,7 +29,7 @@ createRoot(document.getElementById('root')!).render(
 
         {/* Rotas Privadas */}
         <ProtectedRoute>
-          <Route path="/chat" component={ChatPage}/>
+          <Route path="/chats" component={ChatPage}/>
           <Route path="/agents" component={AgentsPage} />
         </ProtectedRoute>
       </Switch>
