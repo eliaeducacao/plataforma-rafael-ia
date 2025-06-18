@@ -1,57 +1,58 @@
 import { FileText, Scale, Calendar, BookOpen, FileCheck, Brain } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 
+export const agents = [
+  {
+    icon: FileText,
+    name: 'Agente Petições',
+    specialty: 'Especialista em Petições Iniciais',
+    description:
+      'Elaboração de petições iniciais, contestações e demais peças processuais com fundamentação jurídica sólida',
+    features: ['Petições Iniciais', 'Contestações', 'Recursos', 'Fundamentação Legal'],
+  },
+  {
+    icon: Scale,
+    name: 'Agente Civil',
+    specialty: 'Direito Civil e Responsabilidade',
+    description:
+      'Especializado em questões de direito civil, contratos, responsabilidade civil e direitos reais',
+    features: ['Contratos', 'Responsabilidade Civil', 'Direitos Reais', 'Família'],
+  },
+  {
+    icon: Calendar,
+    name: 'Agente de Prazos',
+    specialty: 'Gestão de Prazos Processuais',
+    description:
+      'Controle inteligente de prazos, alertas automáticos e gestão de cronogramas processuais',
+    features: ['Controle de Prazos', 'Alertas', 'Cronogramas', 'Agenda Processual'],
+  },
+  {
+    icon: BookOpen,
+    name: 'Agente Doutrinador',
+    specialty: 'Pesquisa Doutrinária e Legal',
+    description:
+      'Pesquisa especializada em doutrina, jurisprudência e fundamentação teórica para seus casos',
+    features: ['Pesquisa Doutrinária', 'Jurisprudência', 'Fundamentação', 'Citações'],
+  },
+  {
+    icon: FileCheck,
+    name: 'Agente de Contratos',
+    specialty: 'Elaboração e Revisão Contratual',
+    description:
+      'Criação, revisão e análise de contratos com identificação de cláusulas críticas e sugestões',
+    features: ['Elaboração', 'Revisão', 'Análise de Riscos', 'Cláusulas'],
+  },
+  {
+    icon: Brain,
+    name: 'Agente GPT-4 Puro Jurídico',
+    specialty: 'IA Jurídica Avançada',
+    description:
+      'Versão especializada do GPT-4 com treinamento específico em Direito brasileiro e práticas jurídicas',
+    features: ['IA Avançada', 'Direito Brasileiro', 'Análise Complexa', 'Estratégias'],
+  },
+];
+
 const AgentLibrary = () => {
-  const agents = [
-    {
-      icon: FileText,
-      name: 'Agente Petições',
-      specialty: 'Especialista em Petições Iniciais',
-      description:
-        'Elaboração de petições iniciais, contestações e demais peças processuais com fundamentação jurídica sólida',
-      features: ['Petições Iniciais', 'Contestações', 'Recursos', 'Fundamentação Legal'],
-    },
-    {
-      icon: Scale,
-      name: 'Agente Civil',
-      specialty: 'Direito Civil e Responsabilidade',
-      description:
-        'Especializado em questões de direito civil, contratos, responsabilidade civil e direitos reais',
-      features: ['Contratos', 'Responsabilidade Civil', 'Direitos Reais', 'Família'],
-    },
-    {
-      icon: Calendar,
-      name: 'Agente de Prazos',
-      specialty: 'Gestão de Prazos Processuais',
-      description:
-        'Controle inteligente de prazos, alertas automáticos e gestão de cronogramas processuais',
-      features: ['Controle de Prazos', 'Alertas', 'Cronogramas', 'Agenda Processual'],
-    },
-    {
-      icon: BookOpen,
-      name: 'Agente Doutrinador',
-      specialty: 'Pesquisa Doutrinária e Legal',
-      description:
-        'Pesquisa especializada em doutrina, jurisprudência e fundamentação teórica para seus casos',
-      features: ['Pesquisa Doutrinária', 'Jurisprudência', 'Fundamentação', 'Citações'],
-    },
-    {
-      icon: FileCheck,
-      name: 'Agente de Contratos',
-      specialty: 'Elaboração e Revisão Contratual',
-      description:
-        'Criação, revisão e análise de contratos com identificação de cláusulas críticas e sugestões',
-      features: ['Elaboração', 'Revisão', 'Análise de Riscos', 'Cláusulas'],
-    },
-    {
-      icon: Brain,
-      name: 'Agente GPT-4 Puro Jurídico',
-      specialty: 'IA Jurídica Avançada',
-      description:
-        'Versão especializada do GPT-4 com treinamento específico em Direito brasileiro e práticas jurídicas',
-      features: ['IA Avançada', 'Direito Brasileiro', 'Análise Complexa', 'Estratégias'],
-    },
-  ];
 
   return (
     <section id="agentes" className="py-20 bg-background">
