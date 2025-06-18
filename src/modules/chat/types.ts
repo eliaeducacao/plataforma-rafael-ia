@@ -13,6 +13,13 @@ export interface Message {
     messages: Message[]
   }
   
+  export interface Thread {
+    id: string
+    title: string
+    agentId: string
+    messages: Message[]
+  }
+  
   export interface Agent {
     id: string
     name: string
