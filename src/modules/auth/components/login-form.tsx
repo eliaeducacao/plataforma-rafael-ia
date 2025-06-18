@@ -1,57 +1,66 @@
-import { useState } from 'react';
+import { Button } from '@/shared/components/ui/button';
+import { Input } from '@/shared/components/ui/input';
+
+import { Mail } from 'lucide-react';
+
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form';
+import { useAuth } from '@/modules/auth/contexts/auth-context';
+
+const formSchema = z.object({
+  email: z.string().min(1, { message: "O e-mail é obrigatório" }).email({ message: "O e-mail precisa ser válido."})
+})
+
+type FormSchema = z.infer<typeof formSchema>
 
 export function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    
-    try {
-      await console.log(e);
-    } catch (err) {
-      setError('Ocorreu um erro ao enviar o código de acesso');
-    } finally {
-      setLoading(false);
-    }
+  const { handleSubmit, register, formState: { errors }, setError } = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    mode: "onSubmit"
+  })
+
+  const onSubmit = async (data: FormSchema) => {
+    const result = await login(data.email)
+    if (result.ok) return
+
+    setError('email', { message: "Esse não é um e-mail de estudante."})
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+    <div className="w-full max-w-md mx-auto p-4">
+      <div className="bg-white h-lg rounded-lg shadow-md p-4 space-y-3">
+        <form onSubmit={handleSubmit(onSubmit, (e) => console.log(e) )}>
+          <div className="space-y-2 mb-1">
+            <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Email
             </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              required
-            />
+            <div className="relative">
+              <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="email"
+                id="email"
+                className="pl-9"
+                placeholder="seuemail@email.com"
+                {...register('email')}
+              />
+            </div>
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm">
-              {error}
+          {errors.email && (
+            <div className="text-xs text-destructive mb-2">
+              {errors.email.message}
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
-            disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="w-full"
           >
-            {loading ? 'Enviando...' : 'Enviar código de acesso'}
-          </button>
+            Entre no sistema
+          </Button>
         </form>
       </div>
     </div>
