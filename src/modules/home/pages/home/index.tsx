@@ -9,7 +9,7 @@ import FAQ from '@/modules/home/components/faq';
 import CTASection from '@/modules/home/components/cta-section';
 import Footer from '@/modules/home/components/footer';
 
-function HomePage() {
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -25,5 +25,3 @@ function HomePage() {
     </div>
   );
 }
-
-export default HomePage;
