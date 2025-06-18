@@ -6,12 +6,15 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/shared/components/ui/breadcrumb"
+import { useLocation } from "wouter"
 
 interface BreadcrumbProps {
   agentName: string
 }
 
 export default function ChatBreadcrumb({ agentName }: BreadcrumbProps) {
+  const [, setLocation] = useLocation()
+
   return (
     <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
@@ -19,7 +22,7 @@ export default function ChatBreadcrumb({ agentName }: BreadcrumbProps) {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink className="font-medium text-primary text-sm sm:text-base truncate">
+                <BreadcrumbLink className="font-medium text-primary text-sm sm:text-base hover:cursor-pointer truncate" onClick={() => setLocation('/agents')}>
                   {agentName}
                 </BreadcrumbLink>
               </BreadcrumbItem>

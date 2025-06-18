@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react"
 import type { Thread } from "../types"
 import { Button } from "@/shared/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card"
+import { CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Separator } from "@/shared/components/ui/separator"
 import { cn } from "@/shared/lib/utils"
 
@@ -12,11 +12,11 @@ interface SidebarProps {
   onNewConversation: () => void
 }
 
-export default function Sidebar({ 
-  threads, 
-  selectedThreadId, 
-  onSelectThread, 
-  onNewConversation 
+export default function Sidebar({
+  threads,
+  selectedThreadId,
+  onSelectThread,
+  onNewConversation
 }: SidebarProps) {
   return (
     <div className="w-80 bg-background border-r flex flex-col min-h-0 flex-shrink-0">
@@ -43,7 +43,7 @@ export default function Sidebar({
               <div className="flex flex-col items-start space-y-1 w-full min-w-0">
                 <div className="font-medium truncate w-full text-sm sm:text-base">{thread.title}</div>
                 <div className="text-xs text-muted-foreground truncate w-full">
-                  {thread.messages.length > 0 
+                  {thread.messages.length > 0
                     ? `${thread.messages.length} mensagens`
                     : "Conversa vazia"
                   }

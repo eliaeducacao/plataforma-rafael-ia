@@ -55,9 +55,9 @@ export default function ChatWindow({ thread, agent, onUpdateThread }: ChatWindow
       id: Date.now().toString(),
       content,
       sender: "user",
-      timestamp: new Date().toLocaleTimeString("pt-BR", { 
-        hour: "2-digit", 
-        minute: "2-digit" 
+      timestamp: new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
       })
     }
 
@@ -66,16 +66,16 @@ export default function ChatWindow({ thread, agent, onUpdateThread }: ChatWindow
       id: (Date.now() + 1).toString(),
       content: generateMockResponse(content, agent.name),
       sender: "ai",
-      timestamp: new Date().toLocaleTimeString("pt-BR", { 
-        hour: "2-digit", 
-        minute: "2-digit" 
+      timestamp: new Date().toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit"
       })
     }
 
     // Atualizar mensagens localmente
     const newMessages = [...localMessages, userMessage]
     setLocalMessages(newMessages)
-    
+
     // TODO: Futura integração com API OpenAI - enviar mensagem real
     console.log("Mensagem enviada:", content)
     console.log("Thread ID:", thread.id)
@@ -85,7 +85,7 @@ export default function ChatWindow({ thread, agent, onUpdateThread }: ChatWindow
     setTimeout(() => {
       const finalMessages = [...newMessages, aiMessage]
       setLocalMessages(finalMessages)
-      
+
       // Notificar o componente pai sobre a atualização
       if (onUpdateThread) {
         onUpdateThread(thread.id, finalMessages)
@@ -132,7 +132,7 @@ export default function ChatWindow({ thread, agent, onUpdateThread }: ChatWindow
 }
 
 // Função para gerar respostas mockadas baseadas no agente
-function generateMockResponse(userMessage: string, agentName: string): string {
+function generateMockResponse(_userMessage: string, agentName: string): string {
   const responses = {
     "Agente de Advocacia": [
       "Entendo sua questão jurídica. Vou analisar os aspectos legais relevantes e fornecer orientações adequadas.",
