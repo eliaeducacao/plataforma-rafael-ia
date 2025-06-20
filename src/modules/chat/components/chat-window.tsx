@@ -1,43 +1,40 @@
-import { useEffect, useRef, useState } from "react"
+import { RefObject } from "react"
 import ChatBreadcrumb from "./breadcrumb"
 import Message from "./message"
 import NewMessageInput from "./new-message-input"
 import type { Chat, Message as MessageType } from "../types"
 
 interface ChatWindowProps {
+  // Dados
   chat?: Chat | null
-  message?: MessageType
+  localMessages: MessageType[]
+  messagesEndRef: RefObject<HTMLDivElement | null>
+
+  // Handlers
   onUpdateChat?: (threadId: string, messages: MessageType[]) => void
+
+  // Props para o input
+  messageInput: string
+  onMessageInputChange: (value: string) => void
+  onSubmitMessage: (e: React.FormEvent) => void
+  onKeyPress: (e: React.KeyboardEvent) => void
+  onInputResize: (e: React.FormEvent<HTMLTextAreaElement>) => void
+
+  // Props para navegação
+  onNavigateToAgents: () => void
 }
 
-export function ChatWindow({ chat, message, onUpdateChat }: ChatWindowProps) {
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const [localMessages, setLocalMessages] = useState<MessageType[]>([])
-
-  // Sincronizar mensagens locais com a thread atual
-  useEffect(() => {
-    if (message) {
-      setLocalMessages((prev) => [...prev, message])
-    } else {
-      setLocalMessages([])
-    }
-  }, [message])
-
-  // Scroll automático até o final da conversa
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [localMessages])
-
-  // Reset scroll position quando mudamos de thread
-  useEffect(() => {
-    if (chat) {
-      // Pequeno delay para garantir que as mensagens foram renderizadas
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "auto" })
-      }, 100)
-    }
-  }, [chat?._id, chat])
-
+export function ChatWindow({
+  chat,
+  localMessages,
+  messagesEndRef,
+  messageInput,
+  onMessageInputChange,
+  onSubmitMessage,
+  onKeyPress,
+  onInputResize,
+  onNavigateToAgents
+}: ChatWindowProps) {
   if (!chat) {
     return (
       <div className="flex-1 flex items-center justify-center bg-background h-full w-full overflow-hidden">
@@ -49,44 +46,14 @@ export function ChatWindow({ chat, message, onUpdateChat }: ChatWindowProps) {
     )
   }
 
-  const handleSendMessage = (content: string) => {
-    // Criar mensagem do usuário
-    const userMessage: MessageType = {
-      message: content,
-      role: "human",
-    }
-
-    // TODO: Fazer a chamada API https://api.eliaeducacao.com.br/webhook/3667f47c-418a-41c7-98ae-3f97d6468e84/api/v1/chats/:chat_id/messages e pegar o campo output para definir a mensagem da IA
-
-    // Simular resposta do agente após um delay
-    const aiMessage: MessageType = {
-      message: content +
-        " messagem de ia",
-      role: "ai",
-    }
-
-    // Atualizar mensagens localmente
-    const newMessages = [...localMessages, userMessage]
-    setLocalMessages(newMessages)
-
-
-    // Simular delay da resposta da IA
-    setTimeout(() => {
-      const finalMessages = [...newMessages, aiMessage]
-      setLocalMessages(finalMessages)
-
-      // Notificar o componente pai sobre a atualização
-      if (onUpdateChat) {
-        onUpdateChat(chat._id, finalMessages)
-      }
-    }, 1000)
-  }
-
   return (
     <div className="flex-1 flex flex-col bg-background h-full w-full overflow-hidden">
       {/* Breadcrumb */}
       <header className="flex-shrink-0 w-full border-b">
-        <ChatBreadcrumb agentName={"Agentes"} />
+        <ChatBreadcrumb
+          agentName="Agentes"
+          onNavigateToAgents={onNavigateToAgents}
+        />
       </header>
 
       {/* Área de mensagens */}
@@ -114,7 +81,13 @@ export function ChatWindow({ chat, message, onUpdateChat }: ChatWindowProps) {
 
       {/* Input de nova mensagem */}
       <footer className="flex-shrink-0 w-full border-t">
-        <NewMessageInput onSendMessage={handleSendMessage} />
+        <NewMessageInput
+          value={messageInput}
+          onChange={onMessageInputChange}
+          onSubmit={onSubmitMessage}
+          onKeyPress={onKeyPress}
+          onInputResize={onInputResize}
+        />
       </footer>
     </div>
   )

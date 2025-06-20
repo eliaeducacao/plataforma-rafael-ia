@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { ChevronLeft, MessageSquare, User, X } from "lucide-react"
 import type { Agent } from "@/modules/chat/types"
 import {
@@ -16,13 +15,21 @@ import { Button } from "@/shared/components/ui/button"
 
 interface ConversationSidebarProps {
   agent: Agent | null
+  newConversationMode: boolean
   onBack: () => void
   onSelectConversation: (agent: Agent, conversationId: string) => void
+  onNewConversationMode: (mode: boolean) => void
+  onStartNewConversation: () => void
 }
 
-export default function ConversationSidebar({ agent, onBack, onSelectConversation }: ConversationSidebarProps) {
-  const [newConversationMode, setNewConversationMode] = useState(false)
-
+export default function ConversationSidebar({
+  agent,
+  newConversationMode,
+  onBack,
+  onSelectConversation,
+  onNewConversationMode,
+  onStartNewConversation
+}: ConversationSidebarProps) {
   if (!agent) {
     return (
       <Sidebar>
@@ -33,16 +40,6 @@ export default function ConversationSidebar({ agent, onBack, onSelectConversatio
         </SidebarHeader>
       </Sidebar>
     )
-  }
-
-  const handleNewConversation = () => {
-    // Criar uma nova conversa com ID temporário
-    const newAgent = {
-      ...agent,
-      activeConversation: undefined,
-    }
-    onSelectConversation(newAgent, "new")
-    setNewConversationMode(false)
   }
 
   return (
@@ -61,7 +58,7 @@ export default function ConversationSidebar({ agent, onBack, onSelectConversatio
       </SidebarHeader>
       <SidebarContent>
         <div className="px-3 py-2">
-          <Button variant="outline" className="w-full mb-3" onClick={() => setNewConversationMode(true)}>
+          <Button variant="outline" className="w-full mb-3" onClick={() => onNewConversationMode(true)}>
             <MessageSquare className="mr-2 h-4 w-4" />
             Nova conversa
           </Button>
@@ -70,11 +67,11 @@ export default function ConversationSidebar({ agent, onBack, onSelectConversatio
             <div className="mb-3 p-3 border rounded-md">
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-sm font-medium">Nova conversa</h3>
-                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setNewConversationMode(false)}>
+                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onNewConversationMode(false)}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <Button className="w-full" onClick={handleNewConversation}>
+              <Button className="w-full" onClick={onStartNewConversation}>
                 Iniciar
               </Button>
             </div>

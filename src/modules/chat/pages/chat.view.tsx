@@ -2,11 +2,26 @@ import { useChatModel } from "./chat.model"
 import { ChatWindow } from "../components/chat-window"
 import { Sidebar } from "../components/sidebar"
 import { Button } from "@/shared/components/ui/button"
-import { useLocation } from "wouter"
 
 export function ChatView(props: ReturnType<typeof useChatModel>) {
-  const { chats, selectedChatId, handleNewConversation, handleSelectChat, selectedChat, handleUpdateThread, messages, selectedAgentId } = props
-  const [, setLocation] = useLocation()
+  const {
+    chats,
+    selectedChatId,
+    handleNewConversation,
+    handleSelectChat,
+    selectedChat,
+    handleUpdateThread,
+    messages,
+    selectedAgentId,
+    localMessages,
+    messagesEndRef,
+    messageInput,
+    handleMessageInputChange,
+    handleSubmitMessage,
+    handleKeyPress,
+    handleInputResize,
+    handleNavigateToAgents
+  } = props
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
@@ -24,6 +39,14 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
           <ChatWindow
             key={selectedChatId} // Force re-render quando mudamos de thread
             chat={selectedChat}
+            localMessages={localMessages}
+            messagesEndRef={messagesEndRef}
+            messageInput={messageInput}
+            onMessageInputChange={handleMessageInputChange}
+            onSubmitMessage={handleSubmitMessage}
+            onKeyPress={handleKeyPress}
+            onInputResize={handleInputResize}
+            onNavigateToAgents={handleNavigateToAgents}
             onUpdateChat={handleUpdateThread}
           />
         </>
@@ -34,7 +57,7 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
             <p className="text-muted-foreground text-sm sm:text-base mb-4">
               Você precisa selecionar um agente antes de iniciar uma conversa.
             </p>
-            <Button onClick={() => setLocation('/agents')} className="w-full sm:w-auto">
+            <Button onClick={handleNavigateToAgents} className="w-full sm:w-auto">
               Voltar para Agentes
             </Button>
           </div>
