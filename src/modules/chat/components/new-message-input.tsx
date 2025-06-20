@@ -8,6 +8,7 @@ interface NewMessageInputProps {
   onSubmit: (e: React.FormEvent) => void
   onKeyPress: (e: React.KeyboardEvent) => void
   onInputResize: (e: React.FormEvent<HTMLTextAreaElement>) => void
+  disabled?: boolean
 }
 
 export default function NewMessageInput({
@@ -15,7 +16,8 @@ export default function NewMessageInput({
   onChange,
   onSubmit,
   onKeyPress,
-  onInputResize
+  onInputResize,
+  disabled = false
 }: NewMessageInputProps) {
   return (
     <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
@@ -31,12 +33,13 @@ export default function NewMessageInput({
                 placeholder="Digite sua mensagem aqui..."
                 className="min-h-[40px] sm:min-h-[44px] resize-none w-full"
                 rows={1}
+                disabled={disabled}
               />
             </div>
 
             <Button
               type="submit"
-              disabled={!value.trim()}
+              disabled={!value.trim() || disabled}
               size="icon"
               className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
             >

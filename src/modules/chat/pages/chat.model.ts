@@ -1,12 +1,73 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { api } from '@/shared/lib/axios';
 import type { Message, Chat } from '../types';
 import { useSessionStorage } from '@uidotdev/usehooks';
 
-export function useChatModel() {
+// Tipos para as respostas da API
+interface CreateChatRequest {
+  title: string;
+}
+
+interface SendMessageRequest {
+  message: string;
+}
+
+// Funções de API
+const chatApi = {
+  // Criar Chat
+  createChat: async (agentId: string, data: CreateChatRequest): Promise<Chat> => {
+    const response = await api.post(
+      `/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/agents/${agentId}/chats`,
+      data
+    );
+    return response.data;
+  },
+
+  // Listar Chats de um Agente
+  getChats: async (agentId: string): Promise<Chat[]> => {
+    const response = await api.get(
+      `/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/agents/${agentId}/chats`
+    );
+    return response.data;
+  },
+
+  // Listar Mensagens de um Chat
+  getMessages: async (chatId: string): Promise<Message[]> => {
+    const response = await api.get(
+      `/webhook/8d782de6-243e-41c3-a955-8a8682d4a565/api/v1/chats/${chatId}/messages`
+    );
+    return response.data;
+  },
+
+  // Enviar Mensagem para um Chat (multipart/form-data)
+  sendMessage: async (chatId: string, data: SendMessageRequest): Promise<Message> => {
+    const formData = new FormData();
+    formData.append('message', data.message);
+
+    const response = await api.post(
+      `/webhook/3667f47c-418a-41c7-98ae-3f97d6468e84/api/v1/chats/${chatId}/messages`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
+};
+
+interface UseChatModelProps {
+  agentId?: string;
+  chatId?: string;
+}
+
+export function useChatModel(props: UseChatModelProps = {}) {
+  const queryClient = useQueryClient();
+
   // Estados principais
-  const [chats, setChats] = useState<Chat[] | null>(null);
-  const [messages, setMessages] = useState<Message[] | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [selectedAgentId] = useSessionStorage<string>('x-selected-agent-id', '');
 
@@ -26,18 +87,94 @@ export function useChatModel() {
   // Refs para scroll
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Chat selecionado
-  const selectedChat =
-    chats !== null ? chats.find((chat: Chat) => chat._id === selectedChatId) : null;
+  // Determinar IDs ativos
+  const activeAgentId = props.agentId || selectedAgentId.replace(/"/g, '');
+  const activeChatId = props.chatId || selectedChatId;
 
-  // Efeito para sincronizar mensagens locais
+  // React Query - Listar Chats
+  const {
+    data: chatsData,
+    isLoading: isLoadingChats,
+    error: chatsError,
+    refetch: refetchChats,
+  } = useQuery({
+    queryKey: ['chats', activeAgentId],
+    queryFn: () => chatApi.getChats(activeAgentId),
+    enabled: !!activeAgentId,
+  });
+
+  // Garantir que chats sempre seja um array
+  const chats = Array.isArray(chatsData) ? chatsData : [];
+
+  // React Query - Listar Mensagens
+  const {
+    data: messagesData,
+    isLoading: isLoadingMessages,
+    error: messagesError,
+    refetch: refetchMessages,
+  } = useQuery({
+    queryKey: ['messages', activeChatId],
+    queryFn: () => chatApi.getMessages(activeChatId!),
+    enabled: !!activeChatId,
+  });
+
+  // Garantir que messages sempre seja um array
+  const messages = Array.isArray(messagesData) ? messagesData : [];
+
+  // React Query - Criar Chat
+  const createChatMutation = useMutation({
+    mutationFn: ({ agentId, title }: { agentId: string; title: string }) =>
+      chatApi.createChat(agentId, { title }),
+    onSuccess: newChat => {
+      // Atualizar cache local
+      queryClient.setQueryData(['chats', activeAgentId], (oldChats: Chat[] | undefined) => {
+        const currentChats = Array.isArray(oldChats) ? oldChats : [];
+        return [...currentChats, newChat];
+      });
+
+      // Selecionar o novo chat
+      setSelectedChatId(newChat._id);
+      setCurrentMessage(undefined);
+      setLocalMessages([]);
+    },
+    onError: error => {
+      console.error('Erro ao criar chat:', error);
+    },
+  });
+
+  // React Query - Enviar Mensagem
+  const sendMessageMutation = useMutation({
+    mutationFn: ({ chatId, message }: { chatId: string; message: string }) =>
+      chatApi.sendMessage(chatId, { message }),
+    onSuccess: newMessage => {
+      // Atualizar cache local de mensagens
+      queryClient.setQueryData(['messages', activeChatId], (oldMessages: Message[] | undefined) => {
+        const currentMessages = Array.isArray(oldMessages) ? oldMessages : [];
+        return [...currentMessages, newMessage];
+      });
+
+      // Atualizar mensagens locais
+      setLocalMessages(prev => [...prev, newMessage]);
+
+      // Limpar input
+      setMessageInput('');
+    },
+    onError: error => {
+      console.error('Erro ao enviar mensagem:', error);
+    },
+  });
+
+  // Chat selecionado
+  const selectedChat = chats.find((chat: Chat) => chat._id === selectedChatId) || null;
+
+  // Efeito para sincronizar mensagens locais com as mensagens da API
   useEffect(() => {
-    if (currentMessage) {
-      setLocalMessages(prev => [...prev, currentMessage]);
+    if (messages.length > 0) {
+      setLocalMessages(messages);
     } else {
       setLocalMessages([]);
     }
-  }, [currentMessage]);
+  }, [messages]);
 
   // Efeito para scroll automático
   useEffect(() => {
@@ -56,35 +193,22 @@ export function useChatModel() {
   // Handlers principais
   const handleSelectChat = (chatId: string) => {
     setSelectedChatId(chatId);
-    setCurrentMessage(undefined); // Reset mensagem atual
-    setLocalMessages([]); // Reset mensagens locais
+    setCurrentMessage(undefined);
   };
 
   const handleNewConversation = () => {
-    const newChat: Chat = {
-      _id: `temp-${Date.now()}`,
-      title: `Chat ${chats ? chats.length + 1 : 1}`,
-      user_id: 'temp-user',
-      agent_id: selectedAgentId.replace(/"/g, ''),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
+    if (!activeAgentId) return;
 
-    setChats((prev: Chat[] | null) => {
-      if (prev === null) return [newChat];
-      return [...prev, newChat];
+    const title = `Chat ${chats.length + 1}`;
+    createChatMutation.mutate({
+      agentId: activeAgentId,
+      title,
     });
-
-    setSelectedChatId(newChat._id);
-    setCurrentMessage(undefined);
-    setLocalMessages([]);
   };
 
   const handleUpdateThread = (chatId: string, messages: Message[]) => {
-    setChats((prev: Chat[] | null) => {
-      if (prev === null) return null;
-      return prev.map((chat: Chat) => (chat._id === chatId ? { ...chat, messages } : chat));
-    });
+    // Atualizar cache local
+    queryClient.setQueryData(['messages', chatId], messages);
   };
 
   // Handlers para input de mensagem
@@ -93,37 +217,22 @@ export function useChatModel() {
   };
 
   const handleSendMessage = (content: string) => {
-    if (!selectedChat) return;
+    if (!selectedChat || !content.trim()) return;
 
-    // Criar mensagem do usuário
-    const userMessage: Message = {
-      message: content,
+    // Criar mensagem temporária do usuário para feedback imediato
+    const tempUserMessage: Message = {
+      message: content.trim(),
       role: 'human',
     };
 
-    // TODO: Fazer a chamada API https://api.eliaeducacao.com.br/webhook/3667f47c-418a-41c7-98ae-3f97d6468e84/api/v1/chats/:chat_id/messages e pegar o campo output para definir a mensagem da IA
+    // Adicionar mensagem temporária às mensagens locais
+    setLocalMessages(prev => [...prev, tempUserMessage]);
 
-    // Simular resposta do agente após um delay
-    const aiMessage: Message = {
-      message: content + ' messagem de ia',
-      role: 'ai',
-    };
-
-    // Atualizar mensagens localmente
-    const newMessages = [...localMessages, userMessage];
-    setLocalMessages(newMessages);
-
-    // Limpar input
-    setMessageInput('');
-
-    // Simular delay da resposta da IA
-    setTimeout(() => {
-      const finalMessages = [...newMessages, aiMessage];
-      setLocalMessages(finalMessages);
-
-      // Notificar sobre a atualização
-      handleUpdateThread(selectedChat._id, finalMessages);
-    }, 1000);
+    // Enviar mensagem via API
+    sendMessageMutation.mutate({
+      chatId: selectedChat._id,
+      message: content.trim(),
+    });
   };
 
   const handleSubmitMessage = (e: React.FormEvent) => {
@@ -146,7 +255,7 @@ export function useChatModel() {
     target.style.height = `${Math.min(target.scrollHeight, 200)}px`;
   };
 
-  // Handlers de navegação
+  // Handlers para navegação
   const handleNavigateToAgents = () => {
     setLocation('/agents');
   };
@@ -155,7 +264,7 @@ export function useChatModel() {
     // Implementar lógica de voltar se necessário
   };
 
-  // Handlers da sidebar de conversas
+  // Handlers para sidebar de conversas
   const handleSelectConversation = (agent: unknown, conversationId: string) => {
     return { agent, conversationId };
   };
@@ -174,7 +283,7 @@ export function useChatModel() {
     chats,
     selectedChatId,
     selectedChat,
-    selectedAgentId: selectedAgentId.replace(/"/g, ''),
+    selectedAgentId: activeAgentId,
     messages,
 
     // Estados do chat window
@@ -188,11 +297,18 @@ export function useChatModel() {
     // Estados da sidebar de conversas
     newConversationMode,
 
+    // Estados de loading e error
+    isLoadingChats,
+    isLoadingMessages,
+    chatsError,
+    messagesError,
+    isCreatingChat: createChatMutation.isPending,
+    isSendingMessage: sendMessageMutation.isPending,
+
     // Handlers principais
     handleSelectChat,
     handleNewConversation,
     handleUpdateThread,
-    setMessages,
 
     // Handlers do input
     handleMessageInputChange,
@@ -209,5 +325,12 @@ export function useChatModel() {
     handleSelectConversation,
     handleNewConversationMode,
     handleStartNewConversation,
+
+    // Métodos de API (para uso direto se necessário)
+    createChat: (agentId: string, title: string) => createChatMutation.mutate({ agentId, title }),
+    sendMessage: (chatId: string, message: string) =>
+      sendMessageMutation.mutate({ chatId, message }),
+    refetchChats,
+    refetchMessages,
   };
 }

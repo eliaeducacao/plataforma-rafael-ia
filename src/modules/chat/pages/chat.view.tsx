@@ -2,6 +2,8 @@ import { useChatModel } from "./chat.model"
 import { ChatWindow } from "../components/chat-window"
 import { Sidebar } from "../components/sidebar"
 import { Button } from "@/shared/components/ui/button"
+import { Skeleton } from "@/shared/components/ui/skeleton"
+import { Alert, AlertDescription } from "@/shared/components/ui/alert"
 
 export function ChatView(props: ReturnType<typeof useChatModel>) {
   const {
@@ -20,21 +22,62 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
     handleSubmitMessage,
     handleKeyPress,
     handleInputResize,
-    handleNavigateToAgents
+    handleNavigateToAgents,
+    isLoadingChats,
+    isLoadingMessages,
+    chatsError,
+    messagesError,
+    isCreatingChat,
+    isSendingMessage
   } = props
+
+  // Loading skeleton para a sidebar
+  const SidebarSkeleton = () => (
+    <div className="w-80 bg-background border-r flex flex-col min-h-0 flex-shrink-0 p-4">
+      <Skeleton className="h-8 w-32 mb-4" />
+      <div className="space-y-2">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-16 w-full" />
+        ))}
+      </div>
+    </div>
+  )
+
+  // Error state para chats
+  if (chatsError) {
+    return (
+      <div className="flex h-screen w-full bg-background overflow-hidden items-center justify-center">
+        <div className="max-w-md mx-auto p-4">
+          <Alert variant="destructive">
+            <AlertDescription>
+              Erro ao carregar chats. Tente novamente.
+            </AlertDescription>
+          </Alert>
+          <Button onClick={handleNavigateToAgents} className="w-full mt-4">
+            Voltar para Agentes
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
       {/* Sidebar - Lista de threads */}
       {selectedAgentId ? (
         <>
-          <Sidebar
-            chats={chats}
-            messages={messages}
-            selectedChatId={selectedChatId}
-            onSelectChat={handleSelectChat}
-            onNewConversation={handleNewConversation}
-          />
+          {isLoadingChats ? (
+            <SidebarSkeleton />
+          ) : (
+            <Sidebar
+              chats={chats}
+              messages={messages}
+              selectedChatId={selectedChatId}
+              onSelectChat={handleSelectChat}
+              onNewConversation={handleNewConversation}
+              isCreatingChat={isCreatingChat}
+            />
+          )}
 
           <ChatWindow
             key={selectedChatId} // Force re-render quando mudamos de thread
@@ -48,6 +91,9 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
             onInputResize={handleInputResize}
             onNavigateToAgents={handleNavigateToAgents}
             onUpdateChat={handleUpdateThread}
+            isLoadingMessages={isLoadingMessages}
+            messagesError={messagesError}
+            isSendingMessage={isSendingMessage}
           />
         </>
       ) : (
