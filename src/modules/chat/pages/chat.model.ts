@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useLocation } from 'wouter';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/lib/axios';
@@ -67,29 +67,28 @@ interface UseChatModelProps {
 export function useChatModel(props: UseChatModelProps = {}) {
   const queryClient = useQueryClient();
 
-  // Estados principais
+  // Estados principais - apenas os essenciais
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [selectedAgentId] = useSessionStorage<string>('x-selected-agent-id', '');
-
-  // Estados para o chat window
-  const [localMessages, setLocalMessages] = useState<Message[]>([]);
-  const [currentMessage, setCurrentMessage] = useState<Message | undefined>(undefined);
-
-  // Estados para input de mensagem
   const [messageInput, setMessageInput] = useState('');
-
-  // Estados para sidebar de conversas
   const [newConversationMode, setNewConversationMode] = useState(false);
 
   // Navegação
   const [, setLocation] = useLocation();
 
-  // Refs para scroll
+  // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Determinar IDs ativos
-  const activeAgentId = props.agentId || selectedAgentId.replace(/"/g, '');
-  const activeChatId = props.chatId || selectedChatId;
+  // Determinar IDs ativos - useMemo para evitar recalcular constantemente
+  const activeAgentId = useMemo(
+    () => props.agentId || selectedAgentId.replace(/"/g, ''),
+    [props.agentId, selectedAgentId]
+  );
+
+  const activeChatId = useMemo(
+    () => props.chatId || selectedChatId,
+    [props.chatId, selectedChatId]
+  );
 
   // React Query - Listar Chats
   const {
@@ -103,9 +102,6 @@ export function useChatModel(props: UseChatModelProps = {}) {
     enabled: !!activeAgentId,
   });
 
-  // Garantir que chats sempre seja um array
-  const chats = Array.isArray(chatsData) ? chatsData : [];
-
   // React Query - Listar Mensagens
   const {
     data: messagesData,
@@ -118,8 +114,16 @@ export function useChatModel(props: UseChatModelProps = {}) {
     enabled: !!activeChatId,
   });
 
-  // Garantir que messages sempre seja um array
-  const messages = Array.isArray(messagesData) ? messagesData : [];
+  // Garantir que sempre sejam arrays - useMemo para evitar recriação
+  const chats = useMemo(() => (Array.isArray(chatsData) ? chatsData : []), [chatsData]);
+
+  const messages = useMemo(() => (Array.isArray(messagesData) ? messagesData : []), [messagesData]);
+
+  // Chat selecionado - useMemo para evitar recálculo desnecessário
+  const selectedChat = useMemo(
+    () => chats.find((chat: Chat) => chat._id === selectedChatId) || null,
+    [chats, selectedChatId]
+  );
 
   // React Query - Criar Chat
   const createChatMutation = useMutation({
@@ -134,8 +138,6 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
       // Selecionar o novo chat
       setSelectedChatId(newChat._id);
-      setCurrentMessage(undefined);
-      setLocalMessages([]);
     },
     onError: error => {
       console.error('Erro ao criar chat:', error);
@@ -153,9 +155,6 @@ export function useChatModel(props: UseChatModelProps = {}) {
         return [...currentMessages, newMessage];
       });
 
-      // Atualizar mensagens locais
-      setLocalMessages(prev => [...prev, newMessage]);
-
       // Limpar input
       setMessageInput('');
     },
@@ -164,39 +163,23 @@ export function useChatModel(props: UseChatModelProps = {}) {
     },
   });
 
-  // Chat selecionado
-  const selectedChat = chats.find((chat: Chat) => chat._id === selectedChatId) || null;
-
-  // Efeito para sincronizar mensagens locais com as mensagens da API
+  // Scroll automático - useEffect simples apenas quando há mensagens
   useEffect(() => {
     if (messages.length > 0) {
-      setLocalMessages(messages);
-    } else {
-      setLocalMessages([]);
-    }
-  }, [messages]);
-
-  // Efeito para scroll automático
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [localMessages]);
-
-  // Efeito para reset do scroll quando muda de thread
-  useEffect(() => {
-    if (selectedChat) {
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+      const timeoutId = setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [selectedChat?._id, selectedChat]);
+  }, [messages.length]); // Apenas quando o número de mensagens muda
 
-  // Handlers principais
-  const handleSelectChat = (chatId: string) => {
+  // Handlers com useCallback para evitar recriação
+  const handleSelectChat = useCallback((chatId: string) => {
     setSelectedChatId(chatId);
-    setCurrentMessage(undefined);
-  };
+  }, []);
 
-  const handleNewConversation = () => {
+  const handleNewConversation = useCallback(() => {
     if (!activeAgentId) return;
 
     const title = `Chat ${chats.length + 1}`;
@@ -204,133 +187,179 @@ export function useChatModel(props: UseChatModelProps = {}) {
       agentId: activeAgentId,
       title,
     });
-  };
+  }, [activeAgentId, chats.length, createChatMutation]);
 
-  const handleUpdateThread = (chatId: string, messages: Message[]) => {
-    // Atualizar cache local
-    queryClient.setQueryData(['messages', chatId], messages);
-  };
+  const handleUpdateThread = useCallback(
+    (chatId: string, messages: Message[]) => {
+      queryClient.setQueryData(['messages', chatId], messages);
+    },
+    [queryClient]
+  );
 
-  // Handlers para input de mensagem
-  const handleMessageInputChange = (value: string) => {
+  const handleMessageInputChange = useCallback((value: string) => {
     setMessageInput(value);
-  };
+  }, []);
 
-  const handleSendMessage = (content: string) => {
-    if (!selectedChat || !content.trim()) return;
+  const handleSendMessage = useCallback(
+    (content: string) => {
+      if (!selectedChat || !content.trim()) return;
 
-    // Criar mensagem temporária do usuário para feedback imediato
-    const tempUserMessage: Message = {
-      message: content.trim(),
-      role: 'human',
-    };
+      sendMessageMutation.mutate({
+        chatId: selectedChat._id,
+        message: content.trim(),
+      });
+    },
+    [selectedChat, sendMessageMutation]
+  );
 
-    // Adicionar mensagem temporária às mensagens locais
-    setLocalMessages(prev => [...prev, tempUserMessage]);
-
-    // Enviar mensagem via API
-    sendMessageMutation.mutate({
-      chatId: selectedChat._id,
-      message: content.trim(),
-    });
-  };
-
-  const handleSubmitMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (messageInput.trim()) {
-      handleSendMessage(messageInput.trim());
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  const handleSubmitMessage = useCallback(
+    (e: React.FormEvent) => {
       e.preventDefault();
-      handleSubmitMessage(e);
-    }
-  };
+      if (messageInput.trim()) {
+        handleSendMessage(messageInput.trim());
+      }
+    },
+    [messageInput, handleSendMessage]
+  );
 
-  const handleInputResize = (e: React.FormEvent<HTMLTextAreaElement>) => {
+  const handleKeyPress = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSubmitMessage(e);
+      }
+    },
+    [handleSubmitMessage]
+  );
+
+  const handleInputResize = useCallback((e: React.FormEvent<HTMLTextAreaElement>) => {
     const target = e.target as HTMLTextAreaElement;
     target.style.height = '40px';
     target.style.height = `${Math.min(target.scrollHeight, 200)}px`;
-  };
+  }, []);
 
-  // Handlers para navegação
-  const handleNavigateToAgents = () => {
+  const handleNavigateToAgents = useCallback(() => {
     setLocation('/agents');
-  };
+  }, [setLocation]);
 
-  const handleBackFromConversation = () => {
+  const handleBackFromConversation = useCallback(() => {
     // Implementar lógica de voltar se necessário
-  };
+  }, []);
 
-  // Handlers para sidebar de conversas
-  const handleSelectConversation = (agent: unknown, conversationId: string) => {
+  const handleSelectConversation = useCallback((agent: unknown, conversationId: string) => {
     return { agent, conversationId };
-  };
+  }, []);
 
-  const handleNewConversationMode = (mode: boolean) => {
+  const handleNewConversationMode = useCallback((mode: boolean) => {
     setNewConversationMode(mode);
-  };
+  }, []);
 
-  const handleStartNewConversation = () => {
+  const handleStartNewConversation = useCallback(() => {
     handleNewConversation();
     setNewConversationMode(false);
-  };
+  }, [handleNewConversation]);
 
-  return {
-    // Estados principais
-    chats,
-    selectedChatId,
-    selectedChat,
-    selectedAgentId: activeAgentId,
-    messages,
+  // Métodos de API com useCallback
+  const createChat = useCallback(
+    (agentId: string, title: string) => {
+      createChatMutation.mutate({ agentId, title });
+    },
+    [createChatMutation]
+  );
 
-    // Estados do chat window
-    localMessages,
-    currentMessage,
-    messagesEndRef,
+  const sendMessage = useCallback(
+    (chatId: string, message: string) => {
+      sendMessageMutation.mutate({ chatId, message });
+    },
+    [sendMessageMutation]
+  );
 
-    // Estados do input
-    messageInput,
+  // Retorno estável usando useMemo
+  return useMemo(
+    () => ({
+      // Estados principais
+      chats,
+      selectedChatId,
+      selectedChat,
+      selectedAgentId: activeAgentId,
+      messages,
 
-    // Estados da sidebar de conversas
-    newConversationMode,
+      // Estados do chat window - usar messages diretamente ao invés de localMessages
+      localMessages: messages,
+      messagesEndRef,
 
-    // Estados de loading e error
-    isLoadingChats,
-    isLoadingMessages,
-    chatsError,
-    messagesError,
-    isCreatingChat: createChatMutation.isPending,
-    isSendingMessage: sendMessageMutation.isPending,
+      // Estados do input
+      messageInput,
 
-    // Handlers principais
-    handleSelectChat,
-    handleNewConversation,
-    handleUpdateThread,
+      // Estados da sidebar de conversas
+      newConversationMode,
 
-    // Handlers do input
-    handleMessageInputChange,
-    handleSendMessage,
-    handleSubmitMessage,
-    handleKeyPress,
-    handleInputResize,
+      // Estados de loading e error
+      isLoadingChats,
+      isLoadingMessages,
+      chatsError,
+      messagesError,
+      isCreatingChat: createChatMutation.isPending,
+      isSendingMessage: sendMessageMutation.isPending,
 
-    // Handlers de navegação
-    handleNavigateToAgents,
-    handleBackFromConversation,
+      // Handlers principais
+      handleSelectChat,
+      handleNewConversation,
+      handleUpdateThread,
 
-    // Handlers da sidebar de conversas
-    handleSelectConversation,
-    handleNewConversationMode,
-    handleStartNewConversation,
+      // Handlers do input
+      handleMessageInputChange,
+      handleSendMessage,
+      handleSubmitMessage,
+      handleKeyPress,
+      handleInputResize,
 
-    // Métodos de API (para uso direto se necessário)
-    createChat: (agentId: string, title: string) => createChatMutation.mutate({ agentId, title }),
-    sendMessage: (chatId: string, message: string) =>
-      sendMessageMutation.mutate({ chatId, message }),
-    refetchChats,
-    refetchMessages,
-  };
+      // Handlers de navegação
+      handleNavigateToAgents,
+      handleBackFromConversation,
+
+      // Handlers da sidebar de conversas
+      handleSelectConversation,
+      handleNewConversationMode,
+      handleStartNewConversation,
+
+      // Métodos de API
+      createChat,
+      sendMessage,
+      refetchChats,
+      refetchMessages,
+    }),
+    [
+      chats,
+      selectedChatId,
+      selectedChat,
+      activeAgentId,
+      messages,
+      messageInput,
+      newConversationMode,
+      isLoadingChats,
+      isLoadingMessages,
+      chatsError,
+      messagesError,
+      createChatMutation.isPending,
+      sendMessageMutation.isPending,
+      handleSelectChat,
+      handleNewConversation,
+      handleUpdateThread,
+      handleMessageInputChange,
+      handleSendMessage,
+      handleSubmitMessage,
+      handleKeyPress,
+      handleInputResize,
+      handleNavigateToAgents,
+      handleBackFromConversation,
+      handleSelectConversation,
+      handleNewConversationMode,
+      handleStartNewConversation,
+      createChat,
+      sendMessage,
+      refetchChats,
+      refetchMessages,
+    ]
+  );
 }
