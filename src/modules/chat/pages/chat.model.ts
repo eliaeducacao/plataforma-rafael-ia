@@ -59,6 +59,14 @@ const chatApi = {
   },
 };
 
+// Query Keys - Centralizadas para consistência
+const queryKeys = {
+  chats: (agentId: string) => ['chats', agentId] as const,
+  messages: (chatId: string) => ['messages', chatId] as const,
+  allChats: () => ['chats'] as const,
+  allMessages: () => ['messages'] as const,
+};
+
 interface UseChatModelProps {
   agentId?: string;
   chatId?: string;
@@ -97,9 +105,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
     error: chatsError,
     refetch: refetchChats,
   } = useQuery({
-    queryKey: ['chats', activeAgentId],
+    queryKey: queryKeys.chats(activeAgentId),
     queryFn: () => chatApi.getChats(activeAgentId),
     enabled: !!activeAgentId,
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    gcTime: 10 * 60 * 1000, // 10 minutos
+    retry: 3,
+    refetchOnWindowFocus: false,
   });
 
   // React Query - Listar Mensagens
@@ -109,10 +121,27 @@ export function useChatModel(props: UseChatModelProps = {}) {
     error: messagesError,
     refetch: refetchMessages,
   } = useQuery({
-    queryKey: ['messages', activeChatId],
+    queryKey: queryKeys.messages(activeChatId!),
     queryFn: () => chatApi.getMessages(activeChatId!),
     enabled: !!activeChatId,
+    staleTime: 1 * 60 * 1000, // 1 minuto
+    gcTime: 5 * 60 * 1000, // 5 minutos
+    retry: 3,
+    refetchOnWindowFocus: false,
   });
+
+  // Log de erros se houver
+  useEffect(() => {
+    if (chatsError) {
+      console.error('Erro ao carregar chats:', chatsError);
+    }
+  }, [chatsError]);
+
+  useEffect(() => {
+    if (messagesError) {
+      console.error('Erro ao carregar mensagens:', messagesError);
+    }
+  }, [messagesError]);
 
   // Garantir que sempre sejam arrays - useMemo para evitar recriação
   const chats = useMemo(() => (Array.isArray(chatsData) ? chatsData : []), [chatsData]);
@@ -130,17 +159,22 @@ export function useChatModel(props: UseChatModelProps = {}) {
     mutationFn: ({ agentId, title }: { agentId: string; title: string }) =>
       chatApi.createChat(agentId, { title }),
     onSuccess: newChat => {
-      // Atualizar cache local
-      queryClient.setQueryData(['chats', activeAgentId], (oldChats: Chat[] | undefined) => {
+      // Atualizar cache de chats
+      queryClient.setQueryData(queryKeys.chats(activeAgentId), (oldChats: Chat[] | undefined) => {
         const currentChats = Array.isArray(oldChats) ? oldChats : [];
         return [...currentChats, newChat];
       });
+
+      // Invalidar queries relacionadas para recarregar dados atualizados
+      queryClient.invalidateQueries({ queryKey: queryKeys.allChats() });
 
       // Selecionar o novo chat
       setSelectedChatId(newChat._id);
     },
     onError: error => {
       console.error('Erro ao criar chat:', error);
+      // Invalidar queries para garantir consistência
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats(activeAgentId) });
     },
   });
 
@@ -148,18 +182,24 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const sendMessageMutation = useMutation({
     mutationFn: ({ chatId, message }: { chatId: string; message: string }) =>
       chatApi.sendMessage(chatId, { message }),
-    onSuccess: newMessage => {
-      // Atualizar cache local de mensagens
-      queryClient.setQueryData(['messages', activeChatId], (oldMessages: Message[] | undefined) => {
+    onSuccess: (newMessage, { chatId }) => {
+      // Atualizar cache com a mensagem real da API
+      queryClient.setQueryData(queryKeys.messages(chatId), (oldMessages: Message[] | undefined) => {
         const currentMessages = Array.isArray(oldMessages) ? oldMessages : [];
         return [...currentMessages, newMessage];
       });
 
+      // Invalidar queries para garantir consistência
+      queryClient.invalidateQueries({ queryKey: queryKeys.messages(chatId) });
+
       // Limpar input
       setMessageInput('');
     },
-    onError: error => {
+    onError: (error, { chatId }) => {
       console.error('Erro ao enviar mensagem:', error);
+
+      // Invalidar queries para recarregar estado correto
+      queryClient.invalidateQueries({ queryKey: queryKeys.messages(chatId) });
     },
   });
 
@@ -191,7 +231,9 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   const handleUpdateThread = useCallback(
     (chatId: string, messages: Message[]) => {
-      queryClient.setQueryData(['messages', chatId], messages);
+      queryClient.setQueryData(queryKeys.messages(chatId), messages);
+      // Invalidar para garantir consistência
+      queryClient.invalidateQueries({ queryKey: queryKeys.messages(chatId) });
     },
     [queryClient]
   );
@@ -274,6 +316,20 @@ export function useChatModel(props: UseChatModelProps = {}) {
     [sendMessageMutation]
   );
 
+  // Método para limpar cache se necessário
+  const clearCache = useCallback(() => {
+    queryClient.clear();
+  }, [queryClient]);
+
+  // Método para invalidar queries específicas
+  const invalidateChats = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.allChats() });
+  }, [queryClient]);
+
+  const invalidateMessages = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.allMessages() });
+  }, [queryClient]);
+
   // Retorno estável usando useMemo
   return useMemo(
     () => ({
@@ -328,6 +384,11 @@ export function useChatModel(props: UseChatModelProps = {}) {
       sendMessage,
       refetchChats,
       refetchMessages,
+
+      // Métodos de cache management
+      clearCache,
+      invalidateChats,
+      invalidateMessages,
     }),
     [
       chats,
@@ -360,6 +421,9 @@ export function useChatModel(props: UseChatModelProps = {}) {
       sendMessage,
       refetchChats,
       refetchMessages,
+      clearCache,
+      invalidateChats,
+      invalidateMessages,
     ]
   );
 }
