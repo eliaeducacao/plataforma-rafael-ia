@@ -1,21 +1,23 @@
 import { Plus } from "lucide-react"
-import type { Thread } from "../types"
+import type { Chat, Message } from "../types"
 import { Button } from "@/shared/components/ui/button"
 import { CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Separator } from "@/shared/components/ui/separator"
 import { cn } from "@/shared/lib/utils"
 
 interface SidebarProps {
-  threads: Thread[]
-  selectedThreadId: string
-  onSelectThread: (threadId: string) => void
+  chats: Chat[] | null
+  messages: Message[] | null
+  selectedChatId: string | null
+  onSelectChat: (chatId: string) => void
   onNewConversation: () => void
 }
 
-export default function Sidebar({
-  threads,
-  selectedThreadId,
-  onSelectThread,
+export function Sidebar({
+  chats,
+  messages,
+  selectedChatId,
+  onSelectChat,
   onNewConversation
 }: SidebarProps) {
   return (
@@ -30,21 +32,21 @@ export default function Sidebar({
       {/* Lista de threads */}
       <div className="flex-1 overflow-y-auto p-4 min-h-0">
         <div className="space-y-2">
-          {threads.map((thread) => (
+          {chats?.map((chats) => (
             <Button
-              key={thread.id}
-              variant={selectedThreadId === thread.id ? "secondary" : "ghost"}
-              onClick={() => onSelectThread(thread.id)}
+              key={chats._id}
+              variant={selectedChatId === chats._id ? "secondary" : "ghost"}
+              onClick={() => onSelectChat(chats._id)}
               className={cn(
                 "w-full justify-start h-auto p-3 text-left",
-                selectedThreadId === thread.id && "bg-secondary"
+                selectedChatId === chats._id && "bg-secondary"
               )}
             >
               <div className="flex flex-col items-start space-y-1 w-full min-w-0">
-                <div className="font-medium truncate w-full text-sm sm:text-base">{thread.title}</div>
+                <div className="font-medium truncate w-full text-sm sm:text-base">{chats.title}</div>
                 <div className="text-xs text-muted-foreground truncate w-full">
-                  {thread.messages.length > 0
-                    ? `${thread.messages.length} mensagens`
+                  {messages?.length && messages?.length > 0
+                    ? `${messages?.length} mensagens`
                     : "Conversa vazia"
                   }
                 </div>

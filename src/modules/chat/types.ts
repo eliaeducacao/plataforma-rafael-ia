@@ -1,27 +1,27 @@
-export interface Message {
-  id: string
-  content: string
-  sender: "user" | "ai"
-  timestamp: string
-}
-
 export interface Conversation {
-  id: string
-  title: string
-  messages: Message[]
+  id: string;
+  title: string;
+  messages: Message[];
 }
 
-export interface Thread {
-  id: string
-  title: string
-  agentId: string
-  messages: Message[]
+export interface Chat {
+  _id: string;
+  title: string;
+  user_id: string;
+  agent_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Message {
+  role: string;
+  message: string;
 }
 
 export interface Agent {
-  id: string
-  name: string
-  description: string
-  conversations: Conversation[]
-  activeConversation?: string
+  id: string;
+  name: string;
+  description: string;
+  conversations: Conversation[];
+  activeConversation?: string;
 }

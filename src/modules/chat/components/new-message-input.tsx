@@ -45,7 +45,7 @@ export default function NewMessageInput({ onSendMessage }: NewMessageInputProps)
                 }}
               />
             </div>
-            
+
             <Button
               type="submit"
               disabled={!message.trim()}
@@ -56,7 +56,7 @@ export default function NewMessageInput({ onSendMessage }: NewMessageInputProps)
               <span className="sr-only">Enviar mensagem</span>
             </Button>
           </form>
-          
+
           <p className="text-xs text-muted-foreground mt-2 text-center">
             Pressione Enter para enviar, Shift+Enter para nova linha
           </p>

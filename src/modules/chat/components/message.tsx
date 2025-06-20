@@ -8,7 +8,7 @@ interface MessageProps {
 }
 
 export default function Message({ message }: MessageProps) {
-  const isUser = message.sender === "user"
+  const isUser = message.role === "human"
 
   return (
     <div className={cn(
@@ -20,7 +20,7 @@ export default function Message({ message }: MessageProps) {
           <Bot className="h-3 w-3 sm:h-4 sm:w-4" />
         </Avatar>
       )}
-      
+
       <div className={cn(
         "flex flex-col min-w-0 max-w-[85%] sm:max-w-[75%] lg:max-w-[60%]",
         isUser && "items-end"
@@ -34,16 +34,16 @@ export default function Message({ message }: MessageProps) {
           )}
         >
           <p className="leading-relaxed whitespace-pre-wrap break-words">
-            {message.content}
+            {message.message}
           </p>
         </div>
-        
-        <div className={cn(
+
+        {/* <div className={cn(
           "text-xs text-muted-foreground mt-1 opacity-0 group-hover:opacity-100 transition-opacity px-1",
           isUser ? "text-right" : "text-left"
         )}>
           {message.timestamp}
-        </div>
+        </div> */}
       </div>
 
       {isUser && (

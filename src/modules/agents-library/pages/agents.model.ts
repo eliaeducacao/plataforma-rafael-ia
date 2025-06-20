@@ -5,7 +5,10 @@ import { useSessionStorage } from '@uidotdev/usehooks';
 import { useLocation } from 'wouter';
 
 export function useAgentsModel() {
-  const [selectedAgent, setSelectedAgent] = useSessionStorage<string>('x-selected-agent', '');
+  const [selectedAgentId, setSelectedAgentId] = useSessionStorage<string>(
+    'x-selected-agent-id',
+    ''
+  );
   const [, setLocation] = useLocation();
 
   const { data: agents, isLoading: isAgentsLoading } = useQuery<Agent[]>({
@@ -18,15 +21,15 @@ export function useAgentsModel() {
   });
 
   function handleChangeAgent(id: string) {
-    setSelectedAgent(id);
+    setSelectedAgentId(id);
     setLocation('/chats');
   }
 
   return {
-    selectedAgent,
+    selectedAgentId,
     agents,
     isAgentsLoading,
-    setSelectedAgent,
+    setSelectedAgentId,
     handleChangeAgent,
   };
 }
