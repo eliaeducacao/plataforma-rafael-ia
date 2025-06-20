@@ -1,6 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 
 import { useAgentsModel } from "./agents.model";
+import { DynamicIcon } from "@/shared/lib/icon-utils";
 
 export function AgentsView(props: ReturnType<typeof useAgentsModel>) {
   const { agents, handleChangeAgent } = props;
@@ -8,7 +9,7 @@ export function AgentsView(props: ReturnType<typeof useAgentsModel>) {
   return (
     <div className="px-10 py-12">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 overflow-y-auto">
-        {agents.map((agent, index) => (
+        {agents?.map((agent, index) => (
           <div
             key={index}
             className="bg-card border-2 border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-xl transition-all duration-300 group animate-fade-in"
@@ -17,11 +18,11 @@ export function AgentsView(props: ReturnType<typeof useAgentsModel>) {
             {/* Agent Header */}
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4 group-hover:bg-primary/20 transition-colors">
-                <agent.icon className="w-6 h-6 text-primary" />
+                <DynamicIcon name={agent.icon} className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-card-foreground">{agent.name}</h3>
-                <p className="text-sm text-primary font-medium">{agent.specialty}</p>
+                <h3 className="text-lg font-semibold text-card-foreground">{agent.title}</h3>
+                <p className="text-sm text-primary font-medium">{agent.subtitle}</p>
               </div>
             </div>
 
@@ -39,8 +40,8 @@ export function AgentsView(props: ReturnType<typeof useAgentsModel>) {
             </div>
 
             {/* Action Button */}
-            <Button className="w-full text-primary-foreground" variant="default" onClick={() => handleChangeAgent(agent.name)}>
-              Conversar com {agent.name.split(' ')[1]}
+            <Button className="w-full text-primary-foreground" variant="default" onClick={() => handleChangeAgent(agent._id)}>
+              {agent.button}
             </Button>
           </div>
         ))}
