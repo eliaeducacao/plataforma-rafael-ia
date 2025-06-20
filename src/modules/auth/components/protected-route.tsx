@@ -1,4 +1,6 @@
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
+import { useAuth } from "../hooks/use-auth"
+
 import { AppSidebar } from "@/shared/components/app-sidebar"
 import { SidebarProvider } from "@/shared/components/ui/sidebar"
 
@@ -7,6 +9,9 @@ type ProtectedRouteProps = {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { token } = useAuth()
+
+  useEffect(() => { }, [token])
   return (
     <SidebarProvider>
       <div className="flex h-screen w-screen">
