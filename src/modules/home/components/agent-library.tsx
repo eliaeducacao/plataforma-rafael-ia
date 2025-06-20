@@ -1,58 +1,17 @@
-import { FileText, Scale, Calendar, BookOpen, FileCheck, Brain, } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import { DynamicIcon } from '@/shared/lib/icon-utils/index';
+import { Agent } from "@/shared/types"
 
-export const agents = [
-  {
-    icon: FileText,
-    name: 'Agente Petições',
-    specialty: 'Especialista em Petições Iniciais',
-    description:
-      'Elaboração de petições iniciais, contestações e demais peças processuais com fundamentação jurídica sólida',
-    features: ['Petições Iniciais', 'Contestações', 'Recursos', 'Fundamentação Legal'],
-  },
-  {
-    icon: Scale,
-    name: 'Agente Civil',
-    specialty: 'Direito Civil e Responsabilidade',
-    description:
-      'Especializado em questões de direito civil, contratos, responsabilidade civil e direitos reais',
-    features: ['Contratos', 'Responsabilidade Civil', 'Direitos Reais', 'Família'],
-  },
-  {
-    icon: Calendar,
-    name: 'Agente de Prazos',
-    specialty: 'Gestão de Prazos Processuais',
-    description:
-      'Controle inteligente de prazos, alertas automáticos e gestão de cronogramas processuais',
-    features: ['Controle de Prazos', 'Alertas', 'Cronogramas', 'Agenda Processual'],
-  },
-  {
-    icon: BookOpen,
-    name: 'Agente Doutrinador',
-    specialty: 'Pesquisa Doutrinária e Legal',
-    description:
-      'Pesquisa especializada em doutrina, jurisprudência e fundamentação teórica para seus casos',
-    features: ['Pesquisa Doutrinária', 'Jurisprudência', 'Fundamentação', 'Citações'],
-  },
-  {
-    icon: FileCheck,
-    name: 'Agente Contratos',
-    specialty: 'Elaboração e Revisão Contratual',
-    description:
-      'Criação, revisão e análise de contratos com identificação de cláusulas críticas e sugestões',
-    features: ['Elaboração', 'Revisão', 'Análise de Riscos', 'Cláusulas'],
-  },
-  {
-    icon: Brain,
-    name: 'Agente GPT-4 Puro Jurídico',
-    specialty: 'IA Jurídica Avançada',
-    description:
-      'Versão especializada do GPT-4 com treinamento específico em Direito brasileiro e práticas jurídicas',
-    features: ['IA Avançada', 'Direito Brasileiro', 'Análise Complexa', 'Estratégias'],
-  },
-];
+import { Skeleton } from '@/shared/components/ui/skeleton';
 
-function AgentLibrary() {
+type AgentLibraryProps = {
+  agents: Agent[] | undefined;
+  isLoading: boolean
+}
+
+function AgentLibrary({ agents, isLoading }: AgentLibraryProps) {
+  if (isLoading) return <AgentLibrarySkeleton />;
+
   return (
     <section id="agentes" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -67,7 +26,7 @@ function AgentLibrary() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {agents.map((agent, index) => (
+          {agents?.map((agent, index) => (
             <div
               key={index}
               className="bg-card border-2 border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-xl transition-all duration-300 group animate-fade-in"
@@ -76,11 +35,11 @@ function AgentLibrary() {
               {/* Agent Header */}
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4 group-hover:bg-primary/20 transition-colors">
-                  <agent.icon className="w-6 h-6 text-primary" />
+                  <DynamicIcon name={agent.icon} className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-card-foreground">{agent.name}</h3>
-                  <p className="text-sm text-primary font-medium">{agent.specialty}</p>
+                  <h3 className="text-lg font-semibold text-card-foreground">{agent.title}</h3>
+                  <p className="text-sm text-primary font-medium">{agent.subtitle}</p>
                 </div>
               </div>
 
@@ -99,7 +58,7 @@ function AgentLibrary() {
 
               {/* Action Button */}
               <Button className="w-full text-primary-foreground" variant="default">
-                Conversar com {agent.name.split(' ')[1]}
+                {agent.button}
               </Button>
             </div>
           ))}
@@ -132,3 +91,70 @@ function AgentLibrary() {
 };
 
 export default AgentLibrary;
+
+
+function AgentLibrarySkeleton() {
+  return (
+    <section id="agentes" className="py-20 bg-background">
+      <div className="container mx-auto px-6">
+        {/* Header skeleton */}
+        <div className="text-center mb-16">
+          <Skeleton className="h-12 w-80 mx-auto mb-6" />
+          <Skeleton className="h-6 w-96 mx-auto mb-2" />
+          <Skeleton className="h-6 w-72 mx-auto" />
+        </div>
+
+        {/* Grid skeleton */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="bg-card border-2 border-border rounded-xl p-6"
+            >
+              {/* Agent Header skeleton */}
+              <div className="flex items-center mb-4">
+                <Skeleton className="w-12 h-12 rounded-lg mr-4" />
+                <div className="flex-1">
+                  <Skeleton className="h-5 w-32 mb-1" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              </div>
+
+              {/* Description skeleton */}
+              <div className="mb-4">
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+
+              {/* Features skeleton */}
+              <div className="space-y-2 mb-6">
+                {Array.from({ length: 6 }).map((_, featureIndex) => (
+                  <div key={featureIndex} className="flex items-center">
+                    <Skeleton className="w-1.5 h-1.5 rounded-full mr-2" />
+                    <Skeleton className="h-3 w-32" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Button skeleton */}
+              <Skeleton className="w-full h-10 rounded" />
+            </div>
+          ))}
+        </div>
+
+        {/* Library Stats skeleton */}
+        <div className="mt-16 bg-secondary rounded-2xl p-8">
+          <div className="grid md:grid-cols-4 gap-6 text-center">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index}>
+                <Skeleton className="h-8 w-16 mx-auto mb-2" />
+                <Skeleton className="h-4 w-24 mx-auto" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
