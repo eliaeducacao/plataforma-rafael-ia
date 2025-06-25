@@ -25,15 +25,20 @@ import {
   useSidebar,
 } from "@/shared/components/ui/sidebar"
 
-export function NavUser({
-  user,
-}: {
+type NavUserProps = {
   user: {
     name: string
     email: string
     avatar: string
-  }
-}) {
+  };
+  onLogout: () => void
+}
+
+export function NavUser({
+  user,
+  onLogout
+}: NavUserProps
+) {
   const { isMobile } = useSidebar()
 
   return (
@@ -47,7 +52,7 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">S</AvatarFallback>
+                <AvatarFallback className="rounded-lg">{user.name.split("")[0]}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -90,7 +95,7 @@ export function NavUser({
               </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={onLogout}>
               <IconLogout />
               Sair
             </DropdownMenuItem>

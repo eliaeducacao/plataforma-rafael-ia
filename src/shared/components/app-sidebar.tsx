@@ -10,7 +10,7 @@ import {
   // IconInnerShadowTop,
   // IconReport,
   // IconUsers,
-  IconDashboard,
+  // IconDashboard,
   IconHelp,
   IconListDetails,
   IconMessageCircle,
@@ -32,17 +32,12 @@ import {
 import { Scale } from "lucide-react"
 
 const data = {
-  user: {
-    name: "Rafael Roni",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
+    // {
+    //   title: "Dashboard",
+    //   url: "#",
+    //   icon: IconDashboard,
+    // },
     {
       title: "Biblioteca de Agentes",
       url: "/agents",
@@ -72,18 +67,27 @@ const data = {
   navSecondary: [
     {
       title: "Configurações",
-      url: "#",
+      url: "#settings",
       icon: IconSettings,
     },
     {
       title: "Preciso de ajuda",
-      url: "#",
+      url: "https://wa.me/5511913337009",
       icon: IconHelp,
     }
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: {
+    name: string
+    email: string
+    avatar: string
+  }
+  onLogout: () => void
+}
+
+export function AppSidebar({ user, onLogout, ...props }: AppSidebarProps) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -108,7 +112,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} onLogout={onLogout} />
       </SidebarFooter>
     </Sidebar>
   )

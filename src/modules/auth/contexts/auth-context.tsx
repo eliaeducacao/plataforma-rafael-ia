@@ -14,6 +14,10 @@ export type AuthContextProps = {
   isLoginPending: boolean
   logout: () => Promise<ResultResponse>;
   token: string | null
+  user: {
+    email: string
+    name: string
+  } | null
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);

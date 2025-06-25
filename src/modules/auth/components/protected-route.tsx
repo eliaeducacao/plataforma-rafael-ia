@@ -9,13 +9,17 @@ type ProtectedRouteProps = {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { token } = useAuth()
+  const { token, logout, user } = useAuth()
 
   useEffect(() => { }, [token])
   return (
     <SidebarProvider>
       <div className="flex h-screen w-screen">
-        <AppSidebar />
+        <AppSidebar user={{
+          avatar: '',
+          email: user?.email ?? '',
+          name: user?.name ?? ''
+        }} onLogout={logout} />
         <main className="flex-1 overflow-auto">
           {children}
         </main>
