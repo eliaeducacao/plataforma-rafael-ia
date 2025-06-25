@@ -34,13 +34,7 @@ export default function NewMessageInput({
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('🎯 handleFileChange chamado');
-    console.log('📁 e.target.files:', e.target.files);
-
     const file = e.target.files?.[0] || null
-    console.log('📂 Arquivo extraído:', file);
-    console.log('🚀 Chamando onFileSelect com:', file);
-
     onFileSelect(file)
   }
 
@@ -99,30 +93,41 @@ export default function NewMessageInput({
               disabled={disabled || isConverting}
             />
 
-            <Button
-              type="button"
-              onClick={handleFileUploadClick}
-              disabled={disabled || isConverting}
-              size="icon"
-              className={`h-10 w-10 sm:h-11 sm:w-11 shrink-0 ${selectedFile ? 'bg-primary/20 border-primary' : ''}`}
-              title={selectedFile ? `PDF anexado: ${selectedFile.name}` : "Anexar PDF"}
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+            <div className="relative">
+              <Button
+                type="button"
+                onClick={handleFileUploadClick}
+                disabled={disabled || isConverting}
+                size="icon"
+                className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
+                title={selectedFile ? `PDF anexado: ${selectedFile.name}` : "Anexar PDF"}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <span className="sr-only">Anexar PDF</span>
-            </Button>
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <span className="sr-only">Anexar PDF</span>
+              </Button>
+
+              {/* Badge indicador de arquivo anexado */}
+              {selectedFile && (
+                <div className="absolute -top-1 -right-1 h-4 w-4 bg-green-500 rounded-full flex items-center justify-center animate-in fade-in-0 zoom-in-95 duration-200 shadow-sm border-2 border-background">
+                  <svg className="h-2.5 w-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              )}
+            </div>
 
             <Button
               type="submit"

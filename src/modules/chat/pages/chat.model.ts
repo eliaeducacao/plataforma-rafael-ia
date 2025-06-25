@@ -105,11 +105,6 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isConvertingFile, setIsConvertingFile] = useState(false);
 
-  // Debug do selectedFile
-  useEffect(() => {
-    console.log('🗂️ selectedFile atualizado:', selectedFile);
-  }, [selectedFile]);
-
   // Navegação
   const [, setLocation] = useLocation();
 
@@ -494,32 +489,18 @@ export function useChatModel(props: UseChatModelProps = {}) {
   // Handler para seleção de arquivo
   const handleFileSelect = useCallback(
     (file: File | null) => {
-      console.log('🔍 handleFileSelect chamado com:', file);
-
       if (!file) {
-        console.log('❌ Arquivo é null, limpando selectedFile');
         setSelectedFile(null);
         return;
       }
 
-      console.log('📄 Validando arquivo:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      });
-
       const validation = validateFile(file);
-      console.log('✅ Resultado da validação:', validation);
-
       if (!validation.valid) {
-        console.log('❌ Arquivo inválido:', validation.error);
         alert(validation.error);
         return;
       }
 
-      console.log('✅ Arquivo válido, definindo selectedFile');
       setSelectedFile(file);
-      console.log('📂 Arquivo PDF selecionado:', file);
     },
     [validateFile]
   );
