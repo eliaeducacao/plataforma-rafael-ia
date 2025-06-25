@@ -28,7 +28,12 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
     chatsError,
     messagesError,
     isCreatingChat,
-    isSendingMessage
+    isSendingMessage,
+    // Props de arquivo
+    selectedFile,
+    isConvertingFile,
+    handleFileSelect,
+    handleFileRemove
   } = props
 
   // Loading skeleton para a sidebar
@@ -94,6 +99,10 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
             isLoadingMessages={isLoadingMessages}
             messagesError={messagesError}
             isSendingMessage={isSendingMessage}
+            selectedFile={selectedFile}
+            isConvertingFile={isConvertingFile}
+            onFileSelect={handleFileSelect}
+            onFileRemove={handleFileRemove}
           />
         </>
       ) : (

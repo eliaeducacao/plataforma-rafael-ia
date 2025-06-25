@@ -16,6 +16,8 @@ export interface Chat {
 export interface Message {
   role: string;
   message: string;
+  isStreaming?: boolean;
+  timestamp?: number;
 }
 
 export interface Agent {

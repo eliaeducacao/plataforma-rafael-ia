@@ -1,8 +1,9 @@
 import { RefObject } from "react"
 import ChatBreadcrumb from "./breadcrumb"
-import Message from "./message"
+import { default as MessageComponent } from "./message"
 import NewMessageInput from "./new-message-input"
 import type { Chat, Message as MessageType } from "../types"
+import type { SubmitData } from "../pages/chat.model"
 import { Skeleton } from "@/shared/components/ui/skeleton"
 import { Alert, AlertDescription } from "@/shared/components/ui/alert"
 import { Loader2 } from "lucide-react"
@@ -19,9 +20,15 @@ interface ChatWindowProps {
   // Props para o input
   messageInput: string
   onMessageInputChange: (value: string) => void
-  onSubmitMessage: (e: React.FormEvent) => void
+  onSubmitMessage: (data: SubmitData) => void
   onKeyPress: (e: React.KeyboardEvent) => void
   onInputResize: (e: React.FormEvent<HTMLTextAreaElement>) => void
+
+  // Props para arquivo
+  selectedFile?: File | null
+  isConvertingFile?: boolean
+  onFileSelect: (file: File | null) => void
+  onFileRemove: () => void
 
   // Props para navegação
   onNavigateToAgents: () => void
@@ -44,7 +51,11 @@ export function ChatWindow({
   onNavigateToAgents,
   isLoadingMessages = false,
   messagesError,
-  isSendingMessage = false
+  isSendingMessage = false,
+  selectedFile,
+  isConvertingFile = false,
+  onFileSelect,
+  onFileRemove
 }: ChatWindowProps) {
   if (!chat) {
     return (
@@ -110,7 +121,7 @@ export function ChatWindow({
             <div className="max-w-4xl mx-auto w-full">
               <div className="space-y-3 sm:space-y-4">
                 {localMessages.map((message, index) => (
-                  <Message key={index} message={message} />
+                  <MessageComponent key={index} message={message} />
                 ))}
 
                 {/* Indicador de que está enviando mensagem */}
@@ -140,6 +151,10 @@ export function ChatWindow({
           onKeyPress={onKeyPress}
           onInputResize={onInputResize}
           disabled={isSendingMessage}
+          selectedFile={selectedFile}
+          isConverting={isConvertingFile}
+          onFileSelect={onFileSelect}
+          onFileRemove={onFileRemove}
         />
       </footer>
     </div>

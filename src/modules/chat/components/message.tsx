@@ -7,13 +7,27 @@ import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeRaw from 'rehype-raw'
 import '@/shared/styles/markdown.css'
+import { useTypewriter } from "../hooks/use-typewriter"
+import { memo } from 'react'
 
 interface MessageProps {
   message: MessageType
 }
 
-export default function Message({ message }: MessageProps) {
+const Message = memo(function Message({ message }: MessageProps) {
   const isUser = message.role === "human"
+
+  // Usar typewriter apenas para mensagens do bot que estão em streaming
+  const shouldUseTypewriter = !isUser && message.isStreaming === true
+
+  const [typedText] = useTypewriter({
+    text: message.message,
+    speed: 5,
+    enabled: shouldUseTypewriter
+  })
+
+  // Decidir qual texto mostrar
+  const displayText = shouldUseTypewriter ? typedText : message.message
 
   return (
     <div className={cn(
@@ -124,7 +138,7 @@ export default function Message({ message }: MessageProps) {
                 },
               }}
             >
-              {message.message}
+              {displayText}
             </ReactMarkdown>
           </div>
         </div>
@@ -144,4 +158,14 @@ export default function Message({ message }: MessageProps) {
       )}
     </div>
   )
-} 
+}, (prevProps, nextProps) => {
+  // Comparação personalizada para otimizar re-renders
+  return (
+    prevProps.message.role === nextProps.message.role &&
+    prevProps.message.message === nextProps.message.message &&
+    prevProps.message.isStreaming === nextProps.message.isStreaming &&
+    prevProps.message.timestamp === nextProps.message.timestamp
+  )
+})
+
+export default Message 

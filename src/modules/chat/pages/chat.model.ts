@@ -10,8 +10,26 @@ interface CreateChatRequest {
   title: string;
 }
 
+export interface FileData {
+  filename: string;
+  mimeType: string;
+  contentBase64: string;
+}
+
+export interface SubmitData {
+  message: string;
+  file?: FileData;
+}
+
 interface SendMessageRequest {
   message: string;
+  file?: FileData;
+}
+
+interface ApiMessageResponse {
+  threadId: string;
+  output: string;
+  usage: Record<string, unknown>;
 }
 
 // Funções de API
@@ -41,18 +59,19 @@ const chatApi = {
     return response.data;
   },
 
-  // Enviar Mensagem para um Chat (multipart/form-data)
-  sendMessage: async (chatId: string, data: SendMessageRequest): Promise<Message> => {
-    const formData = new FormData();
-    formData.append('message', data.message);
-    formData.append('file', data.message);
+  // Enviar Mensagem para um Chat (JSON com arquivo base64)
+  sendMessage: async (chatId: string, data: SendMessageRequest): Promise<ApiMessageResponse> => {
+    const requestBody = {
+      message: data.message,
+      ...(data.file && { file: data.file }),
+    };
 
     const response = await api.post(
       `/webhook/3667f47c-418a-41c7-98ae-3f97d6468e84/api/v1/chats/${chatId}/messages`,
-      formData,
+      requestBody,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       }
     );
@@ -76,11 +95,20 @@ interface UseChatModelProps {
 export function useChatModel(props: UseChatModelProps = {}) {
   const queryClient = useQueryClient();
 
-  // Estados principais - apenas os essenciais
+  // Estados principais
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [selectedAgentId] = useSessionStorage<string>('x-selected-agent-id', '');
   const [messageInput, setMessageInput] = useState('');
   const [newConversationMode, setNewConversationMode] = useState(false);
+
+  // Estados para arquivo
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isConvertingFile, setIsConvertingFile] = useState(false);
+
+  // Debug do selectedFile
+  useEffect(() => {
+    console.log('🗂️ selectedFile atualizado:', selectedFile);
+  }, [selectedFile]);
 
   // Navegação
   const [, setLocation] = useLocation();
@@ -88,7 +116,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Determinar IDs ativos - useMemo para evitar recalcular constantemente
+  // Determinar IDs ativos
   const activeAgentId = useMemo(
     () => props.agentId || selectedAgentId.replace(/"/g, ''),
     [props.agentId, selectedAgentId]
@@ -181,28 +209,97 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // React Query - Enviar Mensagem
   const sendMessageMutation = useMutation({
-    mutationFn: ({ chatId, message }: { chatId: string; message: string }) =>
-      chatApi.sendMessage(chatId, { message }),
-    onSuccess: (newMessage, { chatId }) => {
+    mutationFn: ({ chatId, message, file }: { chatId: string; message: string; file?: FileData }) =>
+      chatApi.sendMessage(chatId, { message, file }),
+    onMutate: async ({ chatId, message }) => {
+      console.log('🚀 Iniciando envio de mensagem:', { chatId, messageLength: message.length });
+
+      // Adicionar mensagem do usuário imediatamente (optimistic update)
+      queryClient.setQueryData(queryKeys.messages(chatId), (oldMessages: Message[] | undefined) => {
+        const currentMessages = Array.isArray(oldMessages) ? oldMessages : [];
+
+        const userMessage: Message = {
+          role: 'human',
+          message: message,
+          timestamp: Date.now(),
+        };
+
+        return [...currentMessages, userMessage];
+      });
+    },
+    onSuccess: (newMessage: ApiMessageResponse, { chatId }) => {
+      console.log('✅ API Response:', newMessage);
+      console.log('🔄 Mutation finalizada com sucesso');
+
       // Atualizar cache com a mensagem real da API
       queryClient.setQueryData(queryKeys.messages(chatId), (oldMessages: Message[] | undefined) => {
         const currentMessages = Array.isArray(oldMessages) ? oldMessages : [];
-        return [...currentMessages, newMessage];
-      });
 
-      // Invalidar queries para garantir consistência
-      queryClient.invalidateQueries({ queryKey: queryKeys.messages(chatId) });
+        // Converter a estrutura da API para nossa estrutura
+        const formattedMessage: Message = {
+          role: 'ai', // Mensagens da API são sempre do bot
+          message: newMessage.output || '', // Usar output da API
+          isStreaming: true, // Flag para ativar typewriter
+          timestamp: Date.now(), // Timestamp para identificar como nova
+        };
+
+        console.log('🎬 Mensagem do bot com typewriter:', {
+          messageLength: formattedMessage.message.length,
+          isStreaming: formattedMessage.isStreaming,
+        });
+
+        const updatedMessages = [...currentMessages, formattedMessage];
+
+        // Após o tempo necessário, desativar o streaming
+        const messageText = formattedMessage.message;
+        if (messageText && messageText.length > 0) {
+          const timeoutDuration = messageText.length * 15 + 500;
+
+          setTimeout(() => {
+            queryClient.setQueryData(
+              queryKeys.messages(chatId),
+              (currentMessages: Message[] | undefined) => {
+                if (!currentMessages) return currentMessages;
+
+                return currentMessages.map(msg =>
+                  msg.timestamp === formattedMessage.timestamp
+                    ? { ...msg, isStreaming: false }
+                    : msg
+                );
+              }
+            );
+          }, timeoutDuration);
+        }
+
+        return updatedMessages;
+      });
 
       // Limpar input
       setMessageInput('');
     },
     onError: (error, { chatId }) => {
-      console.error('Erro ao enviar mensagem:', error);
+      console.error('❌ Erro ao enviar mensagem:', error);
+      console.log('🔄 Mutation finalizada com erro');
 
       // Invalidar queries para recarregar estado correto
       queryClient.invalidateQueries({ queryKey: queryKeys.messages(chatId) });
     },
   });
+
+  // Monitorar estado da mutação
+  useEffect(() => {
+    console.log('📊 Estado da mutação:', {
+      isPending: sendMessageMutation.isPending,
+      isError: sendMessageMutation.isError,
+      isSuccess: sendMessageMutation.isSuccess,
+      error: sendMessageMutation.error,
+    });
+  }, [
+    sendMessageMutation.isPending,
+    sendMessageMutation.isError,
+    sendMessageMutation.isSuccess,
+    sendMessageMutation.error,
+  ]);
 
   // Scroll automático - useEffect simples apenas quando há mensagens
   useEffect(() => {
@@ -255,24 +352,73 @@ export function useChatModel(props: UseChatModelProps = {}) {
     [selectedChat, sendMessageMutation]
   );
 
+  // Função para converter arquivo para Base64
+  const convertFileToBase64 = useCallback((file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          const base64 = reader.result.split(',')[1];
+          if (base64) {
+            resolve(base64);
+          } else {
+            reject(new Error('Erro ao obter base64 do arquivo'));
+          }
+        } else {
+          reject(new Error('Erro ao converter arquivo'));
+        }
+      };
+      reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+    });
+  }, []);
+
   const handleSubmitMessage = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      if (messageInput.trim()) {
-        handleSendMessage(messageInput.trim());
+    async (data: SubmitData) => {
+      if (!selectedChat) return;
+      if (!data.message.trim() && !selectedFile) return;
+
+      setIsConvertingFile(true);
+
+      try {
+        let fileData: FileData | undefined;
+
+        if (selectedFile) {
+          const contentBase64 = await convertFileToBase64(selectedFile);
+          fileData = {
+            filename: selectedFile.name,
+            mimeType: selectedFile.type,
+            contentBase64,
+          };
+        }
+
+        sendMessageMutation.mutate({
+          chatId: selectedChat._id,
+          message: data.message,
+          file: fileData,
+        });
+
+        // Limpar após envio
+        setMessageInput('');
+        setSelectedFile(null);
+      } catch (error) {
+        console.error('Erro ao processar arquivo:', error);
+      } finally {
+        setIsConvertingFile(false);
       }
     },
-    [messageInput, handleSendMessage]
+    [selectedChat, selectedFile, sendMessageMutation, convertFileToBase64]
   );
 
   const handleKeyPress = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        handleSubmitMessage(e);
+        // O Enter enviará apenas a mensagem de texto, sem arquivo
+        handleSubmitMessage({ message: messageInput });
       }
     },
-    [handleSubmitMessage]
+    [handleSubmitMessage, messageInput]
   );
 
   const handleInputResize = useCallback((e: React.FormEvent<HTMLTextAreaElement>) => {
@@ -311,8 +457,8 @@ export function useChatModel(props: UseChatModelProps = {}) {
   );
 
   const sendMessage = useCallback(
-    (chatId: string, message: string) => {
-      sendMessageMutation.mutate({ chatId, message });
+    (chatId: string, message: string, file?: FileData) => {
+      sendMessageMutation.mutate({ chatId, message, file });
     },
     [sendMessageMutation]
   );
@@ -330,6 +476,63 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const invalidateMessages = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: queryKeys.allMessages() });
   }, [queryClient]);
+
+  // Função para validar arquivo
+  const validateFile = useCallback((file: File): { valid: boolean; error?: string } => {
+    if (file.type !== 'application/pdf') {
+      return { valid: false, error: 'Por favor, selecione apenas arquivos PDF' };
+    }
+
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      return { valid: false, error: 'O arquivo deve ter no máximo 10MB' };
+    }
+
+    return { valid: true };
+  }, []);
+
+  // Handler para seleção de arquivo
+  const handleFileSelect = useCallback(
+    (file: File | null) => {
+      console.log('🔍 handleFileSelect chamado com:', file);
+
+      if (!file) {
+        console.log('❌ Arquivo é null, limpando selectedFile');
+        setSelectedFile(null);
+        return;
+      }
+
+      console.log('📄 Validando arquivo:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      });
+
+      const validation = validateFile(file);
+      console.log('✅ Resultado da validação:', validation);
+
+      if (!validation.valid) {
+        console.log('❌ Arquivo inválido:', validation.error);
+        alert(validation.error);
+        return;
+      }
+
+      console.log('✅ Arquivo válido, definindo selectedFile');
+      setSelectedFile(file);
+      console.log('📂 Arquivo PDF selecionado:', file);
+    },
+    [validateFile]
+  );
+
+  // Handler para remover arquivo
+  const handleFileRemove = useCallback(() => {
+    setSelectedFile(null);
+    // Limpar o input file também
+    const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }, []);
 
   // Retorno estável usando useMemo
   return useMemo(
@@ -390,6 +593,14 @@ export function useChatModel(props: UseChatModelProps = {}) {
       clearCache,
       invalidateChats,
       invalidateMessages,
+
+      // Estados para arquivo
+      selectedFile,
+      isConvertingFile,
+
+      // Handlers para arquivo
+      handleFileSelect,
+      handleFileRemove,
     }),
     [
       chats,
@@ -425,6 +636,10 @@ export function useChatModel(props: UseChatModelProps = {}) {
       clearCache,
       invalidateChats,
       invalidateMessages,
+      selectedFile,
+      isConvertingFile,
+      handleFileSelect,
+      handleFileRemove,
     ]
   );
 }
