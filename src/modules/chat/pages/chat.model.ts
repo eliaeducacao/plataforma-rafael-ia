@@ -14,6 +14,7 @@ export interface FileData {
   filename: string;
   mimeType: string;
   contentBase64: string;
+  size?: number; // Tamanho do arquivo em bytes para exibição na UI
 }
 
 export interface SubmitData {
@@ -206,7 +207,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const sendMessageMutation = useMutation({
     mutationFn: ({ chatId, message, file }: { chatId: string; message: string; file?: FileData }) =>
       chatApi.sendMessage(chatId, { message, file }),
-    onMutate: async ({ chatId, message }) => {
+    onMutate: async ({ chatId, message, file }) => {
       console.log('🚀 Iniciando envio de mensagem:', { chatId, messageLength: message.length });
 
       // Adicionar mensagem do usuário imediatamente (optimistic update)
@@ -217,6 +218,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
           role: 'human',
           message: message,
           timestamp: Date.now(),
+          attachedFile: file
+            ? {
+                filename: file.filename,
+                mimeType: file.mimeType,
+                size: file.size || 0,
+              }
+            : undefined,
         };
 
         return [...currentMessages, userMessage];
@@ -384,6 +392,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
             filename: selectedFile.name,
             mimeType: selectedFile.type,
             contentBase64,
+            size: selectedFile.size, // Adicionando o tamanho para usar na UI
           };
         }
 

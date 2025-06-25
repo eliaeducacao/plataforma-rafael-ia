@@ -18,6 +18,11 @@ export interface Message {
   message: string;
   isStreaming?: boolean;
   timestamp?: number;
+  attachedFile?: {
+    filename: string;
+    mimeType: string;
+    size: number;
+  };
 }
 
 export interface Agent {
