@@ -7,21 +7,18 @@ type useTypewriterProps = {
 
 export function useTypewriter({ text, speed = 50 }: useTypewriterProps) {
   const [displayText, setDisplayText] = useState('');
-
   useEffect(() => {
     let i = 0;
-    const typingInterval = setInterval(() => {
+
+    const typeCharacter = () => {
       if (i < text.length) {
         setDisplayText(prevText => prevText + text.charAt(i));
-        i++;
-      } else {
-        clearInterval(typingInterval);
+        setTimeout(typeCharacter, speed);
       }
-    }, speed);
-
-    return () => {
-      clearInterval(typingInterval);
+      i++;
     };
+
+    typeCharacter();
   }, [text, speed]);
 
   return displayText;
