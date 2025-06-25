@@ -45,6 +45,7 @@ const chatApi = {
   sendMessage: async (chatId: string, data: SendMessageRequest): Promise<Message> => {
     const formData = new FormData();
     formData.append('message', data.message);
+    formData.append('file', data.message);
 
     const response = await api.post(
       `/webhook/3667f47c-418a-41c7-98ae-3f97d6468e84/api/v1/chats/${chatId}/messages`,
