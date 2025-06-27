@@ -84,26 +84,6 @@ const Testimonials = () => {
             </div>
           ))}
         </div>
-
-        {/* Social Proof */}
-        <div className="mt-16 text-center">
-          <div className="bg-card rounded-xl p-8 max-w-4xl mx-auto shadow-lg">
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <div className="text-3xl font-bold text-primary mb-2">500+</div>
-                <div className="text-muted-foreground">Advogados Cadastrados</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-primary mb-2">10k+</div>
-                <div className="text-muted-foreground">Documentos Gerados</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-primary mb-2">98%</div>
-                <div className="text-muted-foreground">Satisfação dos Usuários</div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

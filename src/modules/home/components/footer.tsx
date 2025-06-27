@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Mail, Phone, Linkedin, Instagram, Youtube } from 'lucide-react';
 import Logo from './logo';
 
 const Footer = () => {
@@ -43,32 +43,52 @@ const Footer = () => {
             <ul className="space-y-3 text-sidebar-accent-foreground">
               <li>
                 <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  Agente Petições
+                  Diagnóstico de Caso Jurídico
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  Agente Civil
+                  Analista de Tese Processual
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  Agente de Prazos
+                  Promptador Jurídico
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  Agente Doutrinador
+                  Consultor de Atendimento Jurídico
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  Agente de Contratos
+                  Especialista em Contratos
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  GPT-4 Jurídico
+                  Tradutor Jurídico
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-sidebar-primary transition-colors">
+                  Pesquisador de Jurisprudência
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-sidebar-primary transition-colors">
+                  Modelador de Petições Jurídicas
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-sidebar-primary transition-colors">
+                  Revisor Jurídico
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-sidebar-primary transition-colors">
+                  Marketing Jurídico
                 </a>
               </li>
             </ul>
@@ -98,11 +118,6 @@ const Footer = () => {
                   Status da Plataforma
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-sidebar-primary transition-colors">
-                  Contato Técnico
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -113,28 +128,20 @@ const Footer = () => {
               <div className="flex items-center">
                 <Mail className="w-4 h-4 mr-3 text-sidebar-primary" />
                 <a
-                  href="mailto:contato@advocacia.ai"
+                  href="mailto:eliaescolaadv@gmail.com"
                   className="hover:text-sidebar-primary transition-colors"
                 >
-                  contato@advocacia.ai
+                  eliaescolaadv@gmail.com
                 </a>
               </div>
               <div className="flex items-center">
                 <Phone className="w-4 h-4 mr-3 text-sidebar-primary" />
                 <a
-                  href="tel:+5511999999999"
+                  href="tel:+5511913337009"
                   className="hover:text-sidebar-primary transition-colors"
                 >
-                  (11) 99999-9999
+                  (11) 91333-7009
                 </a>
-              </div>
-              <div className="flex items-start">
-                <MapPin className="w-4 h-4 mr-3 text-sidebar-primary mt-1" />
-                <span>
-                  Av. Paulista, 1578
-                  <br />
-                  São Paulo - SP, 01310-200
-                </span>
               </div>
             </div>
           </div>

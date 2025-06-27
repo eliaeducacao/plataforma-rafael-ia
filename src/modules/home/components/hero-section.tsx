@@ -76,13 +76,13 @@ const HeroSection = () => {
                     <Bot className="w-6 h-6 text-primary mr-2 mt-1" />
                     <div className="bg-muted rounded-lg p-3 max-w-xs">
                       <p className="text-sm text-foreground">
-                        Olá! Sou o Agente Civil. Como posso ajudar com sua petição hoje?
+                        Olá! Sou o Diagnóstico de Caso Jurídico. Descreva sua situação que vou analisar a área do Direito e possíveis teses.
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start justify-end">
                     <div className="bg-primary text-primary-foreground rounded-lg p-3 max-w-xs">
-                      <p className="text-sm">Preciso redigir uma ação de cobrança</p>
+                      <p className="text-sm">Cliente bateu o carro no semáforo e quer me processar por negligência na manutenção</p>
                     </div>
                     <MessageSquare className="w-6 h-6 text-muted-foreground ml-2 mt-1" />
                   </div>
@@ -90,7 +90,8 @@ const HeroSection = () => {
                     <Bot className="w-6 h-6 text-primary mr-2 mt-1" />
                     <div className="bg-muted rounded-lg p-3 max-w-xs">
                       <p className="text-sm text-foreground">
-                        Perfeito! Vou te ajudar a estruturar a petição inicial...
+                        <strong>Área:</strong> Direito Civil - Responsabilidade Civil<br />
+                        <strong>Tese:</strong> Análise de nexo causal e excludentes de responsabilidade...
                       </p>
                     </div>
                   </div>

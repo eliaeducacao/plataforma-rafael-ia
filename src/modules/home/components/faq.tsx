@@ -10,11 +10,6 @@ const FAQ = () => {
 
   const faqs = [
     {
-      question: 'Como funciona a verificação de acesso à plataforma?',
-      answer:
-        'O acesso é controlado através de login seguro com autenticação de dois fatores. Apenas advogados registrados no sistema OAB ou estudantes de Direito com comprovação acadêmica podem acessar a biblioteca de agentes jurídicos.',
-    },
-    {
       question: 'Preciso entender de Inteligência Artificial para usar a plataforma?',
       answer:
         'Não! A plataforma foi desenvolvida especificamente para advogados, com interface intuitiva similar a um chat comum. Basta conversar naturalmente com os agentes, como faria com um colega especialista.',
@@ -43,11 +38,6 @@ const FAQ = () => {
       question: 'Como é feita a atualização da base jurídica dos agentes?',
       answer:
         'Nossa equipe jurídica atualiza constantemente a base de conhecimento com novas leis, jurisprudência e entendimentos dos tribunais superiores. As atualizações são automáticas e transparentes para o usuário.',
-    },
-    {
-      question: 'Existe suporte técnico disponível?',
-      answer:
-        'Oferecemos suporte técnico especializado via chat, e-mail e telefone durante horário comercial. Para questões urgentes, temos canal prioritário 24/7 para assinantes premium.',
     },
   ];
 
@@ -102,17 +92,17 @@ const FAQ = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:suporte@advocacia.ai"
+                href="mailto:eliaescolaadv@gmail.com"
                 className="text-primary hover:text-primary/80 font-medium"
               >
-                suporte@advocacia.ai
+                eliaescolaadv@gmail.com
               </a>
               <span className="hidden sm:block text-muted-foreground">|</span>
               <a
-                href="tel:+5511999999999"
+                href="tel:+5511913337009"
                 className="text-primary hover:text-primary/80 font-medium"
               >
-                (11) 99999-9999
+                (11) 91333-7009
               </a>
             </div>
           </div>

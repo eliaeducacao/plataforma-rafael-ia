@@ -49,7 +49,7 @@ const Benefits = () => {
             Vantagens para o Advogado Moderno
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Transforme sua advocacia com benefícios mensuráveis que impactam diretamente sua
+            Transforme sua prática jurídica com benefícios mensuráveis que impactam diretamente sua
             eficiência e resultados profissionais
           </p>
         </div>
@@ -81,25 +81,10 @@ const Benefits = () => {
         <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-8 lg:p-12 text-primary-foreground">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="text-3xl font-bold mb-4">Retorno sobre Investimento Comprovado</h3>
+              <h3 className="text-3xl font-bold mb-4">Retorno sobre Investimento</h3>
               <p className="text-primary-foreground/80 mb-6">
-                Advogados que utilizam nossa plataforma relatam economia significativa de tempo e
-                aumento na qualidade dos serviços jurídicos prestados.
+                Profissionais que utilizam IA no seu dia a dia relatam uma economia expressiva de tempo, aumento na produtividade e elevação significativa na qualidade dos serviços prestados.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold">15h</div>
-                  <div className="text-primary-foreground/70 text-sm">economizadas/semana</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">95%</div>
-                  <div className="text-primary-foreground/70 text-sm">precisão jurídica</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">300%</div>
-                  <div className="text-primary-foreground/70 text-sm">ROI em 3 meses</div>
-                </div>
-              </div>
             </div>
             <div className="text-center lg:text-right">
               <div className="inline-block bg-primary-foreground/10 rounded-lg p-6">

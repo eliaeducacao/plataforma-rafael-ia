@@ -68,7 +68,7 @@ function AgentLibrary({ agents, isLoading }: AgentLibraryProps) {
         <div className="mt-16 bg-secondary rounded-2xl p-8">
           <div className="grid md:grid-cols-4 gap-6 text-center">
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">6+</div>
+              <div className="text-3xl font-bold text-primary mb-2">9+</div>
               <div className="text-muted-foreground">Agentes Especializados</div>
             </div>
             <div>
