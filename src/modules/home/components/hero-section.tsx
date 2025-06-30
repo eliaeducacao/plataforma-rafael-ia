@@ -37,23 +37,19 @@ const HeroSection = () => {
                 Acessar Biblioteca Jurídica de IA
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 size="lg"
                 className="px-8 py-4 text-lg text-foreground hover:text-foreground"
               >
                 Ver Demonstração
-              </Button>
+              </Button> */}
             </div>
 
             <div
               className="flex items-center justify-center lg:justify-start text-sm text-muted-foreground animate-slide-up"
               style={{ animationDelay: '0.6s' }}
             >
-              <div className="flex items-center mr-6">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Baseado em ChatGPT 4.0
-              </div>
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                 Acesso Seguro 24/7

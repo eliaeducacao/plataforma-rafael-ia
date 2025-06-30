@@ -32,21 +32,21 @@ const CTASection = () => {
 
           {/* Benefits List */}
           <div
-            className="grid md:grid-cols-3 gap-6 mb-12 animate-slide-up"
+            className="grid md:grid-cols-1 gap-6 mb-12 animate-slide-up"
             style={{ animationDelay: '0.4s' }}
           >
             <div className="flex items-center justify-center text-primary-foreground">
               <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
               <span>Setup em 5 minutos</span>
             </div>
-            <div className="flex items-center justify-center text-primary-foreground">
+            {/* <div className="flex items-center justify-center text-primary-foreground">
               <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
               <span>7 dias grátis</span>
             </div>
             <div className="flex items-center justify-center text-primary-foreground">
               <CheckCircle className="w-5 h-5 mr-2 text-green-400" />
               <span>Cancele quando quiser</span>
-            </div>
+            </div> */}
           </div>
 
           {/* CTA Buttons */}
@@ -54,13 +54,13 @@ const CTASection = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-8 animate-slide-up"
             style={{ animationDelay: '0.6s' }}
           >
-            <Button size="lg" variant="secondary" className="px-8 py-4 text-md font-semibold group">
+            {/* <Button size="lg" variant="secondary" className="px-8 py-4 text-md font-semibold group">
               Criar Minha Conta Grátis
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button variant="outline" size="lg" className="text-md font-semibold">
+            </Button> */}
+            {/* <Button variant="outline" size="lg" className="text-md font-semibold">
               Agendar Demonstração
-            </Button>
+            </Button> */}
           </div>
 
           {/* Security Note */}

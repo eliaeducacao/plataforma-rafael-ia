@@ -7,7 +7,6 @@ import Features from "../../components/features";
 import Header from "../../components/header";
 import HeroSection from "../../components/hero-section";
 import HowItWorks from "../../components/how-it-works";
-import Testimonials from "../../components/testimonials";
 import { useHomeModel } from "./home.model";
 
 export function HomeView(props: ReturnType<typeof useHomeModel>) {
@@ -21,7 +20,6 @@ export function HomeView(props: ReturnType<typeof useHomeModel>) {
       <Features />
       <Benefits />
       <AgentLibrary agents={agents} isLoading={isAgentsLoading} />
-      <Testimonials />
       <FAQ />
       <CTASection />
       <Footer />
