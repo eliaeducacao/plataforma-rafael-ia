@@ -1,5 +1,4 @@
-import { Button } from '@/shared/components/ui/button';
-import { ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
+import { CheckCircle, Sparkles } from 'lucide-react';
 
 const CTASection = () => {
   return (
