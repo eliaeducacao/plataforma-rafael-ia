@@ -14,7 +14,7 @@ interface BreadcrumbProps {
 
 export default function ChatBreadcrumb({ agentName, onNavigateToAgents }: BreadcrumbProps) {
   return (
-    <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
+    <div className="bg-background/95 ml-16 my-4 sm:ml-0 sm:my-0 sm:my-0backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
         <div className="max-w-4xl mx-auto w-full">
           <Breadcrumb>

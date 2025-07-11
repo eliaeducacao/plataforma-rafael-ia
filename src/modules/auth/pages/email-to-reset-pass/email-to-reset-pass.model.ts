@@ -1,15 +1,12 @@
-import { useLocation } from 'wouter';
 import { useAuth } from '@/modules/auth/hooks/use-auth';
 import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { formSchema, FormSchema } from './login.schema';
+import { formSchema, FormSchema } from './email-to-reset-pass.schema';
 
-export function useLoginModel() {
-  const [, navigate] = useLocation();
-
-  const { login, isLoginPending, isAuthenticated } = useAuth();
+export function useEmailToResetPassModel() {
+  const { sendEmailToResetPassword, isAuthenticated } = useAuth();
 
   const {
     handleSubmit,
@@ -21,16 +18,14 @@ export function useLoginModel() {
   });
 
   const onSubmit = async (data: FormSchema) => {
-    await login({ email: data.email, password: data.password });
+    await sendEmailToResetPassword({ email: data.email });
   };
 
   return {
-    loading: isLoginPending,
-    navigate,
+    isAuthenticated,
     handleSubmit,
     register,
     onSubmit,
     errors,
-    isAuthenticated,
   };
 }

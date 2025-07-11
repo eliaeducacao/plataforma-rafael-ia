@@ -21,7 +21,10 @@ api.interceptors.response.use(
   response => response,
   error => {
     if (error.response && error.response.status === 401) {
-      window.location.href = '/login';
+      // Não redirecionar se já estamos na página de login
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
 
     return Promise.reject(error);

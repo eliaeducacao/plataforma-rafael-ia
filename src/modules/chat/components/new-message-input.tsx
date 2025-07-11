@@ -77,8 +77,8 @@ export default function NewMessageInput({
                 onChange={(e) => onChange(e.target.value)}
                 onKeyPress={onKeyPress}
                 onInput={onInputResize}
-                placeholder="Digite sua mensagem aqui..."
-                className="min-h-[40px] sm:min-h-[44px] resize-none w-full"
+                placeholder="Digite aqui..."
+                className="min-h-[40px] sm:min-h-[44px] resize-none w-full text-sm sm:text-sm md:text-base placeholder:text-sm"
                 rows={1}
                 disabled={disabled || isConverting}
               />
