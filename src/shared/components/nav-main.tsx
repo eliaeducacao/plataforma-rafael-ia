@@ -1,4 +1,7 @@
-import { IconCirclePlusFilled, type Icon } from "@tabler/icons-react"
+import {
+  // IconCirclePlusFilled, 
+  type Icon
+} from "@tabler/icons-react"
 
 import {
   SidebarGroup,
@@ -26,7 +29,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <SidebarMenu>
+        {/* <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <SidebarMenuButton
               tooltip="Quick Create"
@@ -36,11 +39,11 @@ export function NavMain({
               <span>Criar conversa</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu>
+        </SidebarMenu> */}
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton 
+              <SidebarMenuButton
                 tooltip={item.title}
                 onClick={() => setLocation(item.url)}
                 className={cn(item.url === location ? "!bg-primary/10 !text-primary" : "")}

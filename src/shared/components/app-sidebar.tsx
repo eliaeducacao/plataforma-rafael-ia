@@ -14,7 +14,7 @@ import {
   IconHelp,
   IconListDetails,
   IconMessageCircle,
-  IconSettings,
+  // IconSettings,
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/shared/components/nav-main"
@@ -65,11 +65,11 @@ const data = {
     // },
   ],
   navSecondary: [
-    {
-      title: "Configurações",
-      url: "#settings",
-      icon: IconSettings,
-    },
+    // {
+    //   title: "Configurações",
+    //   url: "#settings",
+    //   icon: IconSettings,
+    // },
     {
       title: "Preciso de ajuda",
       url: "https://wa.me/5511913337009",
