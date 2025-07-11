@@ -1,9 +1,14 @@
-import { Plus, Loader2 } from "lucide-react"
+import { Plus, Loader2, Menu } from "lucide-react"
 import type { Chat, Message } from "../types"
 import { Button } from "@/shared/components/ui/button"
 import { CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Separator } from "@/shared/components/ui/separator"
 import { cn } from "@/shared/lib/utils"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/shared/components/ui/sheet"
 
 interface SidebarProps {
   chats: Chat[] | null
@@ -14,16 +19,15 @@ interface SidebarProps {
   isCreatingChat?: boolean
 }
 
-export function Sidebar({
+const SidebarContent = ({
   chats,
-  messages,
   selectedChatId,
   onSelectChat,
   onNewConversation,
   isCreatingChat = false
-}: SidebarProps) {
+}: Omit<SidebarProps, "messages">) => {
   return (
-    <div className="w-80 bg-background border-r flex flex-col min-h-0 flex-shrink-0">
+    <div className="flex flex-col h-full">
       {/* Header */}
       <CardHeader className="px-4 sm:px-6 py-4">
         <CardTitle className="text-lg sm:text-xl">Meus Chats</CardTitle>
@@ -46,12 +50,6 @@ export function Sidebar({
             >
               <div className="flex flex-col items-start space-y-1 w-full min-w-0">
                 <div className="font-medium truncate w-full text-sm sm:text-base">{chat.title}</div>
-                <div className="text-xs text-muted-foreground truncate w-full">
-                  {messages?.length && messages?.length > 0
-                    ? `${messages?.length} mensagens`
-                    : "Conversa vazia"
-                  }
-                </div>
               </div>
             </Button>
           ))}
@@ -82,5 +80,31 @@ export function Sidebar({
         </Button>
       </div>
     </div>
+  )
+}
+
+export function Sidebar(props: SidebarProps) {
+  return (
+    <>
+      {/* Versão Mobile - Sheet */}
+      <Sheet>
+        <SheetTrigger asChild className="fixed top-4 left-4 z-50 md:hidden">
+          <Button variant="outline" size="icon" className="h-10 w-10">
+            <Menu className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent
+          side="left"
+          className="w-[80vw] sm:w-[300px] p-0 border-r"
+        >
+          <SidebarContent {...props} />
+        </SheetContent>
+      </Sheet>
+
+      {/* Versão Desktop - Sidebar Fixa */}
+      <div className="hidden md:block w-[300px] bg-background border-r flex-shrink-0">
+        <SidebarContent {...props} />
+      </div>
+    </>
   )
 } 
