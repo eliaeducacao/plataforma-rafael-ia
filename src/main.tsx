@@ -6,11 +6,14 @@ import { Route, Switch } from 'wouter';
 import { Toaster } from 'sonner';
 
 import '@/index.css';
+import '@/shared/styles/markdown.css';
 
 import HomePage from '@/modules/home/pages/home';
 import LoginPage from '@/modules/auth/pages/login';
 import ChatPage from '@/modules/chat/pages';
 import AgentsPage from '@/modules/agents-library/pages';
+import ResetPassPage from '@/modules/auth/pages/reset-pass';
+import CreateUserPage from '@/modules/auth/pages/create-user';
 
 import { ProtectedRoute } from '@/modules/auth/components/protected-route';
 import { AuthProvider } from '@/modules/auth/providers/auth-provider';
@@ -36,6 +39,8 @@ createRoot(document.getElementById('root')!).render(
             {/* Rotas Públicas */}
             <Route path="/" component={HomePage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/reset-password" component={ResetPassPage} />
+            <Route path="/create-user" component={CreateUserPage} />
             <Route path="/auth/callback">
               <div>Verificando autenticação...</div>
             </Route>

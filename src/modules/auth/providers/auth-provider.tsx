@@ -10,6 +10,7 @@ import { AuthContext, AuthContextProps } from "../contexts/auth-context";
 import { toast } from "sonner";
 
 import { api } from "@/shared/lib/axios";
+import { FormSchema as CreateUserFormSchema } from "../pages/create-user/create-user.schema";
 
 type AuthProviderProps = {
   children: ReactNode
@@ -38,6 +39,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
     onError: () => {
       toast.error('Erro ao fazer login. Verifique seu e-mail.');
+    },
+  });
+
+  const { mutateAsync: resetPassword, isPending: isResetPasswordPending } = useMutation({
+    mutationKey: ['reset-password'],
+    mutationFn: async ({ id, code, new_password }: { id: string, code: string, new_password: string }): ReturnType<AuthContextProps['resetPassword']> => {
+      const response = await api.post('/webhook/api/v1/auth/reset-password', { id, code, new_password });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Senha resetada com sucesso!');
+      setLocation('/login');
+    },
+    onError: () => {
+      toast.error('Erro ao resetar senha. Verifique o código e a nova senha.');
+    },
+  });
+
+  const { mutateAsync: createUser, isPending: isCreateUserPending } = useMutation({
+    mutationKey: ['create-user'],
+    mutationFn: async (data: CreateUserFormSchema) => {
+      const response = await api.post('/webhook/api/v1/auth/create-user', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Usuário criado com sucesso!');
+      setLocation('/login');
+    },
+    onError: () => {
+      toast.error('Erro ao criar usuário. Verifique os dados informados.');
     },
   });
 
@@ -71,5 +102,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
     fetchUser();
   }, [token, setUser]);
 
-  return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user }}>{children}</AuthContext>
+  return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user, resetPassword, isResetPasswordPending, createUser, isCreateUserPending }}>{children}</AuthContext>
 }
