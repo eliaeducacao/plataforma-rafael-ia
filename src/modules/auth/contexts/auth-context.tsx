@@ -4,13 +4,18 @@ type ResultResponse = {
   ok: boolean
 }
 
+export type LoginRequest = {
+  email: string
+  password: string
+}
+
 type LoginResultResponse = {
   token: string
 }
 
 export type AuthContextProps = {
   isAuthenticated: boolean;
-  login: (email: string) => Promise<LoginResultResponse>;
+  login: (request: LoginRequest) => Promise<LoginResultResponse>;
   isLoginPending: boolean
   logout: () => Promise<ResultResponse>;
   token: string | null
