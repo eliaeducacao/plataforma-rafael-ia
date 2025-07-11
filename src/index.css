@@ -1,6 +1,6 @@
+@import url('@/shared/styles/markdown.css');
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import url('@/shared/styles/markdown.css');
 
 @custom-variant dark (&:is(.dark *));
 

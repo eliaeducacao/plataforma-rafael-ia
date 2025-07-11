@@ -5,12 +5,13 @@ import { useCookies } from "react-cookie";
 import { useLocation } from "wouter";
 import { useLocalStorage } from "@uidotdev/usehooks";
 
-import { AuthContext, AuthContextProps } from "../contexts/auth-context";
+import { AuthContext, AuthContextProps, LoginRequest } from "../contexts/auth-context";
 
 import { toast } from "sonner";
 
 import { api } from "@/shared/lib/axios";
 import { FormSchema as CreateUserFormSchema } from "../pages/create-user/create-user.schema";
+import { AxiosError } from "axios";
 
 type AuthProviderProps = {
   children: ReactNode
@@ -28,17 +29,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const { mutateAsync: login, isPending: isLoginPending } = useMutation({
     mutationKey: ['login'],
-    mutationFn: async (email: string): ReturnType<AuthContextProps['login']> => {
-      const response = await api.post('/webhook/api/v1/auth/login', { email });
+    mutationFn: async ({ email, password }: LoginRequest) => {
+      const response = await api.post('/webhook/api/v2/auth/login', { email, password });
       return response.data;
     },
     onSuccess: (data) => {
+      console.log("Sucesso! ")
       setCookie('x-auth-token', data.token);
       toast.success('Login realizado com sucesso!');
       setLocation('/agents');
     },
-    onError: () => {
-      toast.error('Erro ao fazer login. Verifique seu e-mail.');
+    onError: (error: AxiosError) => {
+      console.log("Erro! ", error);
+      if (error.response?.status === 401) {
+        toast.error('E-mail ou senha inválidos.');
+      } else {
+        toast.error('Erro ao fazer login. Verifique seu e-mail.');
+      }
     },
   });
 

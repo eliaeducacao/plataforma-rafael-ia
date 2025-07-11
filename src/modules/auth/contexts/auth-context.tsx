@@ -5,15 +5,20 @@ type ResultResponse = {
   ok: boolean
 }
 
+export type LoginRequest = {
+  email: string
+  password: string
+}
+
 type LoginResultResponse = {
   token: string
 }
 
 export type AuthContextProps = {
   isAuthenticated: boolean;
-  login: (email: string) => Promise<LoginResultResponse>;
   resetPassword: ({ id, code, new_password }: { id: string, code: string, new_password: string }) => Promise<void>;
   createUser: (data: CreateUserFormSchema) => Promise<void>;
+  login: (request: LoginRequest) => Promise<LoginResultResponse>;
   isLoginPending: boolean
   isResetPasswordPending: boolean
   logout: () => Promise<ResultResponse>;
