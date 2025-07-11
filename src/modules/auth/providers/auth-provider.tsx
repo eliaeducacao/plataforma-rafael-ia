@@ -10,6 +10,7 @@ import { AuthContext, AuthContextProps, LoginRequest } from "../contexts/auth-co
 import { toast } from "sonner";
 
 import { api } from "@/shared/lib/axios";
+import { FormSchema as CreateUserFormSchema } from "../pages/create-user/create-user.schema";
 import { AxiosError } from "axios";
 
 type AuthProviderProps = {
@@ -26,7 +27,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const token = cookies['x-auth-token'];
 
-  const { mutateAsync: loginMutate, isPending: isLoginPending } = useMutation({
+  const { mutateAsync: login, isPending: isLoginPending } = useMutation({
     mutationKey: ['login'],
     mutationFn: async ({ email, password }: LoginRequest) => {
       const response = await api.post('/webhook/api/v2/auth/login', { email, password });
@@ -48,11 +49,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
   });
 
-  const login = async (request: LoginRequest) => {
-    const response = await loginMutate(request);
-    return response;
-  };
+  const { mutateAsync: resetPassword, isPending: isResetPasswordPending } = useMutation({
+    mutationKey: ['reset-password'],
+    mutationFn: async ({ id, code, new_password }: { id: string, code: string, new_password: string }): ReturnType<AuthContextProps['resetPassword']> => {
+      const response = await api.post('/webhook/api/v1/auth/reset-password', { id, code, new_password });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Senha resetada com sucesso!');
+      setLocation('/login');
+    },
+    onError: () => {
+      toast.error('Erro ao resetar senha. Verifique o código e a nova senha.');
+    },
+  });
 
+  const { mutateAsync: createUser, isPending: isCreateUserPending } = useMutation({
+    mutationKey: ['create-user'],
+    mutationFn: async (data: CreateUserFormSchema) => {
+      const response = await api.post('/webhook/api/v1/auth/create-user', data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Usuário criado com sucesso!');
+      setLocation('/login');
+    },
+    onError: () => {
+      toast.error('Erro ao criar usuário. Verifique os dados informados.');
+    },
+  });
 
   async function logout(): ReturnType<AuthContextProps['logout']> {
     setLocation('/login')
@@ -84,5 +109,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
     fetchUser();
   }, [token, setUser]);
 
-  return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user }}>{children}</AuthContext>
+  return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user, resetPassword, isResetPasswordPending, createUser, isCreateUserPending }}>{children}</AuthContext>
 }
