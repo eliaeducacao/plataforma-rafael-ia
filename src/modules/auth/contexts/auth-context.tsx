@@ -17,6 +17,7 @@ type LoginResultResponse = {
 export type AuthContextProps = {
   isAuthenticated: boolean;
   resetPassword: ({ id, code, new_password }: { id: string, code: string, new_password: string }) => Promise<void>;
+  sendEmailToResetPassword: ({ email }: { email: string }) => Promise<void>;
   createUser: (data: CreateUserFormSchema) => Promise<void>;
   login: (request: LoginRequest) => Promise<LoginResultResponse>;
   isLoginPending: boolean
@@ -28,6 +29,7 @@ export type AuthContextProps = {
     name: string
   } | null
   isCreateUserPending: boolean
+  isSendEmailToResetPasswordPending: boolean
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);

@@ -4,6 +4,7 @@ import { Mail, Lock } from "lucide-react";
 
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
+import { Link } from "wouter";
 
 export function LoginView(props: ReturnType<typeof useLoginModel>) {
   const { onSubmit, handleSubmit, errors, register, loading } = props
@@ -76,6 +77,12 @@ export function LoginView(props: ReturnType<typeof useLoginModel>) {
               >
                 Entrar
               </Button>
+
+              <div className="mt-4 text-center">
+                <Link href="/email-to-reset-pass" className="text-sm text-purple-600 hover:text-purple-500">
+                  Esqueceu sua senha?
+                </Link>
+              </div>
             </form>
           </div>
         </div>
