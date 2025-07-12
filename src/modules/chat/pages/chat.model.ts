@@ -33,6 +33,10 @@ interface ApiMessageResponse {
   usage: Record<string, unknown>;
 }
 
+interface TranscriptionResponse {
+  text: string;
+}
+
 // Funções de API
 const chatApi = {
   // Criar Chat
@@ -78,6 +82,19 @@ const chatApi = {
     );
     return response.data;
   },
+
+  // Transcrever Áudio
+  transcribeAudio: async (audioBlob: Blob): Promise<TranscriptionResponse> => {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'audio.webm');
+
+    const response = await api.post('/webhook/api/v1/transcribe', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
 };
 
 // Query Keys - Centralizadas para consistência
@@ -86,6 +103,7 @@ const queryKeys = {
   messages: (chatId: string) => ['messages', chatId] as const,
   allChats: () => ['chats'] as const,
   allMessages: () => ['messages'] as const,
+  transcription: (audioId: string) => ['transcription', audioId] as const,
 };
 
 interface UseChatModelProps {
@@ -153,6 +171,26 @@ export function useChatModel(props: UseChatModelProps = {}) {
     gcTime: 5 * 60 * 1000, // 5 minutos
     retry: 3,
     refetchOnWindowFocus: false,
+  });
+
+  // React Query - Transcrição de Áudio
+  const { mutate: transcribeAudio, isPending: isTranscribing } = useMutation({
+    mutationFn: (audioBlob: Blob) => chatApi.transcribeAudio(audioBlob),
+    onSuccess: response => {
+      // Adicionar texto transcrito ao input
+      console.log('🎤 Transcrição de áudio:', response);
+      const transcribedText = response.text;
+      if (transcribedText) {
+        setMessageInput(prev => {
+          const newText = prev ? `${prev} ${transcribedText}` : transcribedText;
+          return newText;
+        });
+      }
+    },
+    onError: error => {
+      console.error('Erro ao transcrever áudio:', error);
+      // Aqui você pode adicionar uma notificação de erro para o usuário
+    },
   });
 
   // Log de erros se houver
@@ -524,6 +562,20 @@ export function useChatModel(props: UseChatModelProps = {}) {
     }
   }, []);
 
+  // Handler para áudio gravado
+  const handleAudioRecorded = useCallback(
+    (audioBlob: Blob) => {
+      console.log('🎤 Áudio gravado recebido:', {
+        size: audioBlob.size,
+        type: audioBlob.type,
+      });
+
+      // Iniciar transcrição
+      transcribeAudio(audioBlob);
+    },
+    [transcribeAudio]
+  );
+
   // Retorno estável usando useMemo
   return useMemo(
     () => ({
@@ -591,6 +643,12 @@ export function useChatModel(props: UseChatModelProps = {}) {
       // Handlers para arquivo
       handleFileSelect,
       handleFileRemove,
+
+      // Estados para transcrição de áudio
+      isTranscribing,
+
+      // Handlers para áudio
+      handleAudioRecorded,
     }),
     [
       chats,
@@ -630,6 +688,8 @@ export function useChatModel(props: UseChatModelProps = {}) {
       isConvertingFile,
       handleFileSelect,
       handleFileRemove,
+      isTranscribing,
+      handleAudioRecorded,
     ]
   );
 }

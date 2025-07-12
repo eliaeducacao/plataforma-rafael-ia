@@ -32,6 +32,8 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
     isConvertingFile,
     handleFileSelect,
     handleFileRemove,
+    // Props de áudio
+    handleAudioRecorded,
     isLoadingChats
   } = props
 
@@ -100,6 +102,7 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
               isConvertingFile={isConvertingFile}
               onFileSelect={handleFileSelect}
               onFileRemove={handleFileRemove}
+              onAudioRecorded={handleAudioRecorded}
             />
           </div>
         </>
