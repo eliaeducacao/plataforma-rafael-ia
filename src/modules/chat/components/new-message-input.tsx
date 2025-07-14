@@ -1,6 +1,7 @@
 import { Send } from "lucide-react"
 import { Button } from "@/shared/components/ui/button"
 import { Textarea } from "@/shared/components/ui/textarea"
+import { AudioRecorderButton } from "./audio-recorder-button"
 import type { SubmitData } from "../pages/chat.model"
 
 interface NewMessageInputProps {
@@ -14,6 +15,7 @@ interface NewMessageInputProps {
   isConverting?: boolean
   onFileSelect: (file: File | null) => void
   onFileRemove: () => void
+  onAudioRecorded?: (audioBlob: Blob) => void
 }
 
 export default function NewMessageInput({
@@ -26,7 +28,8 @@ export default function NewMessageInput({
   selectedFile,
   isConverting = false,
   onFileSelect,
-  onFileRemove
+  onFileRemove,
+  onAudioRecorded
 }: NewMessageInputProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,6 +43,12 @@ export default function NewMessageInput({
 
   const handleFileUploadClick = () => {
     document.getElementById('pdf-upload')?.click()
+  }
+
+  const handleAudioRecorded = (audioBlob: Blob) => {
+    if (onAudioRecorded) {
+      onAudioRecorded(audioBlob)
+    }
   }
 
   return (
@@ -93,60 +102,72 @@ export default function NewMessageInput({
               disabled={disabled || isConverting}
             />
 
-            <div className="relative">
+            <div className="flex gap-2">
+              {/* Botão de gravação de áudio */}
+              {onAudioRecorded && (
+                <AudioRecorderButton
+                  onAudioRecorded={handleAudioRecorded}
+                  disabled={disabled || isConverting}
+                />
+              )}
+
+              {/* Botão de upload de PDF */}
+              <div className="relative">
+                <Button
+                  type="button"
+                  onClick={handleFileUploadClick}
+                  disabled={disabled || isConverting}
+                  size="icon"
+                  className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
+                  title={selectedFile ? `PDF anexado: ${selectedFile.name}` : "Anexar PDF"}
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <span className="sr-only">Anexar PDF</span>
+                </Button>
+
+                {/* Badge indicador de arquivo anexado */}
+                {selectedFile && (
+                  <div className="absolute -top-1 -right-1 h-4 w-4 bg-green-500 rounded-full flex items-center justify-center animate-in fade-in-0 zoom-in-95 duration-200 shadow-sm border-2 border-background">
+                    <svg className="h-2.5 w-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Botão de enviar */}
               <Button
-                type="button"
-                onClick={handleFileUploadClick}
-                disabled={disabled || isConverting}
+                type="submit"
+                disabled={(!value.trim() && !selectedFile) || disabled || isConverting}
                 size="icon"
                 className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
-                title={selectedFile ? `PDF anexado: ${selectedFile.name}` : "Anexar PDF"}
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                <span className="sr-only">Anexar PDF</span>
-              </Button>
-
-              {/* Badge indicador de arquivo anexado */}
-              {selectedFile && (
-                <div className="absolute -top-1 -right-1 h-4 w-4 bg-green-500 rounded-full flex items-center justify-center animate-in fade-in-0 zoom-in-95 duration-200 shadow-sm border-2 border-background">
-                  <svg className="h-2.5 w-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                {isConverting ? (
+                  <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                </div>
-              )}
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+                <span className="sr-only">
+                  {isConverting ? 'Processando...' : 'Enviar mensagem'}
+                </span>
+              </Button>
             </div>
-
-            <Button
-              type="submit"
-              disabled={(!value.trim() && !selectedFile) || disabled || isConverting}
-              size="icon"
-              className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
-            >
-              {isConverting ? (
-                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-              ) : (
-                <Send className="h-4 w-4" />
-              )}
-              <span className="sr-only">
-                {isConverting ? 'Processando...' : 'Enviar mensagem'}
-              </span>
-            </Button>
           </form>
 
           <p className="text-xs text-muted-foreground mt-2 text-center">

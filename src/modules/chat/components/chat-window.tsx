@@ -30,6 +30,9 @@ interface ChatWindowProps {
   onFileSelect: (file: File | null) => void
   onFileRemove: () => void
 
+  // Props para áudio
+  onAudioRecorded?: (audioBlob: Blob) => void
+
   // Props para navegação
   onNavigateToAgents: () => void
 
@@ -55,7 +58,8 @@ export function ChatWindow({
   selectedFile,
   isConvertingFile = false,
   onFileSelect,
-  onFileRemove
+  onFileRemove,
+  onAudioRecorded
 }: ChatWindowProps) {
   if (!chat) {
     return (
@@ -155,6 +159,7 @@ export function ChatWindow({
           isConverting={isConvertingFile}
           onFileSelect={onFileSelect}
           onFileRemove={onFileRemove}
+          onAudioRecorded={onAudioRecorded}
         />
       </footer>
     </div>
