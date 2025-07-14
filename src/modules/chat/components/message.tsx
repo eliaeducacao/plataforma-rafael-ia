@@ -147,9 +147,15 @@ const Message = memo(function Message({ message }: MessageProps) {
         {message.attachedFile && (
           <div className="mt-2 p-2 bg-background/50 rounded-md border border-border/50 flex items-center gap-2 max-w-full">
             <div className="flex-shrink-0">
-              <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-              </svg>
+              {message.attachedFile.mimeType === 'application/pdf' ? (
+                <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg className="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                </svg>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-medium truncate text-foreground">
@@ -158,7 +164,7 @@ const Message = memo(function Message({ message }: MessageProps) {
               <p className="text-xs text-muted-foreground">
                 {message.attachedFile.size > 0
                   ? `${(message.attachedFile.size / 1024 / 1024).toFixed(2)} MB`
-                  : 'PDF'
+                  : message.attachedFile.mimeType === 'application/pdf' ? 'PDF' : 'DOCX'
                 }
               </p>
             </div>

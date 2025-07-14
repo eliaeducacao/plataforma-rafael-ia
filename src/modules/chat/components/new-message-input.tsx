@@ -42,7 +42,7 @@ export default function NewMessageInput({
   }
 
   const handleFileUploadClick = () => {
-    document.getElementById('pdf-upload')?.click()
+    document.getElementById('file-upload')?.click()
   }
 
   const handleAudioRecorded = (audioBlob: Blob) => {
@@ -59,9 +59,15 @@ export default function NewMessageInput({
           {selectedFile && (
             <div className="mb-3 p-3 bg-muted rounded-lg flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0012 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                </svg>
+                {selectedFile.type === 'application/pdf' ? (
+                  <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0012 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg className="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0012 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                  </svg>
+                )}
                 <span className="text-sm text-foreground">{selectedFile.name}</span>
                 <span className="text-xs text-muted-foreground">
                   ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
@@ -95,10 +101,10 @@ export default function NewMessageInput({
 
             <input
               type="file"
-              accept=".pdf"
+              accept=".pdf,.docx"
               onChange={handleFileChange}
               className="hidden"
-              id="pdf-upload"
+              id="file-upload"
               disabled={disabled || isConverting}
             />
 
@@ -119,7 +125,7 @@ export default function NewMessageInput({
                   disabled={disabled || isConverting}
                   size="icon"
                   className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
-                  title={selectedFile ? `PDF anexado: ${selectedFile.name}` : "Anexar PDF"}
+                  title={selectedFile ? `Arquivo anexado: ${selectedFile.name}` : "Anexar PDF ou DOCX"}
                 >
                   <svg
                     className="h-4 w-4"
@@ -135,7 +141,7 @@ export default function NewMessageInput({
                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
-                  <span className="sr-only">Anexar PDF</span>
+                  <span className="sr-only">Anexar arquivo</span>
                 </Button>
 
                 {/* Badge indicador de arquivo anexado */}
