@@ -521,8 +521,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // Função para validar arquivo
   const validateFile = useCallback((file: File): { valid: boolean; error?: string } => {
-    if (file.type !== 'application/pdf') {
-      return { valid: false, error: 'Por favor, selecione apenas arquivos PDF' };
+    const allowedTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      return { valid: false, error: 'Por favor, selecione apenas arquivos PDF ou DOCX' };
     }
 
     const maxSize = 10 * 1024 * 1024; // 10MB
@@ -556,7 +561,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const handleFileRemove = useCallback(() => {
     setSelectedFile(null);
     // Limpar o input file também
-    const fileInput = document.getElementById('pdf-upload') as HTMLInputElement;
+    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
