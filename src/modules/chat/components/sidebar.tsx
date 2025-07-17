@@ -3,12 +3,13 @@ import type { Chat, Message } from "../types"
 import { Button } from "@/shared/components/ui/button"
 import { CardHeader, CardTitle } from "@/shared/components/ui/card"
 import { Separator } from "@/shared/components/ui/separator"
-import { cn } from "@/shared/lib/utils"
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/shared/components/ui/sheet"
+import { ChatItem } from './chat-item'
+import { UseMutationResult } from '@tanstack/react-query';
 
 interface SidebarProps {
   chats: Chat[] | null
@@ -16,6 +17,12 @@ interface SidebarProps {
   selectedChatId: string | null
   onSelectChat: (chatId: string) => void
   onNewConversation: () => void
+  onDeleteChat: (chatId: string) => void
+  onUpdateChatTitle: (chatId: string, title: string) => Promise<unknown> | void
+  editingChatId: string | null
+  onStartEditChat: (chatId: string) => void
+  onStopEditChat: () => void
+  updateChatTitleMutation: UseMutationResult<Chat, unknown, { chatId: string; title: string }, unknown>
   isCreatingChat?: boolean
 }
 
@@ -24,6 +31,12 @@ const SidebarContent = ({
   selectedChatId,
   onSelectChat,
   onNewConversation,
+  onDeleteChat,
+  onUpdateChatTitle,
+  editingChatId,
+  onStartEditChat,
+  onStopEditChat,
+  updateChatTitleMutation,
   isCreatingChat = false
 }: Omit<SidebarProps, "messages">) => {
   return (
@@ -39,19 +52,20 @@ const SidebarContent = ({
       <div className="flex-1 overflow-y-auto p-4 min-h-0">
         <div className="space-y-2">
           {chats?.map((chat) => (
-            <Button
+            <ChatItem
               key={chat._id}
-              variant={selectedChatId === chat._id ? "secondary" : "ghost"}
-              onClick={() => onSelectChat(chat._id)}
-              className={cn(
-                "w-full justify-start h-auto p-3 text-left",
-                selectedChatId === chat._id && "bg-secondary"
-              )}
-            >
-              <div className="flex flex-col items-start space-y-1 w-full min-w-0">
-                <div className="font-medium truncate w-full text-sm sm:text-base">{chat.title}</div>
-              </div>
-            </Button>
+              chat={chat}
+              isSelected={selectedChatId === chat._id}
+              onSelect={onSelectChat}
+              onDelete={onDeleteChat}
+              onUpdateTitle={onUpdateChatTitle}
+              isEditing={editingChatId === chat._id}
+              onStartEdit={() => onStartEditChat(chat._id)}
+              onStopEdit={onStopEditChat}
+              isUpdatingTitle={updateChatTitleMutation.isPending && editingChatId === chat._id}
+              isUpdateSuccess={updateChatTitleMutation.isSuccess && editingChatId === chat._id}
+              resetMutation={updateChatTitleMutation.reset}
+            />
           ))}
         </div>
       </div>

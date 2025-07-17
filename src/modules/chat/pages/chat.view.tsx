@@ -3,6 +3,7 @@ import { ChatWindow } from "../components/chat-window"
 import { Sidebar } from "../components/sidebar"
 import { Button } from "@/shared/components/ui/button"
 import { Alert, AlertDescription } from "@/shared/components/ui/alert"
+import { useState } from 'react';
 
 export function ChatView(props: ReturnType<typeof useChatModel>) {
   const {
@@ -34,8 +35,12 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
     handleFileRemove,
     // Props de áudio
     handleAudioRecorded,
-    isLoadingChats
+    isLoadingChats,
+    deleteChatMutation,
+    updateChatTitleMutation
   } = props
+
+  const [editingChatId, setEditingChatId] = useState<string | null>(null);
 
   // Error state para chats
   if (chatsError) {
@@ -54,6 +59,18 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
       </div>
     )
   }
+
+  // Handlers para deleção e edição de título
+  const handleDeleteChat = (chatId: string) => {
+    deleteChatMutation.mutate(chatId)
+  }
+
+  const handleUpdateChatTitle = (chatId: string, title: string) => {
+    return updateChatTitleMutation.mutateAsync({ chatId, title })
+  }
+
+  const handleStartEditChat = (chatId: string) => setEditingChatId(chatId);
+  const handleStopEditChat = () => setEditingChatId(null);
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
@@ -78,6 +95,12 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
               selectedChatId={selectedChatId}
               onSelectChat={handleSelectChat}
               onNewConversation={handleNewConversation}
+              onDeleteChat={handleDeleteChat}
+              onUpdateChatTitle={handleUpdateChatTitle}
+              editingChatId={editingChatId}
+              onStartEditChat={handleStartEditChat}
+              onStopEditChat={handleStopEditChat}
+              updateChatTitleMutation={updateChatTitleMutation}
               isCreatingChat={isCreatingChat}
             />
           )}
