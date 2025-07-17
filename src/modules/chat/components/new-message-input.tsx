@@ -59,7 +59,15 @@ export default function NewMessageInput({
           {selectedFile && (
             <div className="mb-3 p-3 bg-muted rounded-lg flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {selectedFile.type === 'application/pdf' ? (
+                {/* Preview de imagem */}
+                {selectedFile.type.startsWith('image/') && selectedFile.type !== 'image/gif' ? (
+                  <img
+                    src={URL.createObjectURL(selectedFile)}
+                    alt={selectedFile.name}
+                    className="h-10 w-10 object-cover rounded border border-border"
+                    style={{ maxWidth: 48, maxHeight: 48 }}
+                  />
+                ) : selectedFile.type === 'application/pdf' ? (
                   <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0012 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
                   </svg>
@@ -99,12 +107,23 @@ export default function NewMessageInput({
               />
             </div>
 
+            {/* Input de documento */}
             <input
               type="file"
               accept=".pdf,.docx"
               onChange={handleFileChange}
               className="hidden"
               id="file-upload"
+              disabled={disabled || isConverting}
+            />
+
+            {/* Input de imagem */}
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/svg+xml"
+              onChange={handleFileChange}
+              className="hidden"
+              id="image-upload"
               disabled={disabled || isConverting}
             />
 
@@ -117,7 +136,7 @@ export default function NewMessageInput({
                 />
               )}
 
-              {/* Botão de upload de PDF */}
+              {/* Botão de upload de PDF/DOCX */}
               <div className="relative">
                 <Button
                   type="button"
@@ -143,9 +162,35 @@ export default function NewMessageInput({
                   </svg>
                   <span className="sr-only">Anexar arquivo</span>
                 </Button>
+                {/* Badge indicador de arquivo anexado - só aparece se for documento */}
+                {selectedFile && !selectedFile.type.startsWith('image/') && (
+                  <div className="absolute -top-1 -right-1 h-4 w-4 bg-green-500 rounded-full flex items-center justify-center animate-in fade-in-0 zoom-in-95 duration-200 shadow-sm border-2 border-background">
+                    <svg className="h-2.5 w-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
+              </div>
 
-                {/* Badge indicador de arquivo anexado */}
-                {selectedFile && (
+              {/* Botão de upload de imagem */}
+              <div className="relative">
+                <Button
+                  type="button"
+                  onClick={() => document.getElementById('image-upload')?.click()}
+                  disabled={disabled || isConverting}
+                  size="icon"
+                  className="h-10 w-10 sm:h-11 sm:w-11 shrink-0"
+                  title={selectedFile ? `Imagem anexada: ${selectedFile.name}` : "Anexar Imagem"}
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" strokeWidth="2" stroke="currentColor" fill="none" />
+                    <circle cx="8.5" cy="8.5" r="1.5" strokeWidth="2" stroke="currentColor" fill="none" />
+                    <path d="M21 15l-5-5L5 21" strokeWidth="2" stroke="currentColor" fill="none" />
+                  </svg>
+                  <span className="sr-only">Anexar imagem</span>
+                </Button>
+                {/* Badge indicador de imagem anexada - só aparece se for imagem */}
+                {selectedFile && selectedFile.type.startsWith('image/') && (
                   <div className="absolute -top-1 -right-1 h-4 w-4 bg-green-500 rounded-full flex items-center justify-center animate-in fade-in-0 zoom-in-95 duration-200 shadow-sm border-2 border-background">
                     <svg className="h-2.5 w-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
