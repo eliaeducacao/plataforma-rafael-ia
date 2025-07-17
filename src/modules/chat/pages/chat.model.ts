@@ -110,12 +110,21 @@ const chatApi = {
     );
     return response.data;
   },
+
+  // Obter Agente por ID
+  getAgent: async (agentId: string) => {
+    const response = await api.get(
+      `/webhook/f356c2bb-bb5e-4667-9853-92ee23b172b8/api/v1/agents/${agentId}`
+    );
+    return response.data;
+  },
 };
 
 // Query Keys - Centralizadas para consistência
 const queryKeys = {
   chats: (agentId: string) => ['chats', agentId] as const,
   messages: (chatId: string) => ['messages', chatId] as const,
+  agent: (agentId: string) => ['agent', agentId] as const,
   allChats: () => ['chats'] as const,
   allMessages: () => ['messages'] as const,
   transcription: (audioId: string) => ['transcription', audioId] as const,
@@ -184,6 +193,21 @@ export function useChatModel(props: UseChatModelProps = {}) {
     enabled: !!activeChatId,
     staleTime: 1 * 60 * 1000, // 1 minuto
     gcTime: 5 * 60 * 1000, // 5 minutos
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+
+  // React Query - Obter Agente
+  const {
+    data: currentAgent,
+    isLoading: isLoadingAgent,
+    error: agentError,
+  } = useQuery({
+    queryKey: queryKeys.agent(activeAgentId),
+    queryFn: () => chatApi.getAgent(activeAgentId),
+    enabled: !!activeAgentId,
+    staleTime: 10 * 60 * 1000, // 10 minutos
+    gcTime: 30 * 60 * 1000, // 30 minutos
     retry: 3,
     refetchOnWindowFocus: false,
   });
@@ -675,10 +699,15 @@ export function useChatModel(props: UseChatModelProps = {}) {
       // Estados de loading e error
       isLoadingChats,
       isLoadingMessages,
+      isLoadingAgent,
       chatsError,
       messagesError,
+      agentError,
       isCreatingChat: createChatMutation.isPending,
       isSendingMessage: sendMessageMutation.isPending,
+
+      // Dados do agente
+      currentAgent,
 
       // Handlers principais
       handleSelectChat,
@@ -740,10 +769,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
       newConversationMode,
       isLoadingChats,
       isLoadingMessages,
+      isLoadingAgent,
       chatsError,
       messagesError,
+      agentError,
       createChatMutation.isPending,
       sendMessageMutation.isPending,
+      currentAgent,
       handleSelectChat,
       handleNewConversation,
       handleUpdateThread,

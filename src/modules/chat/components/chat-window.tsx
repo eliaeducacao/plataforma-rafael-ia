@@ -40,6 +40,10 @@ interface ChatWindowProps {
   isLoadingMessages?: boolean
   messagesError?: Error | null
   isSendingMessage?: boolean
+
+  // Props para agente
+  currentAgent?: { title: string } | null
+  isLoadingAgent?: boolean
 }
 
 export function ChatWindow({
@@ -59,7 +63,9 @@ export function ChatWindow({
   isConvertingFile = false,
   onFileSelect,
   onFileRemove,
-  onAudioRecorded
+  onAudioRecorded,
+  currentAgent,
+  isLoadingAgent = false
 }: ChatWindowProps) {
   if (!chat) {
     return (
@@ -94,8 +100,9 @@ export function ChatWindow({
       {/* Breadcrumb */}
       <header className="flex-shrink-0 w-full border-b">
         <ChatBreadcrumb
-          agentName="Agentes"
+          agentName={currentAgent?.title || "Agentes"}
           onNavigateToAgents={onNavigateToAgents}
+          isLoading={isLoadingAgent}
         />
       </header>
 
