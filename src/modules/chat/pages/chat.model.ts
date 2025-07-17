@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/lib/axios';
 import type { Message, Chat } from '../types';
 import { useSessionStorage } from '@uidotdev/usehooks';
+import { toast } from 'sonner';
 
 // Tipos para as respostas da API
 interface CreateChatRequest {
@@ -93,6 +94,20 @@ const chatApi = {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return response.data;
+  },
+
+  // Deletar Chat
+  deleteChat: async (chatId: string): Promise<void> => {
+    await api.post(`/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/chats/${chatId}/delete`);
+  },
+
+  // Atualizar Nome do Chat
+  updateChatTitle: async (chatId: string, title: string): Promise<Chat> => {
+    const response = await api.post(
+      `/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/chats/${chatId}/rename`,
+      { title }
+    );
     return response.data;
   },
 };
@@ -324,6 +339,36 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
       // Invalidar queries para recarregar estado correto
       queryClient.invalidateQueries({ queryKey: queryKeys.messages(chatId) });
+    },
+  });
+
+  // Mutation para deletar chat
+  const deleteChatMutation = useMutation({
+    mutationFn: (chatId: string) => chatApi.deleteChat(chatId),
+    onSuccess: (_, chatId) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats(activeAgentId) });
+      if (selectedChatId === chatId) {
+        setSelectedChatId(null);
+      }
+      toast.success('Chat deletado com sucesso!');
+    },
+    onError: error => {
+      console.error('Erro ao deletar chat:', error);
+      toast.error('Erro ao deletar o chat. Tente novamente.');
+    },
+  });
+
+  // Mutation para atualizar título do chat
+  const updateChatTitleMutation = useMutation({
+    mutationFn: ({ chatId, title }: { chatId: string; title: string }) =>
+      chatApi.updateChatTitle(chatId, title),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats(activeAgentId) });
+      toast.success('Título do chat atualizado com sucesso!');
+    },
+    onError: error => {
+      console.error('Erro ao atualizar título:', error);
+      toast.error('Erro ao atualizar o título do chat. Tente novamente.');
     },
   });
 
@@ -654,6 +699,10 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
       // Handlers para áudio
       handleAudioRecorded,
+
+      // Mutations
+      deleteChatMutation,
+      updateChatTitleMutation,
     }),
     [
       chats,
@@ -695,6 +744,8 @@ export function useChatModel(props: UseChatModelProps = {}) {
       handleFileRemove,
       isTranscribing,
       handleAudioRecorded,
+      deleteChatMutation,
+      updateChatTitleMutation,
     ]
   );
 }
