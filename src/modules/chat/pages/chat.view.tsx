@@ -37,7 +37,10 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
     handleAudioRecorded,
     isLoadingChats,
     deleteChatMutation,
-    updateChatTitleMutation
+    updateChatTitleMutation,
+    // Dados do agente
+    currentAgent,
+    isLoadingAgent
   } = props
 
   const [editingChatId, setEditingChatId] = useState<string | null>(null);
@@ -126,6 +129,8 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
               onFileSelect={handleFileSelect}
               onFileRemove={handleFileRemove}
               onAudioRecorded={handleAudioRecorded}
+              currentAgent={currentAgent}
+              isLoadingAgent={isLoadingAgent}
             />
           </div>
         </>

@@ -41,7 +41,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
     onError: (error: AxiosError) => {
       console.log("Erro! ", error);
-      if (error.response?.status === 401) {
+
+      // Verificar se o erro é específico sobre e-mail não encontrado
+      const errorData = error.response?.data as { error?: string };
+      if (errorData?.error === 'NOT_EMAIL_FOUND') {
+        toast.error('Este e-mail não é um e-mail de aluno na plataforma.');
+      } else if (error.response?.status === 401) {
         toast.error('E-mail ou senha inválidos.');
       } else {
         toast.error('Erro ao fazer login. Verifique seu e-mail.');
@@ -59,8 +64,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Senha resetada com sucesso!');
       setLocation('/login');
     },
-    onError: () => {
-      toast.error('Erro ao resetar senha. Verifique o código e a nova senha.');
+    onError: (error: AxiosError) => {
+      console.log("Erro ao resetar senha:", error);
+
+      // Verificar se o erro é específico sobre e-mail não encontrado
+      const errorData = error.response?.data as { error?: string };
+      if (errorData?.error === 'NOT_EMAIL_FOUND') {
+        toast.error('Este e-mail não é um e-mail de aluno na plataforma.');
+      } else {
+        toast.error('Erro ao resetar senha. Verifique o código e a nova senha.');
+      }
     },
   });
 
@@ -74,8 +87,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('E-mail de recuperação de senha enviado com sucesso!');
       setLocation('/confirm-email');
     },
-    onError: () => {
-      toast.error('Erro ao enviar e-mail de recuperação de senha. Verifique o e-mail informado.');
+    onError: (error: AxiosError) => {
+      console.log("Erro ao enviar e-mail de recuperação:", error);
+
+      // Verificar se o erro é específico sobre e-mail não encontrado
+      const errorData = error.response?.data as { error?: string };
+      if (errorData?.error === 'NOT_EMAIL_FOUND') {
+        toast.error('Este e-mail não é um e-mail de aluno na plataforma.');
+      } else {
+        toast.error('Erro ao enviar e-mail de recuperação de senha. Verifique o e-mail informado.');
+      }
     },
   });
 
@@ -89,8 +110,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Usuário criado com sucesso!');
       setLocation('/login');
     },
-    onError: () => {
-      toast.error('Erro ao criar usuário. Verifique os dados informados.');
+    onError: (error: AxiosError) => {
+      console.log("Erro ao criar usuário:", error);
+
+      // Verificar se o erro é específico sobre e-mail não encontrado
+      const errorData = error.response?.data as { error?: string };
+      if (errorData?.error === 'NOT_EMAIL_FOUND') {
+        toast.error('Este e-mail não é um e-mail de aluno na plataforma.');
+      } else {
+        toast.error('Erro ao criar usuário. Verifique os dados informados.');
+      }
     },
   });
 
