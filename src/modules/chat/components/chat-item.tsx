@@ -135,7 +135,7 @@ export function ChatItem({
 
   return (
     <SidebarMenuItem>
-      <div className="relative group">
+      <div className="relative group/chat-item">
         <SidebarMenuButton
           onClick={() => onSelect(chat._id)}
           onDoubleClick={handleDoubleClick}
@@ -153,8 +153,8 @@ export function ChatItem({
           <div className="block md:hidden">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button type="button" className="p-1">
-                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                <button type="button" className="p-1 rounded-md bg-red-500 hover:bg-red-600">
+                  <Trash2 className="h-4 w-4 text-gray-100" />
                 </button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -178,13 +178,13 @@ export function ChatItem({
           </div>
           
           {/* Desktop: aparece só no hover */}
-          <div className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="hidden md:block opacity-0 group-hover/chat-item:opacity-100 transition-opacity">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 hover:bg-destructive hover:text-destructive-foreground"
+                  className="h-6 w-6 bg-red-500 hover:bg-red-600 text-gray-100 hover:text-white"
                 >
                   <Trash2 className="h-3 w-3" />
                 </Button>
