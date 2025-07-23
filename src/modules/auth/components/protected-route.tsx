@@ -50,7 +50,7 @@ const queryKeys = {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { token, logout, user } = useAuth()
-  const [location, setLocation] = useLocation()
+  const [, setLocation] = useLocation()
   const queryClient = useQueryClient()
   
   // Estados para chat
