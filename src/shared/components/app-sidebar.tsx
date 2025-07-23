@@ -163,7 +163,7 @@ export function AppSidebar({
             ) : (
               <div className="space-y-1">
                 <SidebarMenu>
-                  {chats?.map((chat) => (
+                  {(chats && Array.isArray(chats) ? chats : []).map((chat) => (
                     <ChatItem
                       key={chat._id}
                       chat={chat}

@@ -455,14 +455,15 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // Scroll automático - useEffect simples apenas quando há mensagens
   useEffect(() => {
-    if (messages.length > 0) {
+    const messageCount = (messages && Array.isArray(messages) ? messages.length : 0);
+    if (messageCount > 0) {
       const timeoutId = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [messages.length]); // Apenas quando o número de mensagens muda
+  }, [messages]); // Monitora mudanças no array de mensagens
 
   // Handlers com useCallback para evitar recriação
   const handleSelectChat = useCallback((chatId: string) => {
@@ -472,12 +473,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const handleNewConversation = useCallback(() => {
     if (!activeAgentId) return;
 
-    const title = `Chat ${chats.length + 1}`;
+    const chatCount = (chats && Array.isArray(chats) ? chats.length : 0);
+    const title = `Chat ${chatCount + 1}`;
     createChatMutation.mutate({
       agentId: activeAgentId,
       title,
     });
-  }, [activeAgentId, chats.length, createChatMutation]);
+  }, [activeAgentId, chats, createChatMutation]);
 
   const handleUpdateThread = useCallback(
     (chatId: string, messages: Message[]) => {

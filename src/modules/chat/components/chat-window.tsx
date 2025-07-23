@@ -120,7 +120,7 @@ export function ChatWindow({
           </div>
         ) : isLoadingMessages ? (
           <MessagesSkeleton />
-        ) : localMessages.length === 0 ? (
+        ) : (!localMessages || !Array.isArray(localMessages) || localMessages.length === 0) ? (
           <div className="flex items-center justify-center h-full w-full px-4">
             <div className="text-center max-w-md mx-auto">
               <h3 className="text-base sm:text-lg font-medium mb-2">Conversa vazia</h3>
@@ -131,7 +131,7 @@ export function ChatWindow({
           <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <div className="max-w-4xl mx-auto w-full">
               <div className="space-y-3 sm:space-y-4">
-                {localMessages.map((message, index) => (
+                {(localMessages && Array.isArray(localMessages) ? localMessages : []).map((message, index) => (
                   <MessageComponent key={index} message={message} />
                 ))}
 
