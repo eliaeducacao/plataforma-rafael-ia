@@ -3,6 +3,10 @@ import { Trash2, Check, X } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import {
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/shared/components/ui/sidebar'
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -95,114 +99,117 @@ export function ChatItem({
 
   if (isEditing) {
     return (
-      <div className="flex items-center gap-2 p-3 border rounded-md bg-background">
-        <Input
-          ref={inputRef}
-          value={editTitle}
-          onChange={(e) => setEditTitle(e.target.value)}
-          onKeyDown={handleKeyPress}
-          className="flex-1 text-sm"
-          maxLength={100}
-          disabled={isUpdatingTitle}
-        />
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={handleSave}
-          className="h-8 w-8"
-          disabled={isUpdatingTitle}
-        >
-          {isUpdatingTitle ? <span className="loader h-4 w-4" /> : <Check className="h-4 w-4" />}
-        </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={handleCancel}
-          className="h-8 w-8"
-          disabled={isUpdatingTitle}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
+      <SidebarMenuItem>
+        <div className="flex items-center gap-2 p-2 border rounded-md bg-background">
+          <Input
+            ref={inputRef}
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            onKeyDown={handleKeyPress}
+            className="flex-1 text-sm h-8"
+            maxLength={100}
+            disabled={isUpdatingTitle}
+          />
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleSave}
+            className="h-6 w-6"
+            disabled={isUpdatingTitle}
+          >
+            {isUpdatingTitle ? <span className="loader h-3 w-3" /> : <Check className="h-3 w-3" />}
+          </Button>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleCancel}
+            className="h-6 w-6"
+            disabled={isUpdatingTitle}
+          >
+            <X className="h-3 w-3" />
+          </Button>
+        </div>
+      </SidebarMenuItem>
     )
   }
 
   return (
-    <div className="relative group">
-      <Button
-        variant={isSelected ? "secondary" : "ghost"}
-        onClick={() => onSelect(chat._id)}
-        onDoubleClick={handleDoubleClick}
-        className={cn(
-          "w-full justify-start h-auto p-3 text-left",
-          isSelected && "bg-secondary"
-        )}
-      >
-        <div className="flex flex-col items-start space-y-1 w-full min-w-0">
-          <div className="font-medium truncate w-full text-sm sm:text-base">
-            {chat.title}
+    <SidebarMenuItem>
+      <div className="relative group">
+        <SidebarMenuButton
+          onClick={() => onSelect(chat._id)}
+          onDoubleClick={handleDoubleClick}
+          className={cn(
+            "w-full justify-start",
+            isSelected && "!bg-primary/10 !text-primary"
+          )}
+        >
+          <span className="truncate">{chat.title}</span>
+        </SidebarMenuButton>
+        
+        {/* Botão deletar - só aparece no hover do item específico */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2">
+          {/* Mobile: ícone sempre visível */}
+          <div className="block md:hidden">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button type="button" className="p-1">
+                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Deletar conversa</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem certeza que deseja deletar a conversa "{chat.title}"? Esta ação não pode ser desfeita.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => handleDelete(chat._id)}
+                    className="bg-destructive text-white hover:bg-destructive/90"
+                  >
+                    Deletar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+          
+          {/* Desktop: aparece só no hover */}
+          <div className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-6 w-6 hover:bg-destructive hover:text-destructive-foreground"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Deletar conversa</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem certeza que deseja deletar a conversa "{chat.title}"? Esta ação não pode ser desfeita.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => handleDelete(chat._id)}
+                    className="bg-destructive text-white hover:bg-destructive/90"
+                  >
+                    Deletar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
-      </Button>
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
-        {/* Mobile: ícone preto, sempre visível. Tablet/Desktop: botão destrutivo só no hover */}
-        <div className="block md:hidden">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <button type="button">
-                <Trash2 className="h-5 w-5 text-black" />
-              </button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Deletar conversa</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Tem certeza que deseja deletar a conversa "{chat.title}"? Esta ação não pode ser desfeita.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => handleDelete(chat._id)}
-                  className="bg-destructive text-white hover:bg-destructive/90"
-                >
-                  Deletar
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-        <div className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                size="icon"
-                variant="destructive"
-                className="h-8 w-8"
-              >
-                <Trash2 className="h-4 w-4 text-white" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Deletar conversa</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Tem certeza que deseja deletar a conversa "{chat.title}"? Esta ação não pode ser desfeita.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => handleDelete(chat._id)}
-                  className="bg-destructive text-white hover:bg-destructive/90"
-                >
-                  Deletar
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
       </div>
-    </div>
+    </SidebarMenuItem>
   )
 } 
