@@ -58,15 +58,12 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [editingChatId, setEditingChatId] = useState<string | null>(null)
   const [selectedAgentId] = useSessionStorage<string>('x-selected-agent-id', '')
   
-  // Determinar se estamos na página de chats
-  const isInChatPage = location.startsWith('/chats')
   const activeAgentId = selectedAgentId.replace(/"/g, '')
 
   // Query para buscar chats sempre que houver agente selecionado
   const {
     data: chats,
     isLoading: isLoadingChats,
-    refetch: refetchChats,
   } = useQuery({
     queryKey: queryKeys.chats(activeAgentId),
     queryFn: () => chatApi.getChats(activeAgentId),
