@@ -52,6 +52,7 @@ createRoot(document.getElementById('root')!).render(
             {/* Rotas Privadas */}
             <ProtectedRoute>
               <Route path="/chats" component={ChatPage} />
+              <Route path="/chats/:chatId" component={ChatPage} />
               <Route path="/agents" component={AgentsPage} />
             </ProtectedRoute>
           </Switch>

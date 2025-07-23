@@ -110,12 +110,21 @@ const chatApi = {
     );
     return response.data;
   },
+
+  // Obter Agente por ID
+  getAgent: async (agentId: string) => {
+    const response = await api.get(
+      `/webhook/f356c2bb-bb5e-4667-9853-92ee23b172b8/api/v1/agents/${agentId}`
+    );
+    return response.data;
+  },
 };
 
 // Query Keys - Centralizadas para consistência
 const queryKeys = {
   chats: (agentId: string) => ['chats', agentId] as const,
   messages: (chatId: string) => ['messages', chatId] as const,
+  agent: (agentId: string) => ['agent', agentId] as const,
   allChats: () => ['chats'] as const,
   allMessages: () => ['messages'] as const,
   transcription: (audioId: string) => ['transcription', audioId] as const,
@@ -156,6 +165,31 @@ export function useChatModel(props: UseChatModelProps = {}) {
     [props.chatId, selectedChatId]
   );
 
+  // Efeito para definir selectedChatId quando chatId vem da URL
+  useEffect(() => {
+    if (props.chatId && props.chatId !== selectedChatId) {
+      setSelectedChatId(props.chatId);
+    }
+  }, [props.chatId, selectedChatId]);
+
+  // Query para buscar detalhes de um chat específico (quando chatId vem da URL)
+  const {
+    data: individualChatData,
+    isLoading: isLoadingIndividualChat,
+  } = useQuery({
+    queryKey: ['chat', activeChatId],
+    queryFn: async () => {
+      // Buscar detalhes do chat para obter agent_id
+      const response = await api.get(`/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/chats/${activeChatId}`);
+      return response.data;
+    },
+    enabled: !!activeChatId && !activeAgentId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+
   // React Query - Listar Chats
   const {
     data: chatsData,
@@ -184,6 +218,21 @@ export function useChatModel(props: UseChatModelProps = {}) {
     enabled: !!activeChatId,
     staleTime: 1 * 60 * 1000, // 1 minuto
     gcTime: 5 * 60 * 1000, // 5 minutos
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+
+  // React Query - Obter Agente
+  const {
+    data: currentAgent,
+    isLoading: isLoadingAgent,
+    error: agentError,
+  } = useQuery({
+    queryKey: queryKeys.agent(activeAgentId),
+    queryFn: () => chatApi.getAgent(activeAgentId),
+    enabled: !!activeAgentId,
+    staleTime: 10 * 60 * 1000, // 10 minutos
+    gcTime: 30 * 60 * 1000, // 30 minutos
     retry: 3,
     refetchOnWindowFocus: false,
   });
@@ -227,10 +276,18 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const messages = useMemo(() => (Array.isArray(messagesData) ? messagesData : []), [messagesData]);
 
   // Chat selecionado - useMemo para evitar recálculo desnecessário
-  const selectedChat = useMemo(
-    () => chats.find((chat: Chat) => chat._id === selectedChatId) || null,
-    [chats, selectedChatId]
-  );
+  const selectedChat = useMemo(() => {
+    // Primeiro, tentar encontrar o chat na lista de chats carregados
+    const chatFromList = chats.find((chat: Chat) => chat._id === selectedChatId);
+    if (chatFromList) return chatFromList;
+    
+    // Se não encontrar e temos dados do chat individual, usar esses dados
+    if (individualChatData && individualChatData._id === selectedChatId) {
+      return individualChatData;
+    }
+    
+    return null;
+  }, [chats, selectedChatId, individualChatData]);
 
   // React Query - Criar Chat
   const createChatMutation = useMutation({
@@ -276,6 +333,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
                 filename: file.filename,
                 mimeType: file.mimeType,
                 size: file.size || 0,
+                contentBase64: file.contentBase64, // garantir base64 para preview
               }
             : undefined,
         };
@@ -283,7 +341,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
         return [...currentMessages, userMessage];
       });
     },
-    onSuccess: (newMessage: ApiMessageResponse, { chatId }) => {
+    onSuccess: (newMessage: ApiMessageResponse, { chatId, file }) => {
       console.log('✅ API Response:', newMessage);
       console.log('🔄 Mutation finalizada com sucesso');
 
@@ -297,6 +355,14 @@ export function useChatModel(props: UseChatModelProps = {}) {
           message: newMessage.output || '', // Usar output da API
           isStreaming: true, // Flag para ativar typewriter
           timestamp: Date.now(), // Timestamp para identificar como nova
+          attachedFile: file
+            ? {
+                filename: file.filename,
+                mimeType: file.mimeType,
+                size: file.size || 0,
+                contentBase64: file.contentBase64, // garantir base64 para preview
+              }
+            : undefined,
         };
 
         console.log('🎬 Mensagem do bot com typewriter:', {
@@ -569,10 +635,22 @@ export function useChatModel(props: UseChatModelProps = {}) {
     const allowedTypes = [
       'application/pdf',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/jpg',
+      'image/svg+xml', // Adicionado SVG
     ];
 
+    if (file.type === 'image/gif') {
+      return { valid: false, error: 'GIFs não são suportados.' };
+    }
+
     if (!allowedTypes.includes(file.type)) {
-      return { valid: false, error: 'Por favor, selecione apenas arquivos PDF ou DOCX' };
+      return {
+        valid: false,
+        error: 'Por favor, selecione um arquivo PDF, DOCX ou imagem (exceto GIF).',
+      };
     }
 
     const maxSize = 10 * 1024 * 1024; // 10MB
@@ -609,6 +687,11 @@ export function useChatModel(props: UseChatModelProps = {}) {
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
+    }
+    // Limpar o input de imagem
+    const imageInput = document.getElementById('image-upload') as HTMLInputElement;
+    if (imageInput) {
+      imageInput.value = '';
     }
   }, []);
 
@@ -648,11 +731,16 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
       // Estados de loading e error
       isLoadingChats,
-      isLoadingMessages,
+      isLoadingMessages: isLoadingMessages || isLoadingIndividualChat,
+      isLoadingAgent,
       chatsError,
       messagesError,
+      agentError,
       isCreatingChat: createChatMutation.isPending,
       isSendingMessage: sendMessageMutation.isPending,
+
+      // Dados do agente
+      currentAgent,
 
       // Handlers principais
       handleSelectChat,
@@ -714,10 +802,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
       newConversationMode,
       isLoadingChats,
       isLoadingMessages,
+      isLoadingAgent,
       chatsError,
       messagesError,
+      agentError,
       createChatMutation.isPending,
       sendMessageMutation.isPending,
+      currentAgent,
       handleSelectChat,
       handleNewConversation,
       handleUpdateThread,
