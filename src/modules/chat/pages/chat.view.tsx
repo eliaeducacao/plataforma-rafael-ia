@@ -19,10 +19,10 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
     isLoadingMessages,
     messagesError,
     isSendingMessage,
-    // Props de arquivo
-    selectedFile,
-    isConvertingFile,
-    handleFileSelect,
+    // Props de arquivos múltiplos
+    selectedFiles,
+    isConvertingFiles,
+    handleFilesSelect,
     handleFileRemove,
     // Props de áudio
     handleAudioRecorded,
@@ -69,9 +69,9 @@ export function ChatView(props: ReturnType<typeof useChatModel>) {
             isLoadingMessages={isLoadingMessages}
             messagesError={messagesError}
             isSendingMessage={isSendingMessage}
-            selectedFile={selectedFile}
-            isConvertingFile={isConvertingFile}
-            onFileSelect={handleFileSelect}
+            selectedFiles={selectedFiles}
+            isConvertingFiles={isConvertingFiles}
+            onFilesSelect={handleFilesSelect}
             onFileRemove={handleFileRemove}
             onAudioRecorded={handleAudioRecorded}
             currentAgent={currentAgent}
