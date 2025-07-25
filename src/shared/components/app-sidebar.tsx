@@ -13,6 +13,7 @@ import {
   // IconDashboard,
   IconHelp,
   IconListDetails,
+  IconSchool,
   // IconSettings,
 } from "@tabler/icons-react"
 
@@ -48,6 +49,11 @@ const data = {
       title: "Biblioteca de Agentes",
       url: "/agents",
       icon: IconListDetails,
+    },
+    {
+      title: "Academy",
+      url: "https://hotmart.com/pt-br/club/eliaeducacao/products/5765416",
+      icon: IconSchool,
     },
     // {
     //   title: "Analytics",
@@ -97,13 +103,13 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   editingChatId?: string | null
   onStartEditChat?: (chatId: string) => void
   onStopEditChat?: () => void
-  updateChatTitleMutation?: UseMutationResult<Chat, unknown, { chatId: string; title: string }, unknown>
+  updateChatTitleMutation: UseMutationResult<Chat, unknown, { chatId: string; title: string }, unknown>
   isCreatingChat?: boolean
   isLoadingChats?: boolean
 }
 
-export function AppSidebar({ 
-  user, 
+export function AppSidebar({
+  user,
   onLogout,
   chats,
   selectedChatId,
@@ -118,7 +124,7 @@ export function AppSidebar({
   updateChatTitleMutation,
   isCreatingChat = false,
   isLoadingChats = false,
-  ...props 
+  ...props
 }: AppSidebarProps) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -141,7 +147,7 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        
+
         {/* Seção de Chats - Sempre presente */}
         <SidebarGroup className="mt-4">
           <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground px-2 py-1">
@@ -176,11 +182,11 @@ export function AppSidebar({
                       onStopEdit={onStopEditChat!}
                       isUpdatingTitle={(updateChatTitleMutation?.isPending ?? false) && editingChatId === chat._id}
                       isUpdateSuccess={(updateChatTitleMutation?.isSuccess ?? false) && editingChatId === chat._id}
-                      resetMutation={updateChatTitleMutation?.reset!}
+                      resetMutation={updateChatTitleMutation.reset}
                     />
                   ))}
                 </SidebarMenu>
-                
+
                 {/* Botão Nova Conversa */}
                 <div className="px-2 pt-2">
                   <Button
@@ -207,7 +213,7 @@ export function AppSidebar({
             )}
           </SidebarGroupContent>
         </SidebarGroup>
-        
+
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
