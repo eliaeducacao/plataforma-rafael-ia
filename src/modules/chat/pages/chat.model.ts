@@ -165,6 +165,31 @@ export function useChatModel(props: UseChatModelProps = {}) {
     [props.chatId, selectedChatId]
   );
 
+  // Efeito para definir selectedChatId quando chatId vem da URL
+  useEffect(() => {
+    if (props.chatId && props.chatId !== selectedChatId) {
+      setSelectedChatId(props.chatId);
+    }
+  }, [props.chatId, selectedChatId]);
+
+  // Query para buscar detalhes de um chat específico (quando chatId vem da URL)
+  const {
+    data: individualChatData,
+    isLoading: isLoadingIndividualChat,
+  } = useQuery({
+    queryKey: ['chat', activeChatId],
+    queryFn: async () => {
+      // Buscar detalhes do chat para obter agent_id
+      const response = await api.get(`/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/chats/${activeChatId}`);
+      return response.data;
+    },
+    enabled: !!activeChatId && !activeAgentId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+
   // React Query - Listar Chats
   const {
     data: chatsData,
@@ -251,10 +276,18 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const messages = useMemo(() => (Array.isArray(messagesData) ? messagesData : []), [messagesData]);
 
   // Chat selecionado - useMemo para evitar recálculo desnecessário
-  const selectedChat = useMemo(
-    () => chats.find((chat: Chat) => chat._id === selectedChatId) || null,
-    [chats, selectedChatId]
-  );
+  const selectedChat = useMemo(() => {
+    // Primeiro, tentar encontrar o chat na lista de chats carregados
+    const chatFromList = chats.find((chat: Chat) => chat._id === selectedChatId);
+    if (chatFromList) return chatFromList;
+    
+    // Se não encontrar e temos dados do chat individual, usar esses dados
+    if (individualChatData && individualChatData._id === selectedChatId) {
+      return individualChatData;
+    }
+    
+    return null;
+  }, [chats, selectedChatId, individualChatData]);
 
   // React Query - Criar Chat
   const createChatMutation = useMutation({
@@ -422,14 +455,15 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // Scroll automático - useEffect simples apenas quando há mensagens
   useEffect(() => {
-    if (messages.length > 0) {
+    const messageCount = (messages && Array.isArray(messages) ? messages.length : 0);
+    if (messageCount > 0) {
       const timeoutId = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [messages.length]); // Apenas quando o número de mensagens muda
+  }, [messages]); // Monitora mudanças no array de mensagens
 
   // Handlers com useCallback para evitar recriação
   const handleSelectChat = useCallback((chatId: string) => {
@@ -439,12 +473,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const handleNewConversation = useCallback(() => {
     if (!activeAgentId) return;
 
-    const title = `Chat ${chats.length + 1}`;
+    const chatCount = (chats && Array.isArray(chats) ? chats.length : 0);
+    const title = `Chat ${chatCount + 1}`;
     createChatMutation.mutate({
       agentId: activeAgentId,
       title,
     });
-  }, [activeAgentId, chats.length, createChatMutation]);
+  }, [activeAgentId, chats, createChatMutation]);
 
   const handleUpdateThread = useCallback(
     (chatId: string, messages: Message[]) => {
@@ -698,7 +733,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
       // Estados de loading e error
       isLoadingChats,
-      isLoadingMessages,
+      isLoadingMessages: isLoadingMessages || isLoadingIndividualChat,
       isLoadingAgent,
       chatsError,
       messagesError,
