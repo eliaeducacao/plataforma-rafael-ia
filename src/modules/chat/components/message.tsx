@@ -143,41 +143,45 @@ const Message = memo(function Message({ message }: MessageProps) {
           </div>
         </div>
 
-        {/* Indicador de arquivo anexado */}
-        {message.attachedFile && (
-          <div className="mt-2 p-2 bg-background/50 rounded-md border border-border/50 flex items-center gap-2 max-w-full">
-            {/* Preview de imagem */}
-            {message.attachedFile.mimeType && message.attachedFile.mimeType.startsWith('image/') && message.attachedFile.mimeType !== 'image/gif' && message.attachedFile.contentBase64 ? (
-              <img
-                src={`data:${message.attachedFile.mimeType};base64,${message.attachedFile.contentBase64}`}
-                alt={message.attachedFile.filename}
-                className="h-10 w-10 object-cover rounded border border-border mr-2"
-                style={{ maxWidth: 48, maxHeight: 48 }}
-              />
-            ) : (
-              <div className="flex-shrink-0">
-                {message.attachedFile.mimeType === 'application/pdf' ? (
-                  <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0012 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                  </svg>
+        {/* Indicador de arquivos anexados */}
+        {message.attachedFiles && message.attachedFiles.length > 0 && (
+          <div className="mt-2 space-y-2">
+            {message.attachedFiles.map((file, index) => (
+              <div key={file.id || index} className="p-2 bg-background/50 rounded-md border border-border/50 flex items-center gap-2 max-w-full">
+                {/* Preview de imagem */}
+                {file.mimeType && file.mimeType.startsWith('image/') && file.mimeType !== 'image/gif' && file.contentBase64 ? (
+                  <img
+                    src={`data:${file.mimeType};base64,${file.contentBase64}`}
+                    alt={file.filename}
+                    className="h-10 w-10 object-cover rounded border border-border mr-2"
+                    style={{ maxWidth: 48, maxHeight: 48 }}
+                  />
                 ) : (
-                  <svg className="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
-                  </svg>
+                  <div className="flex-shrink-0">
+                    {file.mimeType === 'application/pdf' ? (
+                      <svg className="h-4 w-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0012 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg className="h-4 w-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
                 )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium truncate text-foreground">
+                    {file.filename}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {file.size > 0
+                      ? `${(file.size / 1024 / 1024).toFixed(2)} MB`
+                      : file.mimeType === 'application/pdf' ? 'PDF' : 'DOCX'
+                    }
+                  </p>
+                </div>
               </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium truncate text-foreground">
-                {message.attachedFile.filename}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {message.attachedFile.size > 0
-                  ? `${(message.attachedFile.size / 1024 / 1024).toFixed(2)} MB`
-                  : message.attachedFile.mimeType === 'application/pdf' ? 'PDF' : 'DOCX'
-                }
-              </p>
-            </div>
+            ))}
           </div>
         )}
 
@@ -198,12 +202,16 @@ const Message = memo(function Message({ message }: MessageProps) {
   )
 }, (prevProps, nextProps) => {
   // Comparação personalizada para otimizar re-renders
+  const prevFiles = prevProps.message.attachedFiles || [];
+  const nextFiles = nextProps.message.attachedFiles || [];
+
   return (
     prevProps.message.role === nextProps.message.role &&
     prevProps.message.message === nextProps.message.message &&
     prevProps.message.isStreaming === nextProps.message.isStreaming &&
     prevProps.message.timestamp === nextProps.message.timestamp &&
-    prevProps.message.attachedFile?.filename === nextProps.message.attachedFile?.filename
+    prevFiles.length === nextFiles.length &&
+    prevFiles.every((file, index) => file.filename === nextFiles[index]?.filename)
   )
 })
 

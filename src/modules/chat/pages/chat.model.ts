@@ -5,6 +5,7 @@ import { api } from '@/shared/lib/axios';
 import type { Message, Chat } from '../types';
 import { useSessionStorage } from '@uidotdev/usehooks';
 import { toast } from 'sonner';
+import type { FileWithId } from '../components/multi-file-upload';
 
 // Tipos para as respostas da API
 interface CreateChatRequest {
@@ -15,17 +16,18 @@ export interface FileData {
   filename: string;
   mimeType: string;
   contentBase64: string;
-  size?: number; // Tamanho do arquivo em bytes para exibição na UI
+  size: number; // Tamanho do arquivo em bytes para exibição na UI (obrigatório)
+  id?: string; // ID único para gerenciamento na UI
 }
 
 export interface SubmitData {
   message: string;
-  file?: FileData;
+  files?: FileData[]; // Mudança: array de arquivos ao invés de um único
 }
 
 interface SendMessageRequest {
   message: string;
-  file?: FileData;
+  files?: FileData[]; // Mudança: array de arquivos ao invés de um único
 }
 
 interface ApiMessageResponse {
@@ -65,11 +67,11 @@ const chatApi = {
     return response.data;
   },
 
-  // Enviar Mensagem para um Chat (JSON com arquivo base64)
+  // Enviar Mensagem para um Chat (JSON com arquivos base64)
   sendMessage: async (chatId: string, data: SendMessageRequest): Promise<ApiMessageResponse> => {
     const requestBody = {
       message: data.message,
-      ...(data.file && { file: data.file }),
+      ...(data.files && data.files.length > 0 && { files: data.files }),
     };
 
     const response = await api.post(
@@ -144,9 +146,9 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const [messageInput, setMessageInput] = useState('');
   const [newConversationMode, setNewConversationMode] = useState(false);
 
-  // Estados para arquivo
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isConvertingFile, setIsConvertingFile] = useState(false);
+  // Estados para arquivos múltiplos
+  const [selectedFiles, setSelectedFiles] = useState<FileWithId[]>([]);
+  const [isConvertingFiles, setIsConvertingFiles] = useState(false);
 
   // Navegação
   const [, setLocation] = useLocation();
@@ -173,14 +175,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
   }, [props.chatId, selectedChatId]);
 
   // Query para buscar detalhes de um chat específico (quando chatId vem da URL)
-  const {
-    data: individualChatData,
-    isLoading: isLoadingIndividualChat,
-  } = useQuery({
+  const { data: individualChatData, isLoading: isLoadingIndividualChat } = useQuery({
     queryKey: ['chat', activeChatId],
     queryFn: async () => {
       // Buscar detalhes do chat para obter agent_id
-      const response = await api.get(`/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/chats/${activeChatId}`);
+      const response = await api.get(
+        `/webhook/ba68523b-6eb3-4ca5-9d31-f26e0137a838/api/v1/chats/${activeChatId}`
+      );
       return response.data;
     },
     enabled: !!activeChatId && !activeAgentId,
@@ -280,12 +281,12 @@ export function useChatModel(props: UseChatModelProps = {}) {
     // Primeiro, tentar encontrar o chat na lista de chats carregados
     const chatFromList = chats.find((chat: Chat) => chat._id === selectedChatId);
     if (chatFromList) return chatFromList;
-    
+
     // Se não encontrar e temos dados do chat individual, usar esses dados
     if (individualChatData && individualChatData._id === selectedChatId) {
       return individualChatData;
     }
-    
+
     return null;
   }, [chats, selectedChatId, individualChatData]);
 
@@ -315,9 +316,16 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // React Query - Enviar Mensagem
   const sendMessageMutation = useMutation({
-    mutationFn: ({ chatId, message, file }: { chatId: string; message: string; file?: FileData }) =>
-      chatApi.sendMessage(chatId, { message, file }),
-    onMutate: async ({ chatId, message, file }) => {
+    mutationFn: ({
+      chatId,
+      message,
+      files,
+    }: {
+      chatId: string;
+      message: string;
+      files?: FileData[];
+    }) => chatApi.sendMessage(chatId, { message, files }),
+    onMutate: async ({ chatId, message, files }) => {
       console.log('🚀 Iniciando envio de mensagem:', { chatId, messageLength: message.length });
 
       // Adicionar mensagem do usuário imediatamente (optimistic update)
@@ -328,20 +336,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
           role: 'human',
           message: message,
           timestamp: Date.now(),
-          attachedFile: file
-            ? {
-                filename: file.filename,
-                mimeType: file.mimeType,
-                size: file.size || 0,
-                contentBase64: file.contentBase64, // garantir base64 para preview
-              }
-            : undefined,
+          attachedFiles: files && files.length > 0 ? files : undefined,
         };
 
         return [...currentMessages, userMessage];
       });
     },
-    onSuccess: (newMessage: ApiMessageResponse, { chatId, file }) => {
+    onSuccess: (newMessage: ApiMessageResponse, { chatId, files }) => {
       console.log('✅ API Response:', newMessage);
       console.log('🔄 Mutation finalizada com sucesso');
 
@@ -355,14 +356,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
           message: newMessage.output || '', // Usar output da API
           isStreaming: true, // Flag para ativar typewriter
           timestamp: Date.now(), // Timestamp para identificar como nova
-          attachedFile: file
-            ? {
-                filename: file.filename,
-                mimeType: file.mimeType,
-                size: file.size || 0,
-                contentBase64: file.contentBase64, // garantir base64 para preview
-              }
-            : undefined,
+          attachedFiles: files && files.length > 0 ? files : undefined,
         };
 
         console.log('🎬 Mensagem do bot com typewriter:', {
@@ -455,7 +449,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // Scroll automático - useEffect simples apenas quando há mensagens
   useEffect(() => {
-    const messageCount = (messages && Array.isArray(messages) ? messages.length : 0);
+    const messageCount = messages && Array.isArray(messages) ? messages.length : 0;
     if (messageCount > 0) {
       const timeoutId = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -473,7 +467,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const handleNewConversation = useCallback(() => {
     if (!activeAgentId) return;
 
-    const chatCount = (chats && Array.isArray(chats) ? chats.length : 0);
+    const chatCount = chats && Array.isArray(chats) ? chats.length : 0;
     const title = `Chat ${chatCount + 1}`;
     createChatMutation.mutate({
       agentId: activeAgentId,
@@ -530,39 +524,42 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const handleSubmitMessage = useCallback(
     async (data: SubmitData) => {
       if (!selectedChat) return;
-      if (!data.message.trim() && !selectedFile) return;
+      if (!data.message.trim() && selectedFiles.length === 0) return;
 
-      setIsConvertingFile(true);
+      setIsConvertingFiles(true);
 
       try {
-        let fileData: FileData | undefined;
+        const filesData: FileData[] = [];
 
-        if (selectedFile) {
-          const contentBase64 = await convertFileToBase64(selectedFile);
-          fileData = {
-            filename: selectedFile.name,
-            mimeType: selectedFile.type,
+        // Converter todos os arquivos para base64
+        for (const file of selectedFiles) {
+          const contentBase64 = await convertFileToBase64(file);
+          filesData.push({
+            filename: file.name,
+            mimeType: file.type,
             contentBase64,
-            size: selectedFile.size, // Adicionando o tamanho para usar na UI
-          };
+            size: file.size,
+            id: file.id,
+          });
         }
 
         sendMessageMutation.mutate({
           chatId: selectedChat._id,
           message: data.message,
-          file: fileData,
+          files: filesData.length > 0 ? filesData : undefined,
         });
 
         // Limpar após envio
         setMessageInput('');
-        setSelectedFile(null);
+        setSelectedFiles([]);
       } catch (error) {
-        console.error('Erro ao processar arquivo:', error);
+        console.error('Erro ao processar arquivos:', error);
+        toast.error('Erro ao processar arquivos. Tente novamente.');
       } finally {
-        setIsConvertingFile(false);
+        setIsConvertingFiles(false);
       }
     },
-    [selectedChat, selectedFile, sendMessageMutation, convertFileToBase64]
+    [selectedChat, selectedFiles, sendMessageMutation, convertFileToBase64]
   );
 
   const handleKeyPress = useCallback(
@@ -612,8 +609,8 @@ export function useChatModel(props: UseChatModelProps = {}) {
   );
 
   const sendMessage = useCallback(
-    (chatId: string, message: string, file?: FileData) => {
-      sendMessageMutation.mutate({ chatId, message, file });
+    (chatId: string, message: string, files?: FileData[]) => {
+      sendMessageMutation.mutate({ chatId, message, files });
     },
     [sendMessageMutation]
   );
@@ -632,69 +629,14 @@ export function useChatModel(props: UseChatModelProps = {}) {
     queryClient.invalidateQueries({ queryKey: queryKeys.allMessages() });
   }, [queryClient]);
 
-  // Função para validar arquivo
-  const validateFile = useCallback((file: File): { valid: boolean; error?: string } => {
-    const allowedTypes = [
-      'application/pdf',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'image/jpeg',
-      'image/png',
-      'image/webp',
-      'image/jpg',
-      'image/svg+xml', // Adicionado SVG
-    ];
-
-    if (file.type === 'image/gif') {
-      return { valid: false, error: 'GIFs não são suportados.' };
-    }
-
-    if (!allowedTypes.includes(file.type)) {
-      return {
-        valid: false,
-        error: 'Por favor, selecione um arquivo PDF, DOCX ou imagem (exceto GIF).',
-      };
-    }
-
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      return { valid: false, error: 'O arquivo deve ter no máximo 10MB' };
-    }
-
-    return { valid: true };
+  // Handler para seleção de múltiplos arquivos
+  const handleFilesSelect = useCallback((files: FileWithId[]) => {
+    setSelectedFiles(files);
   }, []);
 
-  // Handler para seleção de arquivo
-  const handleFileSelect = useCallback(
-    (file: File | null) => {
-      if (!file) {
-        setSelectedFile(null);
-        return;
-      }
-
-      const validation = validateFile(file);
-      if (!validation.valid) {
-        alert(validation.error);
-        return;
-      }
-
-      setSelectedFile(file);
-    },
-    [validateFile]
-  );
-
-  // Handler para remover arquivo
-  const handleFileRemove = useCallback(() => {
-    setSelectedFile(null);
-    // Limpar o input file também
-    const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
-    }
-    // Limpar o input de imagem
-    const imageInput = document.getElementById('image-upload') as HTMLInputElement;
-    if (imageInput) {
-      imageInput.value = '';
-    }
+  // Handler para remover arquivo específico
+  const handleFileRemove = useCallback((fileId: string) => {
+    setSelectedFiles(prev => prev.filter(file => file.id !== fileId));
   }, []);
 
   // Handler para áudio gravado
@@ -776,12 +718,12 @@ export function useChatModel(props: UseChatModelProps = {}) {
       invalidateChats,
       invalidateMessages,
 
-      // Estados para arquivo
-      selectedFile,
-      isConvertingFile,
+      // Estados para arquivos múltiplos
+      selectedFiles,
+      isConvertingFiles,
 
-      // Handlers para arquivo
-      handleFileSelect,
+      // Handlers para arquivos múltiplos
+      handleFilesSelect,
       handleFileRemove,
 
       // Estados para transcrição de áudio
@@ -804,6 +746,7 @@ export function useChatModel(props: UseChatModelProps = {}) {
       newConversationMode,
       isLoadingChats,
       isLoadingMessages,
+      isLoadingIndividualChat,
       isLoadingAgent,
       chatsError,
       messagesError,
@@ -831,9 +774,9 @@ export function useChatModel(props: UseChatModelProps = {}) {
       clearCache,
       invalidateChats,
       invalidateMessages,
-      selectedFile,
-      isConvertingFile,
-      handleFileSelect,
+      selectedFiles,
+      isConvertingFiles,
+      handleFilesSelect,
       handleFileRemove,
       isTranscribing,
       handleAudioRecorded,
