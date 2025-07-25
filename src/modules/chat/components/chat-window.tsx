@@ -4,6 +4,7 @@ import { default as MessageComponent } from "./message"
 import NewMessageInput from "./new-message-input"
 import type { Chat, Message as MessageType } from "../types"
 import type { SubmitData } from "../pages/chat.model"
+import type { FileWithId } from "./multi-file-upload"
 import { Skeleton } from "@/shared/components/ui/skeleton"
 import { Alert, AlertDescription } from "@/shared/components/ui/alert"
 import { Loader2 } from "lucide-react"
@@ -24,11 +25,11 @@ interface ChatWindowProps {
   onKeyPress: (e: React.KeyboardEvent) => void
   onInputResize: (e: React.FormEvent<HTMLTextAreaElement>) => void
 
-  // Props para arquivo
-  selectedFile?: File | null
-  isConvertingFile?: boolean
-  onFileSelect: (file: File | null) => void
-  onFileRemove: () => void
+  // Props para arquivos múltiplos
+  selectedFiles?: FileWithId[]
+  isConvertingFiles?: boolean
+  onFilesSelect: (files: FileWithId[]) => void
+  onFileRemove: (fileId: string) => void
 
   // Props para áudio
   onAudioRecorded?: (audioBlob: Blob) => void
@@ -59,9 +60,9 @@ export function ChatWindow({
   isLoadingMessages = false,
   messagesError,
   isSendingMessage = false,
-  selectedFile,
-  isConvertingFile = false,
-  onFileSelect,
+  selectedFiles = [],
+  isConvertingFiles = false,
+  onFilesSelect,
   onFileRemove,
   onAudioRecorded,
   currentAgent,
@@ -162,9 +163,9 @@ export function ChatWindow({
           onKeyPress={onKeyPress}
           onInputResize={onInputResize}
           disabled={isSendingMessage}
-          selectedFile={selectedFile}
-          isConverting={isConvertingFile}
-          onFileSelect={onFileSelect}
+          selectedFiles={selectedFiles}
+          isConverting={isConvertingFiles}
+          onFilesSelect={onFilesSelect}
           onFileRemove={onFileRemove}
           onAudioRecorded={onAudioRecorded}
         />

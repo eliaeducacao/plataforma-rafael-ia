@@ -24,7 +24,7 @@ export function NavMain({
     icon?: Icon
   }[]
 }) {
-  const [location, setLocation] = useLocation()
+  const [location, navigate] = useLocation()
 
   return (
     <SidebarGroup>
@@ -45,7 +45,7 @@ export function NavMain({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 tooltip={item.title}
-                onClick={() => setLocation(item.url)}
+                onClick={() => item.url.includes("http") ? window.open(item.url, "_blank") : navigate(item.url)}
                 className={cn(item.url === location ? "!bg-primary/10 !text-primary" : "")}
               >
                 {item.icon && <item.icon />}
