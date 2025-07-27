@@ -1,10 +1,17 @@
+export type Category = {
+  _id: string;
+  order: number;
+  name: string;
+};
+
 export type Agent = {
   _id: string;
-  assistant_id: string;
-  icon: string;
   title: string;
   subtitle: string;
   description: string;
-  features: string[];
+  topics: string[];
   button: string;
+  token: string;
+  icon: string;
+  category: string;
 };

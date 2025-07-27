@@ -1,3 +1,5 @@
+export type { Agent } from '@/shared/types';
+
 export interface Conversation {
   id: string;
   title: string;
@@ -27,12 +29,4 @@ export interface AttachedFile {
   size: number;
   contentBase64?: string;
   id?: string;
-}
-
-export interface Agent {
-  id: string;
-  name: string;
-  description: string;
-  conversations: Conversation[];
-  activeConversation?: string;
 }
