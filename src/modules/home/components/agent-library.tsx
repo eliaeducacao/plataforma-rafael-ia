@@ -46,12 +46,12 @@ function AgentLibrary({ agents, isLoading }: AgentLibraryProps) {
               {/* Description */}
               <p className="text-muted-foreground mb-4 leading-relaxed">{agent.description}</p>
 
-              {/* Features */}
+              {/* Topics */}
               <div className="space-y-2 mb-6">
-                {agent.features.map((feature, featureIndex) => (
-                  <div key={featureIndex} className="flex items-center text-sm">
+                {agent.topics.map((topic, topicIndex) => (
+                  <div key={topicIndex} className="flex items-center text-sm">
                     <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></div>
-                    <span className="text-muted-foreground">{feature}</span>
+                    <span className="text-muted-foreground">{topic}</span>
                   </div>
                 ))}
               </div>
@@ -127,10 +127,10 @@ function AgentLibrarySkeleton() {
                 <Skeleton className="h-4 w-1/2" />
               </div>
 
-              {/* Features skeleton */}
+              {/* Topics skeleton */}
               <div className="space-y-2 mb-6">
-                {Array.from({ length: 6 }).map((_, featureIndex) => (
-                  <div key={featureIndex} className="flex items-center">
+                {Array.from({ length: 6 }).map((_, topicIndex) => (
+                  <div key={topicIndex} className="flex items-center">
                     <Skeleton className="w-1.5 h-1.5 rounded-full mr-2" />
                     <Skeleton className="h-3 w-32" />
                   </div>
@@ -138,21 +138,9 @@ function AgentLibrarySkeleton() {
               </div>
 
               {/* Button skeleton */}
-              <Skeleton className="w-full h-10 rounded" />
+              <Skeleton className="h-10 w-full rounded-md" />
             </div>
           ))}
-        </div>
-
-        {/* Library Stats skeleton */}
-        <div className="mt-16 bg-secondary rounded-2xl p-8">
-          <div className="grid md:grid-cols-4 gap-6 text-center">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <div key={index}>
-                <Skeleton className="h-8 w-16 mx-auto mb-2" />
-                <Skeleton className="h-4 w-24 mx-auto" />
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
