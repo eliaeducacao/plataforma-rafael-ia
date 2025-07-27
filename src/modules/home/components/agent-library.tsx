@@ -1,17 +1,26 @@
-import { Button } from '@/shared/components/ui/button';
-import { DynamicIcon } from '@/shared/lib/icon-utils/index';
-import { Agent } from "@/shared/types"
-
-import { Skeleton } from '@/shared/components/ui/skeleton';
+import { Agent, Category } from "@/shared/types"
+import { CategorySelector } from "@/modules/agents-library/components/category-selector";
+import { AgentCard, AgentCardSkeleton } from "@/modules/agents-library/components/agent-card";
 
 type AgentLibraryProps = {
   agents: Agent[] | undefined;
-  isLoading: boolean
+  categories: Category[];
+  selectedCategory: string | null;
+  isLoading: boolean;
+  isCategoriesLoading: boolean;
+  onCategoryChange: (categoryId: string | null) => void;
+  onSelectAgent: (agentId: string) => void;
 }
 
-function AgentLibrary({ agents, isLoading }: AgentLibraryProps) {
-  if (isLoading) return <AgentLibrarySkeleton />;
-
+function AgentLibrary({
+  agents,
+  categories,
+  selectedCategory,
+  isLoading,
+  isCategoriesLoading,
+  onCategoryChange,
+  onSelectAgent
+}: AgentLibraryProps) {
   return (
     <section id="agentes" className="py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -25,43 +34,31 @@ function AgentLibrary({ agents, isLoading }: AgentLibraryProps) {
           </p>
         </div>
 
+        {/* Category Selector */}
+        <CategorySelector
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={onCategoryChange}
+          isLoading={isCategoriesLoading}
+        />
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {agents?.map((agent, index) => (
-            <div
-              key={index}
-              className="bg-card border-2 border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-xl transition-all duration-300 group animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Agent Header */}
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4 group-hover:bg-primary/20 transition-colors">
-                  <DynamicIcon name={agent.icon} className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-card-foreground">{agent.title}</h3>
-                  <p className="text-sm text-primary font-medium">{agent.subtitle}</p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-muted-foreground mb-4 leading-relaxed">{agent.description}</p>
-
-              {/* Topics */}
-              <div className="space-y-2 mb-6">
-                {agent.topics.map((topic, topicIndex) => (
-                  <div key={topicIndex} className="flex items-center text-sm">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full mr-2"></div>
-                    <span className="text-muted-foreground">{topic}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Action Button */}
-              <Button className="w-full text-primary-foreground" variant="default">
-                {agent.button}
-              </Button>
-            </div>
-          ))}
+          {isLoading ? (
+            // Skeleton loading state
+            Array.from({ length: 6 }).map((_, index) => (
+              <AgentCardSkeleton key={index} index={index} />
+            ))
+          ) : (
+            // Actual agents
+            agents?.map((agent, index) => (
+              <AgentCard
+                key={agent._id}
+                agent={agent}
+                index={index}
+                onSelectAgent={onSelectAgent}
+              />
+            ))
+          )}
         </div>
 
         {/* Library Stats */}
@@ -91,58 +88,3 @@ function AgentLibrary({ agents, isLoading }: AgentLibraryProps) {
 };
 
 export default AgentLibrary;
-
-
-function AgentLibrarySkeleton() {
-  return (
-    <section id="agentes" className="py-20 bg-background">
-      <div className="container mx-auto px-6">
-        {/* Header skeleton */}
-        <div className="text-center mb-16">
-          <Skeleton className="h-12 w-80 mx-auto mb-6" />
-          <Skeleton className="h-6 w-96 mx-auto mb-2" />
-          <Skeleton className="h-6 w-72 mx-auto" />
-        </div>
-
-        {/* Grid skeleton */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div
-              key={index}
-              className="bg-card border-2 border-border rounded-xl p-6"
-            >
-              {/* Agent Header skeleton */}
-              <div className="flex items-center mb-4">
-                <Skeleton className="w-12 h-12 rounded-lg mr-4" />
-                <div className="flex-1">
-                  <Skeleton className="h-5 w-32 mb-1" />
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </div>
-
-              {/* Description skeleton */}
-              <div className="mb-4">
-                <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-
-              {/* Topics skeleton */}
-              <div className="space-y-2 mb-6">
-                {Array.from({ length: 6 }).map((_, topicIndex) => (
-                  <div key={topicIndex} className="flex items-center">
-                    <Skeleton className="w-1.5 h-1.5 rounded-full mr-2" />
-                    <Skeleton className="h-3 w-32" />
-                  </div>
-                ))}
-              </div>
-
-              {/* Button skeleton */}
-              <Skeleton className="h-10 w-full rounded-md" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}

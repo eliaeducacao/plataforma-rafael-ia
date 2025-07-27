@@ -25,14 +25,6 @@ export function CategorySelector({ categories, selectedCategory, onCategoryChang
   return (
     <div className="mb-6">
       <div className="flex flex-wrap gap-2">
-        <Button
-          variant={selectedCategory === null ? "default" : "outline"}
-          size="sm"
-          onClick={() => onCategoryChange(null)}
-          className="text-sm"
-        >
-          Todas as categorias
-        </Button>
         {categories.map((category) => (
           <Button
             key={category._id}

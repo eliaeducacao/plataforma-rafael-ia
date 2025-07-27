@@ -3,7 +3,7 @@ import { Agent, Category } from '@/shared/types';
 import { useQuery } from '@tanstack/react-query';
 import { useSessionStorage } from '@uidotdev/usehooks';
 import { useLocation } from 'wouter';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function useAgentsModel() {
   const [selectedAgentId, setSelectedAgentId] = useSessionStorage<string>(
@@ -28,6 +28,16 @@ export function useAgentsModel() {
       return data;
     },
   });
+
+  // Selecionar a primeira categoria por padrão
+  useEffect(() => {
+    if (categories && categories.length > 0 && !selectedCategory) {
+      const firstCategory = categories[0];
+      if (firstCategory && firstCategory._id) {
+        setSelectedCategory(firstCategory._id);
+      }
+    }
+  }, [categories, selectedCategory]);
 
   // Filtrar agentes por categoria
   const filteredAgents = agents?.filter(agent => {
