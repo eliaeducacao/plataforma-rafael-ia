@@ -304,8 +304,12 @@ export function useChatModel(props: UseChatModelProps = {}) {
       // Invalidar queries relacionadas para recarregar dados atualizados
       queryClient.invalidateQueries({ queryKey: queryKeys.allChats() });
 
-      // Selecionar o novo chat
+      // Selecionar o novo chat e navegar de forma síncrona
       setSelectedChatId(newChat._id);
+      // Usar setTimeout para garantir que o selectedChatId seja atualizado primeiro
+      setTimeout(() => {
+        setLocation(`/chats/${newChat._id}`);
+      }, 0);
     },
     onError: error => {
       console.error('Erro ao criar chat:', error);
@@ -458,6 +462,41 @@ export function useChatModel(props: UseChatModelProps = {}) {
       return () => clearTimeout(timeoutId);
     }
   }, [messages]); // Monitora mudanças no array de mensagens
+
+  // Lógica de seleção automática de chat quando o agente muda
+  useEffect(() => {
+    console.log('🔄 useEffect seleção automática:', { 
+      activeAgentId, 
+      isLoadingChats, 
+      chats: chats?.length, 
+      selectedChatId,
+      isCreatingChat: createChatMutation.isPending
+    });
+    
+    if (activeAgentId && !isLoadingChats && chats !== undefined) {
+      // Se há chats disponíveis, seleciona o primeiro
+      if (chats && Array.isArray(chats) && chats.length > 0) {
+        const firstChat = chats[0];
+        if (firstChat && selectedChatId !== firstChat._id) {
+          console.log('✅ Selecionando primeiro chat:', firstChat._id);
+          setSelectedChatId(firstChat._id);
+          setLocation(`/chats/${firstChat._id}`);
+        }
+      } 
+      // Se não há chats E não está criando um chat, cria um novo automaticamente
+      else if (chats && Array.isArray(chats) && chats.length === 0 && !createChatMutation.isPending) {
+        console.log('🆕 Criando novo chat para agente:', activeAgentId);
+        createChatMutation.mutate({
+          agentId: activeAgentId,
+          title: 'Novo Chat',
+        });
+      }
+      // Se chats ainda não foi carregado (undefined), não faz nada
+      else if (chats === undefined) {
+        console.log('⏳ Chats ainda não carregados');
+      }
+    }
+  }, [activeAgentId, chats, isLoadingChats, createChatMutation.isPending, setLocation]);
 
   // Handlers com useCallback para evitar recriação
   const handleSelectChat = useCallback((chatId: string) => {
