@@ -1,4 +1,3 @@
-import { SidebarTrigger } from "@/shared/components/ui/sidebar";
 import { useAgentsModel } from "./agents.model";
 import { CategorySelector } from "../components/category-selector";
 import { AgentCard, AgentCardSkeleton } from "../components/agent-card";
@@ -17,7 +16,6 @@ export function AgentsView(props: ReturnType<typeof useAgentsModel>) {
   return (
     <div className="px-10 py-12">
       <div className="flex items-center mb-6">
-        <SidebarTrigger className="md:hidden mr-4" />
         <h1 className="text-2xl font-bold">Biblioteca de Agentes</h1>
       </div>
 
