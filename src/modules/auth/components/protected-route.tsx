@@ -8,6 +8,7 @@ import type { Chat } from '@/modules/chat/types'
 
 import { AppSidebar } from "@/shared/components/app-sidebar"
 import { SidebarProvider, SidebarInset } from "@/shared/components/ui/sidebar"
+import { InternalHeader } from "@/shared/components/internal-header"
 
 type ProtectedRouteProps = {
   children: ReactNode
@@ -181,6 +182,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
         isLoadingChats={isLoadingChats}
       />
       <SidebarInset>
+        <InternalHeader />
         {children}
       </SidebarInset>
     </SidebarProvider>
