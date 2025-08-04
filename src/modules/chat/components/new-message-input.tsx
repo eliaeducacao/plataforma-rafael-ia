@@ -7,7 +7,7 @@ import { CommandMenu } from "./command-menu"
 import type { FileWithId } from "./multi-file-upload"
 import type { SubmitData } from "../pages/chat.model"
 import type { Agent } from "@/shared/types"
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 
 interface NewMessageInputProps {
   value: string
@@ -79,31 +79,24 @@ export default function NewMessageInput({
 
   const updateCommandPosition = useCallback(() => {
     if (textareaRef.current) {
-      const rect = textareaRef.current.getBoundingClientRect()
-      const textBeforeSlash = value.substring(0, value.lastIndexOf('/'))
-
-      // Calcular posição aproximada do cursor
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      if (context) {
-        context.font = window.getComputedStyle(textareaRef.current).font
-        const textWidth = context.measureText(textBeforeSlash).width
-
-        // Calcular posição relativa ao textarea
-        const relativeLeft = Math.min(textWidth, rect.width - 100)
-
-        setCommandPosition({
-          top: -10, // Posição acima do input
-          left: relativeLeft
-        })
-      }
+      // Posicionar o menu acima do input, não cobrindo-o
+      setCommandPosition({
+        top: -110, // Posição acima do input (altura do menu + margem)
+        left: 0 // Alinhado com a borda esquerda do input
+      })
     }
-  }, [value])
+  }, [])
 
   const handleSelectCommand = (command: string) => {
+    console.log('🎯 Comando selecionado:', command)
+    console.log('📝 Valor atual do input:', value)
+    console.log('🤖 Prompt do agente:', currentAgent?.prompt)
+
     if (command === '/prompt' && currentAgent?.prompt) {
       // Substituir o "/" pelo prompt do agente
       const newValue = value.replace(/\/$/, currentAgent.prompt)
+      console.log('🔄 Novo valor do input:', newValue)
+      console.log('📏 Comprimento do novo valor:', newValue.length)
       onChange(newValue)
     } else if (command) {
       // Para outros comandos futuros
@@ -116,17 +109,54 @@ export default function NewMessageInput({
     // Focar no textarea após selecionar comando
     setTimeout(() => {
       textareaRef.current?.focus()
+      // Forçar redimensionamento após inserir o conteúdo
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 128)}px`
+        console.log('📐 Altura do textarea após redimensionamento:', textareaRef.current.style.height)
+      }
     }, 0)
   }
 
   const handleKeyPressWithCommands = (e: React.KeyboardEvent) => {
-    // Se os comandos estão visíveis, não processar teclas especiais
-    if (showCommands && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === 'Escape')) {
-      return
+    // Se os comandos estão visíveis, processar teclas especiais
+    if (showCommands) {
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'ArrowUp':
+          e.preventDefault()
+          return
+        case 'Enter':
+          e.preventDefault()
+          // Selecionar automaticamente o primeiro comando disponível
+          if (currentAgent?.prompt) {
+            handleSelectCommand('/prompt')
+          }
+          return
+        case 'Escape':
+          e.preventDefault()
+          setShowCommands(false)
+          return
+        default:
+          break
+      }
     }
 
     onKeyPress(e)
   }
+
+  // Adicionar listener global para Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showCommands) {
+        e.preventDefault()
+        setShowCommands(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [showCommands])
 
   return (
     <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full relative">
@@ -168,8 +198,17 @@ export default function NewMessageInput({
                 style={{
                   height: 'auto',
                   minHeight: '40px',
-                  maxHeight: '128px'
+                  maxHeight: '192px',
+                  overflowY: 'auto'
                 }}
+              />
+
+              {/* Menu de comandos - posicionado dentro do container do input */}
+              <CommandMenu
+                isVisible={showCommands}
+                onSelectCommand={handleSelectCommand}
+                currentAgent={currentAgent}
+                position={commandPosition}
               />
             </div>
 
@@ -225,14 +264,6 @@ export default function NewMessageInput({
           </p>
         </div>
       </div>
-
-      {/* Menu de comandos */}
-      <CommandMenu
-        isVisible={showCommands}
-        onSelectCommand={handleSelectCommand}
-        currentAgent={currentAgent}
-        position={commandPosition}
-      />
 
       {/* Modal de upload de arquivos */}
       <FileUploadModal
