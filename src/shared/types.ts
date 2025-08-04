@@ -14,4 +14,5 @@ export type Agent = {
   token: string;
   icon: string;
   category: string;
+  prompt: string;
 };

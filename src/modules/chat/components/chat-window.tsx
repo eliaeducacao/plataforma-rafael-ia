@@ -5,6 +5,7 @@ import NewMessageInput from "./new-message-input"
 import type { Chat, Message as MessageType } from "../types"
 import type { SubmitData } from "../pages/chat.model"
 import type { FileWithId } from "./multi-file-upload"
+import type { Agent } from "@/shared/types"
 import { Skeleton } from "@/shared/components/ui/skeleton"
 import { Alert, AlertDescription } from "@/shared/components/ui/alert"
 import { Loader2 } from "lucide-react"
@@ -43,7 +44,7 @@ interface ChatWindowProps {
   isSendingMessage?: boolean
 
   // Props para agente
-  currentAgent?: { title: string } | null
+  currentAgent?: Agent | null
   isLoadingAgent?: boolean
 }
 
@@ -132,10 +133,11 @@ export function ChatWindow({
           <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <div className="max-w-4xl mx-auto w-full">
               <div className="space-y-3 sm:space-y-4">
-                {(localMessages && Array.isArray(localMessages) ? localMessages : []).map((message, index) => (
-                  <MessageComponent key={index} message={message} />
-                ))}
-
+                {(() => {
+                  return (localMessages && Array.isArray(localMessages) ? localMessages : []).map((message, index) => (
+                    <MessageComponent key={index} message={message} />
+                  ))
+                })()}
                 {/* Indicador de que está enviando mensagem */}
                 {isSendingMessage && (
                   <div className="flex gap-2 sm:gap-3 w-full justify-start">
@@ -168,6 +170,7 @@ export function ChatWindow({
           onFilesSelect={onFilesSelect}
           onFileRemove={onFileRemove}
           onAudioRecorded={onAudioRecorded}
+          currentAgent={currentAgent}
         />
       </footer>
     </div>
