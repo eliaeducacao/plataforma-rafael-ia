@@ -621,6 +621,13 @@ export function useChatModel(props: UseChatModelProps = {}) {
   const handleInputResize = useCallback((e: React.FormEvent<HTMLTextAreaElement>) => {
     const target = e.target as HTMLTextAreaElement;
 
+    console.log('📏 Redimensionando input:', {
+      value: target.value,
+      valueLength: target.value.length,
+      scrollHeight: target.scrollHeight,
+      currentHeight: target.style.height,
+    });
+
     // Resetar altura para calcular corretamente
     target.style.height = 'auto';
 
@@ -630,11 +637,15 @@ export function useChatModel(props: UseChatModelProps = {}) {
     // Aplicar nova altura
     target.style.height = `${newHeight}px`;
 
-    // Adicionar scroll se necessário
+    console.log('📐 Nova altura aplicada:', newHeight);
+
+    // Sempre permitir scroll quando necessário
     if (target.scrollHeight > 128) {
       target.style.overflowY = 'auto';
+      console.log('📜 Scroll habilitado');
     } else {
       target.style.overflowY = 'hidden';
+      console.log('📜 Scroll desabilitado');
     }
   }, []);
 

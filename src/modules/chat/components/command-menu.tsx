@@ -54,6 +54,17 @@ export function CommandMenu({
     }
   }
 
+  // Selecionar automaticamente o primeiro comando se disponível
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && commands.length > 0) {
+      e.preventDefault()
+      const firstCommand = commands[0]
+      if (firstCommand) {
+        handleSelect(firstCommand.id)
+      }
+    }
+  }
+
   if (!isVisible) {
     return null
   }
@@ -66,6 +77,7 @@ export function CommandMenu({
         top: position.top,
         left: position.left
       }}
+      onKeyDown={handleKeyDown}
     >
       <Command className="w-full rounded-lg border bg-popover shadow-lg">
         <div className="flex items-center border-b px-3">

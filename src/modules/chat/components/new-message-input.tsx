@@ -88,9 +88,15 @@ export default function NewMessageInput({
   }, [])
 
   const handleSelectCommand = (command: string) => {
+    console.log('🎯 Comando selecionado:', command)
+    console.log('📝 Valor atual do input:', value)
+    console.log('🤖 Prompt do agente:', currentAgent?.prompt)
+
     if (command === '/prompt' && currentAgent?.prompt) {
       // Substituir o "/" pelo prompt do agente
       const newValue = value.replace(/\/$/, currentAgent.prompt)
+      console.log('🔄 Novo valor do input:', newValue)
+      console.log('📏 Comprimento do novo valor:', newValue.length)
       onChange(newValue)
     } else if (command) {
       // Para outros comandos futuros
@@ -103,6 +109,12 @@ export default function NewMessageInput({
     // Focar no textarea após selecionar comando
     setTimeout(() => {
       textareaRef.current?.focus()
+      // Forçar redimensionamento após inserir o conteúdo
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 128)}px`
+        console.log('📐 Altura do textarea após redimensionamento:', textareaRef.current.style.height)
+      }
     }, 0)
   }
 
@@ -186,7 +198,8 @@ export default function NewMessageInput({
                 style={{
                   height: 'auto',
                   minHeight: '40px',
-                  maxHeight: '128px'
+                  maxHeight: '192px',
+                  overflowY: 'auto'
                 }}
               />
 
