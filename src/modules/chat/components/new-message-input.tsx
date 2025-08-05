@@ -3,9 +3,11 @@ import { Button } from "@/shared/components/ui/button"
 import { Textarea } from "@/shared/components/ui/textarea"
 import { AudioRecorderButton } from "./audio-recorder-button"
 import FileUploadModal from "./file-upload-modal"
+import { CommandMenu } from "./command-menu"
 import type { FileWithId } from "./multi-file-upload"
 import type { SubmitData } from "../pages/chat.model"
-import { useState } from "react"
+import type { Agent } from "@/shared/types"
+import { useState, useRef, useCallback, useEffect } from "react"
 
 interface NewMessageInputProps {
   value: string
@@ -19,6 +21,7 @@ interface NewMessageInputProps {
   onFilesSelect: (files: FileWithId[]) => void
   onFileRemove: (fileId: string) => void
   onAudioRecorded?: (audioBlob: Blob) => void
+  currentAgent?: Agent | null
 }
 
 export default function NewMessageInput({
@@ -32,9 +35,13 @@ export default function NewMessageInput({
   isConverting = false,
   onFilesSelect,
   onFileRemove,
-  onAudioRecorded
+  onAudioRecorded,
+  currentAgent
 }: NewMessageInputProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showCommands, setShowCommands] = useState(false)
+  const [commandPosition, setCommandPosition] = useState({ top: 0, left: 0 })
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,8 +62,104 @@ export default function NewMessageInput({
     setIsModalOpen(false)
   }
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value
+    onChange(newValue)
+
+    // Verificar se o usuário digitou "/" para mostrar comandos
+    if (newValue.endsWith('/') && !showCommands) {
+      setShowCommands(true)
+      updateCommandPosition()
+    } else if (!newValue.includes('/') && showCommands) {
+      setShowCommands(false)
+    } else if (showCommands && newValue.includes('/')) {
+      updateCommandPosition()
+    }
+  }
+
+  const updateCommandPosition = useCallback(() => {
+    if (textareaRef.current) {
+      // Posicionar o menu acima do input, não cobrindo-o
+      setCommandPosition({
+        top: -110, // Posição acima do input (altura do menu + margem)
+        left: 0 // Alinhado com a borda esquerda do input
+      })
+    }
+  }, [])
+
+  const handleSelectCommand = (command: string) => {
+    console.log('🎯 Comando selecionado:', command)
+    console.log('📝 Valor atual do input:', value)
+    console.log('🤖 Prompt do agente:', currentAgent?.prompt)
+
+    if (command === '/prompt' && currentAgent?.prompt) {
+      // Substituir o "/" pelo prompt do agente
+      const newValue = value.replace(/\/$/, currentAgent.prompt)
+      console.log('🔄 Novo valor do input:', newValue)
+      console.log('📏 Comprimento do novo valor:', newValue.length)
+      onChange(newValue)
+    } else if (command) {
+      // Para outros comandos futuros
+      const newValue = value.replace(/\/$/, command)
+      onChange(newValue)
+    }
+
+    setShowCommands(false)
+
+    // Focar no textarea após selecionar comando
+    setTimeout(() => {
+      textareaRef.current?.focus()
+      // Forçar redimensionamento após inserir o conteúdo
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 128)}px`
+        console.log('📐 Altura do textarea após redimensionamento:', textareaRef.current.style.height)
+      }
+    }, 0)
+  }
+
+  const handleKeyPressWithCommands = (e: React.KeyboardEvent) => {
+    // Se os comandos estão visíveis, processar teclas especiais
+    if (showCommands) {
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'ArrowUp':
+          e.preventDefault()
+          return
+        case 'Enter':
+          e.preventDefault()
+          // Selecionar automaticamente o primeiro comando disponível
+          if (currentAgent?.prompt) {
+            handleSelectCommand('/prompt')
+          }
+          return
+        case 'Escape':
+          e.preventDefault()
+          setShowCommands(false)
+          return
+        default:
+          break
+      }
+    }
+
+    onKeyPress(e)
+  }
+
+  // Adicionar listener global para Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showCommands) {
+        e.preventDefault()
+        setShowCommands(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [showCommands])
+
   return (
-    <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
+    <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full relative">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto w-full">
           {/* Exibe arquivos selecionados em uma lista compacta */}
@@ -81,16 +184,31 @@ export default function NewMessageInput({
           )}
 
           <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3 w-full">
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 relative">
               <Textarea
+                ref={textareaRef}
                 value={value}
-                onChange={(e) => onChange(e.target.value)}
-                onKeyPress={onKeyPress}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPressWithCommands}
                 onInput={onInputResize}
-                placeholder="Digite aqui..."
-                className="min-h-[40px] sm:min-h-[44px] resize-none w-full text-sm sm:text-sm md:text-base placeholder:text-sm"
+                placeholder="Digite aqui... (use / para comandos)"
+                className="min-h-[40px] sm:min-h-[44px] max-h-32 resize-none w-full text-sm sm:text-sm md:text-base placeholder:text-sm overflow-y-auto"
                 rows={1}
                 disabled={disabled || isConverting}
+                style={{
+                  height: 'auto',
+                  minHeight: '40px',
+                  maxHeight: '192px',
+                  overflowY: 'auto'
+                }}
+              />
+
+              {/* Menu de comandos - posicionado dentro do container do input */}
+              <CommandMenu
+                isVisible={showCommands}
+                onSelectCommand={handleSelectCommand}
+                currentAgent={currentAgent}
+                position={commandPosition}
               />
             </div>
 
@@ -141,7 +259,7 @@ export default function NewMessageInput({
           <p className="text-xs text-muted-foreground mt-2 text-center">
             {isConverting
               ? 'Processando arquivos...'
-              : 'Pressione Enter para enviar, Shift+Enter para nova linha'
+              : 'Pressione Enter para enviar, Shift+Enter para nova linha, / para comandos'
             }
           </p>
         </div>

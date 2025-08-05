@@ -3,6 +3,7 @@ import { useLocation } from 'wouter';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/shared/lib/axios';
 import type { Message, Chat } from '../types';
+import type { Agent } from '@/shared/types';
 import { useSessionStorage } from '@uidotdev/usehooks';
 import { toast } from 'sonner';
 import type { FileWithId } from '../components/multi-file-upload';
@@ -114,7 +115,7 @@ const chatApi = {
   },
 
   // Obter Agente por ID
-  getAgent: async (agentId: string) => {
+  getAgent: async (agentId: string): Promise<Agent> => {
     const response = await api.get(
       `/webhook/f356c2bb-bb5e-4667-9853-92ee23b172b8/api/v1/agents/${agentId}`
     );
@@ -465,14 +466,14 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   // Lógica de seleção automática de chat quando o agente muda
   useEffect(() => {
-    console.log('🔄 useEffect seleção automática:', { 
-      activeAgentId, 
-      isLoadingChats, 
-      chats: chats?.length, 
+    console.log('🔄 useEffect seleção automática:', {
+      activeAgentId,
+      isLoadingChats,
+      chats: chats?.length,
       selectedChatId,
-      isCreatingChat: createChatMutation.isPending
+      isCreatingChat: createChatMutation.isPending,
     });
-    
+
     if (activeAgentId && !isLoadingChats && chats !== undefined) {
       // Se há chats disponíveis, seleciona o primeiro
       if (chats && Array.isArray(chats) && chats.length > 0) {
@@ -482,9 +483,14 @@ export function useChatModel(props: UseChatModelProps = {}) {
           setSelectedChatId(firstChat._id);
           setLocation(`/chats/${firstChat._id}`);
         }
-      } 
+      }
       // Se não há chats E não está criando um chat, cria um novo automaticamente
-      else if (chats && Array.isArray(chats) && chats.length === 0 && !createChatMutation.isPending) {
+      else if (
+        chats &&
+        Array.isArray(chats) &&
+        chats.length === 0 &&
+        !createChatMutation.isPending
+      ) {
         console.log('🆕 Criando novo chat para agente:', activeAgentId);
         createChatMutation.mutate({
           agentId: activeAgentId,
@@ -614,8 +620,33 @@ export function useChatModel(props: UseChatModelProps = {}) {
 
   const handleInputResize = useCallback((e: React.FormEvent<HTMLTextAreaElement>) => {
     const target = e.target as HTMLTextAreaElement;
-    target.style.height = '40px';
-    target.style.height = `${Math.min(target.scrollHeight, 200)}px`;
+
+    console.log('📏 Redimensionando input:', {
+      value: target.value,
+      valueLength: target.value.length,
+      scrollHeight: target.scrollHeight,
+      currentHeight: target.style.height,
+    });
+
+    // Resetar altura para calcular corretamente
+    target.style.height = 'auto';
+
+    // Calcular nova altura baseada no conteúdo
+    const newHeight = Math.min(target.scrollHeight, 128); // max 128px (8rem)
+
+    // Aplicar nova altura
+    target.style.height = `${newHeight}px`;
+
+    console.log('📐 Nova altura aplicada:', newHeight);
+
+    // Sempre permitir scroll quando necessário
+    if (target.scrollHeight > 128) {
+      target.style.overflowY = 'auto';
+      console.log('📜 Scroll habilitado');
+    } else {
+      target.style.overflowY = 'hidden';
+      console.log('📜 Scroll desabilitado');
+    }
   }, []);
 
   const handleNavigateToAgents = useCallback(() => {
