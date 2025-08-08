@@ -8,7 +8,8 @@ import { Toaster } from 'sonner';
 import '@/index.css';
 import '@/shared/styles/markdown.css';
 
-import HomePage from '@/modules/home/pages/home';
+import HomePage from '@/modules/lps/pages/home';
+import CapturePage from '@/modules/lps/pages/capture';
 import LoginPage from '@/modules/auth/pages/login';
 import ChatPage from '@/modules/chat/pages';
 import AgentsPage from '@/modules/agents-library/pages';
@@ -20,26 +21,29 @@ import EmailToResetPassPage from '@/modules/auth/pages/email-to-reset-pass';
 import { ProtectedRoute } from '@/modules/auth/components/protected-route';
 import { AuthProvider } from '@/modules/auth/providers/auth-provider';
 
-import { CookiesProvider } from "react-cookie"
+import { CookiesProvider } from 'react-cookie';
 
 import { QueryClient } from '@tanstack/react-query';
-import { QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query';
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <CookiesProvider defaultSetOptions={{
-      path: '/',
-      secure: true,
-      sameSite: 'strict'
-    }}>
+    <CookiesProvider
+      defaultSetOptions={{
+        path: '/',
+        secure: true,
+        sameSite: 'strict',
+      }}
+    >
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Toaster position='top-center' duration={3000} richColors />
+          <Toaster position="top-center" duration={3000} richColors />
           <Switch>
             {/* Rotas Públicas */}
             <Route path="/" component={HomePage} />
+            <Route path="/lp" component={CapturePage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/reset-password" component={ResetPassPage} />
             <Route path="/create-user" component={CreateUserPage} />
