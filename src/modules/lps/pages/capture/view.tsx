@@ -290,7 +290,7 @@ export function CaptureView() {
           </div>
 
           {/* Desktop Layout */}
-          <div className="hidden lg:flex flex-col lg:grid-cols-12 gap-8 lg:gap-16 min-h-[calc(100vh-12rem)]">
+          <div className="hidden flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-16 min-h-[calc(100vh-12rem)]">
             {/* Content Side */}
             <div className="lg:col-span-7 xl:col-span-6 flex flex-col justify-center space-y-6 sm:space-y-8 lg:space-y-10">
               {/* Main Title */}
