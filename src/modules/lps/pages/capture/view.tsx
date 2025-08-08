@@ -30,7 +30,6 @@ import {
   Youtube,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import Logo from '../../components/logo';
 
 interface FormData {
   name: string;
@@ -782,7 +781,6 @@ export function CaptureView() {
 
             {/* Final CTA */}
             <div className="relative px-4 sm:px-0">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl sm:rounded-3xl transform rotate-1 opacity-90"></div>
               <div className="relative bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-white">
                 <div className="max-w-5xl mx-auto text-center">
                   <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6">
@@ -833,16 +831,16 @@ export function CaptureView() {
                     </div>
                   </div>
 
-                  <div className="space-y-6 sm:space-y-6">
+                  <div className="flex flex-col gap-6">
                     <Button
                       size="lg"
-                      className="w-full sm:w-auto bg-white text-purple-700 hover:bg-gray-100 text-sm sm:text-base lg:text-xl font-semibold px-4 sm:px-8 lg:px-12 py-4 sm:py-4 lg:py-6 h-auto rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="sm:w-auto bg-white text-purple-700 hover:bg-gray-100 text-xs sm:text-base lg:text-xl font-semibold px-4 sm:px-8 lg:px-12 py-4 sm:py-4 lg:py-6 h-auto rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Começar Teste Gratuito Agora
-                      <ArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                     </Button>
 
-                    <div className="flex flex-col sm:flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6 text-sm sm:text-sm text-purple-100">
+                    <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-3 sm:gap-4 lg:gap-6 text-sm sm:text-sm text-purple-100">
                       <span className="flex items-center justify-center gap-2">
                         <span className="text-green-400 text-base">✓</span> 30 dias grátis
                       </span>
@@ -870,7 +868,7 @@ export function CaptureView() {
           <div className="grid md:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="space-y-4">
-              <Logo />
+              <Scale />
 
               <p className="text-sidebar-accent-foreground leading-relaxed">
                 A primeira plataforma de agentes de IA especializados em Direito, desenvolvida para

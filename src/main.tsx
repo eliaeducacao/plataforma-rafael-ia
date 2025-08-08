@@ -8,7 +8,7 @@ import { Toaster } from 'sonner';
 import '@/index.css';
 import '@/shared/styles/markdown.css';
 
-import HomePage from '@/modules/lps/pages/home';
+import HomePage from '@/modules/home/pages/home';
 import CapturePage from '@/modules/lps/pages/capture';
 import LoginPage from '@/modules/auth/pages/login';
 import ChatPage from '@/modules/chat/pages';
