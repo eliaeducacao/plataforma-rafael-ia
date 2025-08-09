@@ -52,7 +52,7 @@ const data = {
     },
     {
       title: "Academy",
-      url: "https://hotmart.com/pt-br/club/eliaeducacao/products/5765416",
+      url: "/academy",
       icon: IconSchool,
     },
     // {

@@ -10,6 +10,7 @@ import '@/shared/styles/markdown.css';
 
 import HomePage from '@/modules/home/pages/home';
 import CapturePage from '@/modules/lps/pages/capture';
+import AcademyPage from '@/modules/lps/pages/academy';
 import LoginPage from '@/modules/auth/pages/login';
 import ChatPage from '@/modules/chat/pages';
 import AgentsPage from '@/modules/agents-library/pages';
@@ -44,6 +45,7 @@ createRoot(document.getElementById('root')!).render(
             {/* Rotas Públicas */}
             <Route path="/" component={HomePage} />
             <Route path="/lp" component={CapturePage} />
+            <Route path="/academy" component={AcademyPage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/reset-password" component={ResetPassPage} />
             <Route path="/create-user" component={CreateUserPage} />

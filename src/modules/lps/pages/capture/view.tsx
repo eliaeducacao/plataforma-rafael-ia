@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'wouter';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Badge } from '@/shared/components/ui/badge';
 import {
@@ -34,7 +36,7 @@ import { toast } from 'sonner';
 interface FormData {
   name: string;
   email: string;
-  phone: string;
+  phone: string | undefined;
 }
 
 export function CaptureView() {
@@ -47,6 +49,28 @@ export function CaptureView() {
     formState: { errors },
     reset,
   } = useForm<FormData>();
+
+  // Função para aplicar máscara no telefone
+  const formatPhoneNumber = (value: string) => {
+    // Remove tudo que não é dígito
+    const numbers = value.replace(/\D/g, '');
+
+    // Aplica a máscara (11) 99999-9999
+    if (numbers.length <= 2) {
+      return `(${numbers}`;
+    } else if (numbers.length <= 7) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+    } else if (numbers.length <= 11) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7)}`;
+    } else {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+    }
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    e.target.value = formatted;
+  };
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -164,9 +188,26 @@ export function CaptureView() {
                       <p className="text-base font-semibold mb-2 text-gray-900">
                         Obrigado pelo seu interesse!
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 mb-4">
                         Verifique seu email para acessar a plataforma
                       </p>
+
+                      {/* Academy Link */}
+                      <div className="space-y-3">
+                        <p className="text-sm font-medium text-gray-700">
+                          Acesse também nosso curso gratuito:
+                        </p>
+                        <Link
+                          to="/academy"
+                          className="inline-flex items-center justify-center w-full h-12 text-sm font-semibold bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                          <Play className="mr-2 h-5 w-5" />
+                          Acessar Academy
+                        </Link>
+                        <p className="text-xs text-gray-500">
+                          Curso com 3 vídeos sobre IA na Advocacia
+                        </p>
+                      </div>
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -233,11 +274,12 @@ export function CaptureView() {
                           id="phone-mobile"
                           placeholder="(11) 99999-9999"
                           className="h-11 text-sm border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
+                          onInput={handlePhoneChange}
                           {...register('phone', {
                             required: 'Telefone é obrigatório',
                             pattern: {
-                              value: /^[\d\s()\-+]+$/,
-                              message: 'Formato de telefone inválido',
+                              value: /^\(\d{2}\) \d{5}-\d{4}$/,
+                              message: 'Formato: (11) 99999-9999',
                             },
                           })}
                         />
@@ -351,9 +393,26 @@ export function CaptureView() {
                         <p className="text-base sm:text-lg font-semibold mb-2 text-gray-900">
                           Obrigado pelo seu interesse!
                         </p>
-                        <p className="text-sm sm:text-base text-gray-600">
+                        <p className="text-sm sm:text-base text-gray-600 mb-4">
                           Verifique seu email para acessar a plataforma
                         </p>
+
+                        {/* Academy Link */}
+                        <div className="space-y-3">
+                          <p className="text-sm sm:text-base font-medium text-gray-700">
+                            Acesse também nosso curso gratuito:
+                          </p>
+                          <Link
+                            to="/academy"
+                            className="inline-flex items-center justify-center w-full h-12 text-sm sm:text-base font-semibold bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                          >
+                            <Play className="mr-2 h-5 w-5" />
+                            Acessar Academy
+                          </Link>
+                          <p className="text-xs sm:text-sm text-gray-500">
+                            Curso com 3 vídeos sobre IA na Advocacia
+                          </p>
+                        </div>
                       </div>
                     ) : (
                       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
@@ -420,11 +479,12 @@ export function CaptureView() {
                             id="phone-desktop"
                             placeholder="(11) 99999-9999"
                             className="h-11 text-base border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
+                            onInput={handlePhoneChange}
                             {...register('phone', {
                               required: 'Telefone é obrigatório',
                               pattern: {
-                                value: /^[\d\s()\-+]+$/,
-                                message: 'Formato de telefone inválido',
+                                value: /^\(\d{2}\) \d{5}-\d{4}$/,
+                                message: 'Formato: (11) 99999-9999',
                               },
                             })}
                           />
