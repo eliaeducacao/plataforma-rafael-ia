@@ -36,7 +36,7 @@ import { toast } from 'sonner';
 interface FormData {
   name: string;
   email: string;
-  phone: string | undefined;
+  phone: string;
 }
 
 export function CaptureView() {
@@ -70,10 +70,15 @@ export function CaptureView() {
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(e.target.value);
     e.target.value = formatted;
+    // Trigger validation after formatting
+    e.target.dispatchEvent(new Event('input', { bubbles: true }));
   };
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+
+    // FORMATE O NUMERO PARA 27999999999 sem caracteres especiais
+    const formattedPhone = data.phone.replace(/\D/g, '').slice(0, 11);
 
     try {
       // TODO: Configure o webhook do n8n
@@ -85,7 +90,7 @@ export function CaptureView() {
         body: JSON.stringify({
           name: data.name,
           email: data.email,
-          phone: data.phone,
+          phone: formattedPhone,
           source: 'landing-page-oab-rondonia',
           timestamp: new Date().toISOString(),
         }),
@@ -223,13 +228,7 @@ export function CaptureView() {
                           id="name-mobile"
                           placeholder="Seu nome completo"
                           className="h-11 text-sm border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                          {...register('name', {
-                            required: 'Nome é obrigatório',
-                            minLength: {
-                              value: 2,
-                              message: 'Nome deve ter pelo menos 2 caracteres',
-                            },
-                          })}
+                          {...register('name')}
                         />
                         {errors.name && (
                           <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
@@ -249,13 +248,7 @@ export function CaptureView() {
                           type="email"
                           placeholder="seu@email.com"
                           className="h-11 text-sm border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                          {...register('email', {
-                            required: 'Email é obrigatório',
-                            pattern: {
-                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                              message: 'Email inválido',
-                            },
-                          })}
+                          {...register('email')}
                         />
                         {errors.email && (
                           <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
@@ -275,13 +268,7 @@ export function CaptureView() {
                           placeholder="(11) 99999-9999"
                           className="h-11 text-sm border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
                           onInput={handlePhoneChange}
-                          {...register('phone', {
-                            required: 'Telefone é obrigatório',
-                            pattern: {
-                              value: /^\(\d{2}\) \d{5}-\d{4}$/,
-                              message: 'Formato: (11) 99999-9999',
-                            },
-                          })}
+                          {...register('phone')}
                         />
                         {errors.phone && (
                           <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>
@@ -428,13 +415,7 @@ export function CaptureView() {
                             id="name-desktop"
                             placeholder="Seu nome completo"
                             className="h-11 text-base border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                            {...register('name', {
-                              required: 'Nome é obrigatório',
-                              minLength: {
-                                value: 2,
-                                message: 'Nome deve ter pelo menos 2 caracteres',
-                              },
-                            })}
+                            {...register('name')}
                           />
                           {errors.name && (
                             <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
@@ -454,13 +435,7 @@ export function CaptureView() {
                             type="email"
                             placeholder="seu@email.com"
                             className="h-11 text-base border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
-                            {...register('email', {
-                              required: 'Email é obrigatório',
-                              pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: 'Email inválido',
-                              },
-                            })}
+                            {...register('email')}
                           />
                           {errors.email && (
                             <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
@@ -480,13 +455,7 @@ export function CaptureView() {
                             placeholder="(11) 99999-9999"
                             className="h-11 text-base border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-colors"
                             onInput={handlePhoneChange}
-                            {...register('phone', {
-                              required: 'Telefone é obrigatório',
-                              pattern: {
-                                value: /^\(\d{2}\) \d{5}-\d{4}$/,
-                                message: 'Formato: (11) 99999-9999',
-                              },
-                            })}
+                            {...register('phone')}
                           />
                           {errors.phone && (
                             <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>
