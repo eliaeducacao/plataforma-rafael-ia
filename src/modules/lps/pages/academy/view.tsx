@@ -68,15 +68,6 @@ export function AcademyView(props: AcademyModel) {
       <header className="bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* Back Button */}
-            <Link
-              to="/capture"
-              className="flex items-center gap-2 text-purple-600 hover:text-purple-700 transition-colors font-medium"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Voltar
-            </Link>
-
             {/* Partnership Badge */}
             <div className="flex justify-center">
               <Badge
