@@ -53,11 +53,7 @@ export function CaptureView() {
 
     try {
       // TODO: Configure o webhook do n8n
-      const webhookUrl =
-        process.env.VITE_N8N_WEBHOOK_URL ||
-        'https://your-n8n-instance.com/webhook/capture-oab-rondonia';
-
-      const response = await fetch(webhookUrl, {
+      const response = await fetch('https://hook.us1.make.com/eb4hloejwjb553xm6wj2g8379zatckqy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
