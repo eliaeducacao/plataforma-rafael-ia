@@ -17,11 +17,12 @@ import {
   Youtube,
 } from 'lucide-react';
 import { Link } from 'wouter';
-import { Video, AcademyModel } from './model';
+import { useAcademyModel } from './model';
+import { VIDEOS } from './contants';
+import { Video } from './model';
 
-export function AcademyView(props: AcademyModel) {
+export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
   const {
-    videos,
     completedVideos,
     isLoading,
     error,
@@ -154,12 +155,12 @@ export function AcademyView(props: AcademyModel) {
                       Lista de Aulas
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {completedVideos.size} de {videos.length} aulas concluídas
+                      {completedVideos.size} de {VIDEOS.length} aulas concluídas
                     </p>
                   </div>
 
                   <div className="p-4 space-y-2">
-                    {videos.map((video: Video, index: number) => (
+                    {VIDEOS.map((video: Video, index: number) => (
                       <div
                         key={video.id}
                         className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors border ${currentVideo.id === video.id
@@ -236,7 +237,7 @@ export function AcademyView(props: AcademyModel) {
                   Seu Progresso
                 </h3>
                 <span className="text-sm sm:text-base text-gray-600">
-                  {completedVideos.size} de {videos.length} aulas concluídas
+                  {completedVideos.size} de {VIDEOS.length} aulas concluídas
                 </span>
               </div>
 
