@@ -116,7 +116,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                 Trial 30 Dias - Academia Elia
               </h2>
               <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-                Aprenda a usar todos os agentes da plataforma Elia com nossa playlist completa de tutoriais.
+                Aprenda a usar todos os agentes da plataforma Elia com nossa playlist completa "Trial 30 Dias".
               </p>
             </div>
 
@@ -152,7 +152,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                 <div className="bg-white rounded-xl border border-gray-200 shadow-lg">
                   <div className="p-6 border-b border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Tutoriais dos Agentes
+                      Trial 30 Dias - Tutoriais
                     </h3>
                     <p className="text-sm text-gray-600">
                       {completedVideos.size} de {VIDEOS.length} tutoriais concluídos
@@ -234,7 +234,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
             <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg border border-gray-200 max-w-2xl mx-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
-                  Seu Progresso
+                  Seu Progresso na Playlist
                 </h3>
                 <span className="text-sm sm:text-base text-gray-600">
                   {completedVideos.size} de {VIDEOS.length} tutoriais concluídos
@@ -265,7 +265,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900">
-                O que você vai aprender
+                O que você vai aprender na playlist "Trial 30 Dias"
               </h2>
               <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
                 Conhecimentos práticos para usar todos os agentes da plataforma Elia desde o primeiro dia.
