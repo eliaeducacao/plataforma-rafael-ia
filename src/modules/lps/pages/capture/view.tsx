@@ -165,7 +165,7 @@ export function CaptureView(props: ReturnType<typeof useCaptureModel>) {
                     </CardTitle>
                     <p className="text-sm sm:text-base text-gray-600">
                       {isSubmitted
-                        ? 'Curso com 3 vídeos sobre IA na Advocacia'
+                        ? 'Playlist "Trial 30 Dias" com 12 tutoriais dos agentes Elia'
                         : 'Preencha os dados abaixo para começar'}
                     </p>
                   </CardHeader>
@@ -178,7 +178,7 @@ export function CaptureView(props: ReturnType<typeof useCaptureModel>) {
                         </div>
                         <div>
                           <p className="text-sm lg:text-base text-gray-600 mb-4 lg:mb-6">
-                            Curso com 3 vídeos sobre IA na Advocacia
+                            Playlist "Trial 30 Dias" com 12 tutoriais dos agentes Elia
                           </p>
                         </div>
                         <div>

@@ -214,7 +214,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-medium mb-6 sm:mb-8">
               <Brain className="w-4 h-4 sm:w-5 sm:h-5" />
-              Curso Gratuito - IA na Advocacia
+              Playlist Gratuita - Trial 30 Dias
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 sm:mb-8 text-gray-900 leading-tight">
@@ -443,7 +443,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
           <div className="border-t border-sidebar-border mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-sidebar-accent-foreground/70 text-sm">
-                © 2024 AdvocacIA. Todos os direitos reservados.
+                © 2024 EliaAI. Todos os direitos reservados.
               </p>
               <div className="flex space-x-6 mt-4 md:mt-0">
                 <a
