@@ -76,7 +76,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                 className="px-4 sm:px-6 py-1.5 sm:py-2 bg-purple-100/80 text-purple-700 border-purple-200 rounded-full text-xs sm:text-sm font-medium"
               >
                 <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                OAB Rondônia e EliaAI juntos
+                OAB e EliaAI juntos
               </Badge>
             </div>
 
@@ -91,16 +91,16 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
 
               <div className="w-px h-8 sm:h-10 bg-gray-300"></div>
 
-              {/* OAB Rondônia Logo */}
+              {/* OAB Logo */}
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 bg-white rounded-xl flex items-center justify-center shadow-lg border border-gray-200">
                   <img
-                    src="/oabro-logo.png"
-                    alt="OAB Rondônia"
+                    src="/oab-logo.png"
+                    alt="OAB"
                     className="w-6 h-6 sm:w-9 sm:h-9 object-contain"
                   />
                 </div>
-                <span className="text-sm sm:text-base text-gray-700 font-medium">OAB Rondônia</span>
+                <span className="text-sm sm:text-base text-gray-700 font-medium">OAB</span>
               </div>
             </div>
           </div>
@@ -113,10 +113,10 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-4 sm:mb-6">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-gray-900">
-                Assista às Aulas
+                Trial 30 Dias - Academia Elia
               </h2>
               <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-                Selecione uma aula na lista ao lado e assista ao conteúdo completo.
+                Aprenda a usar todos os agentes da plataforma Elia com nossa playlist completa de tutoriais.
               </p>
             </div>
 
@@ -152,10 +152,10 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                 <div className="bg-white rounded-xl border border-gray-200 shadow-lg">
                   <div className="p-6 border-b border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Lista de Aulas
+                      Tutoriais dos Agentes
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {completedVideos.size} de {VIDEOS.length} aulas concluídas
+                      {completedVideos.size} de {VIDEOS.length} tutoriais concluídos
                     </p>
                   </div>
 
@@ -226,8 +226,8 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
             </h1>
 
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-8 sm:mb-12 max-w-3xl mx-auto">
-              Aprenda os fundamentos da IA generativa e como aplicá-la na sua prática jurídica diária.
-              Curso completo com 3 aulas práticas e gratuitas.
+              Aprenda a usar todos os agentes da plataforma Elia com nossa playlist completa de tutoriais.
+              Playlist "Trial 30 Dias" com 12 vídeos práticos e gratuitos.
             </p>
 
             {/* Progress Bar */}
@@ -237,7 +237,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                   Seu Progresso
                 </h3>
                 <span className="text-sm sm:text-base text-gray-600">
-                  {completedVideos.size} de {VIDEOS.length} aulas concluídas
+                  {completedVideos.size} de {VIDEOS.length} tutoriais concluídos
                 </span>
               </div>
 
@@ -250,7 +250,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
 
               <p className="text-sm text-gray-600">
                 {progressPercentage === 100
-                  ? '🎉 Parabéns! Você completou o curso!'
+                  ? '🎉 Parabéns! Você completou a playlist!'
                   : `${Math.round(progressPercentage)}% concluído`
                 }
               </p>
@@ -268,7 +268,7 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                 O que você vai aprender
               </h2>
               <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-                Conhecimentos práticos para aplicar IA na sua advocacia desde o primeiro dia.
+                Conhecimentos práticos para usar todos os agentes da plataforma Elia desde o primeiro dia.
               </p>
             </div>
 
@@ -279,10 +279,10 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                     <Brain className="w-6 h-6 text-purple-600" />
                   </div>
                   <h3 className="text-lg sm:text-xl font-semibold mb-3 text-gray-900">
-                    Fundamentos da IA
+                    Agentes Especializados
                   </h3>
                   <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                    Entenda os conceitos básicos de inteligência artificial generativa e como ela funciona.
+                    Conheça todos os agentes da plataforma Elia e suas funcionalidades específicas.
                   </p>
                 </CardContent>
               </Card>
@@ -293,10 +293,10 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                     <Scale className="w-6 h-6 text-purple-600" />
                   </div>
                   <h3 className="text-lg sm:text-xl font-semibold mb-3 text-gray-900">
-                    Aplicações Jurídicas
+                    Aplicações Práticas
                   </h3>
                   <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                    Descubra como usar IA para otimizar sua prática jurídica e aumentar a produtividade.
+                    Aprenda a usar cada agente para otimizar seu trabalho e aumentar a produtividade.
                   </p>
                 </CardContent>
               </Card>
@@ -307,10 +307,10 @@ export function AcademyView(props: ReturnType<typeof useAcademyModel>) {
                     <Users className="w-6 h-6 text-purple-600" />
                   </div>
                   <h3 className="text-lg sm:text-xl font-semibold mb-3 text-gray-900">
-                    Implementação Prática
+                    Implementação Imediata
                   </h3>
                   <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                    Aprenda a implementar ferramentas de IA no seu escritório de advocacia.
+                    Aprenda a implementar e usar todos os agentes da plataforma Elia imediatamente.
                   </p>
                 </CardContent>
               </Card>

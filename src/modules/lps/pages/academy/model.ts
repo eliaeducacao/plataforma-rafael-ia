@@ -50,10 +50,10 @@ export function useAcademyModel() {
       currentVideo ||
       VIDEOS[0] || {
         id: '1',
-        title: 'Aula de Boas-vindas',
-        description: 'Introdução ao curso',
-        duration: 's15 min',
-        url: 'https://youtu.be/FOP4CmVCxFQ',
+        title: 'Como acessar a plataforma da Elia',
+        description: 'Tutorial completo sobre como acessar e navegar pela plataforma da Elia.',
+        duration: '5 min',
+        url: 'https://youtu.be/ws5t1YCwKFc',
         thumbnail: '/api/placeholder/400/225',
       }
     );

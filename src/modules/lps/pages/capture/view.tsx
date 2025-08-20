@@ -66,7 +66,7 @@ export function CaptureView(props: ReturnType<typeof useCaptureModel>) {
                 className="px-4 sm:px-6 py-1.5 sm:py-2 bg-purple-100/80 text-purple-700 border-purple-200 rounded-full text-xs sm:text-sm font-medium"
               >
                 <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                OAB Rondônia e EliaAI juntos
+                OAB e EliaAI juntos
               </Badge>
             </div>
 
@@ -81,16 +81,16 @@ export function CaptureView(props: ReturnType<typeof useCaptureModel>) {
 
               <div className="w-px h-8 sm:h-10 bg-gray-300"></div>
 
-              {/* OAB Rondônia Logo */}
+              {/* OAB Logo */}
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 bg-white rounded-xl flex items-center justify-center shadow-lg border border-gray-200">
                   <img
-                    src="/oabro-logo.png"
-                    alt="OAB Rondônia"
+                    src="/oab-logo.png"
+                    alt="OAB"
                     className="w-6 h-6 sm:w-9 sm:h-9 object-contain"
                   />
                 </div>
-                <span className="text-sm sm:text-base text-gray-700 font-medium">OAB Rondônia</span>
+                <span className="text-sm sm:text-base text-gray-700 font-medium">OAB</span>
               </div>
             </div>
           </div>
@@ -381,7 +381,7 @@ export function CaptureView(props: ReturnType<typeof useCaptureModel>) {
 
             <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center">
               <p className="text-xs sm:text-sm text-gray-400">
-                © 2024 EliaAI. Todos os direitos reservados. Em parceria com OAB Rondônia.
+                © 2024 EliaAI. Todos os direitos reservados. Em parceria com OAB.
               </p>
             </div>
           </div>
