@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import { useMutation } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
@@ -20,6 +20,8 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [, setLocation] = useLocation()
   const [cookies, setCookie, removeCookie] = useCookies(['x-auth-token']);
+  const [resetEmailDisabledUntil, setResetEmailDisabledUntil] = useState<number | null>(null);  
+  const [isResetEmailDisabled, setIsResetEmailDisabled] = useState(false);
   const [user, setUser] = useLocalStorage<{
     name: string
     email: string
@@ -77,28 +79,47 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
   });
 
-  const { mutateAsync: sendEmailToResetPassword, isPending: isSendEmailToResetPasswordPending } = useMutation({
-    mutationKey: ['send-email-to-reset-password'],
-    mutationFn: async ({ email }: { email: string }): ReturnType<AuthContextProps['sendEmailToResetPassword']> => {
-      const response = await api.post('/webhook/api/v2/webhook/reset-password/send', { email });
-      return response.data;
-    },
-    onSuccess: () => {
-      toast.success('E-mail de recuperação de senha enviado com sucesso!');
-      setLocation('/confirm-email');
-    },
-    onError: (error: AxiosError) => {
-      console.log("Erro ao enviar e-mail de recuperação:", error);
+const { mutateAsync: sendEmailToResetPassword, isPending: isSendEmailToResetPasswordPending } = useMutation({
+  mutationKey: ['send-email-to-reset-password'],
+  mutationFn: async ({ email }: { email: string }): ReturnType<AuthContextProps['sendEmailToResetPassword']> => {
+    const response = await api.post('/webhook/api/v2/webhook/reset-password/send', { email });
+    return response.data;
+  },
+  onSuccess: () => {
+    toast.success('E-mail de recuperação de senha enviado com sucesso!');
+    setLocation('/confirm-email');
 
-      // Verificar se o erro é específico sobre e-mail não encontrado
-      const errorData = error.response?.data as { error?: string };
-      if (errorData?.error === 'NOT_EMAIL_FOUND') {
-        toast.error('Este e-mail não é um e-mail de aluno na plataforma.');
-      } else {
-        toast.error('Erro ao enviar e-mail de recuperação de senha. Verifique o e-mail informado.');
-      }
-    },
-  });
+    // 🚀 bloquear botão por 10 minutos (600.000 ms)
+    const expireAt = Date.now() + 10 * 60 * 1000;
+    setResetEmailDisabledUntil(expireAt);
+  },
+  onError: (error: AxiosError) => {
+    console.log("Erro ao enviar e-mail de recuperação:", error);
+
+    const errorData = error.response?.data as { error?: string };
+    if (errorData?.error === 'NOT_EMAIL_FOUND') {
+      toast.error('Este e-mail não é um e-mail de aluno na plataforma.');
+    } else {
+      toast.error('Erro ao enviar e-mail de recuperação de senha. Verifique o e-mail informado.');
+    }
+  },
+});
+
+useEffect(() => {
+  if (!resetEmailDisabledUntil) return;
+
+  const interval = setInterval(() => {
+    if (Date.now() >= resetEmailDisabledUntil) {
+      setIsResetEmailDisabled(false);
+      setResetEmailDisabledUntil(null);
+      clearInterval(interval);
+    } else {
+      setIsResetEmailDisabled(true);
+    }
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [resetEmailDisabledUntil]);
 
   const { mutateAsync: createUser, isPending: isCreateUserPending } = useMutation({
     mutationKey: ['create-user'],
@@ -153,5 +174,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     fetchUser();
   }, [token, setUser]);
 
-  return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user, resetPassword, isResetPasswordPending, createUser, isCreateUserPending, sendEmailToResetPassword, isSendEmailToResetPasswordPending }}>{children}</AuthContext>
+  return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user, resetPassword, isResetPasswordPending, createUser, isCreateUserPending, sendEmailToResetPassword, isSendEmailToResetPasswordPending, 
+    isResetEmailDisabled,  }}>{children}</AuthContext>
 }
