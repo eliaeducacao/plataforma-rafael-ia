@@ -29,6 +29,7 @@ export type AuthContextProps = {
     name: string
   } | null
   isCreateUserPending: boolean
+  isResetEmailDisabled: boolean
   isSendEmailToResetPasswordPending: boolean
 }
 

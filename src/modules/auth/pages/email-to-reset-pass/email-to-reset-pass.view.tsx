@@ -4,9 +4,11 @@ import { Mail } from "lucide-react";
 
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
+import { useAuth } from "../../hooks/use-auth";
 
 export function EmailToResetPassView(props: ReturnType<typeof useEmailToResetPassModel>) {
   const { onSubmit, handleSubmit, errors, register } = props
+  const { sendEmailToResetPassword, isSendEmailToResetPasswordPending, isResetEmailDisabled } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -46,10 +48,10 @@ export function EmailToResetPassView(props: ReturnType<typeof useEmailToResetPas
               )}
 
               <Button
-                type="submit"
-                className="w-full"
+                onClick={() => sendEmailToResetPassword({ email : '' })}
+                disabled={isSendEmailToResetPasswordPending || isResetEmailDisabled}
               >
-                Recuperar senha
+                {isResetEmailDisabled ? "Aguarde 10 min..." : "Recuperar senha"}
               </Button>
             </form>
           </div>
