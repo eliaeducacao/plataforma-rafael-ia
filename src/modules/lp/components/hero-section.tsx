@@ -1,0 +1,63 @@
+import { Button } from "@/shared/components/ui/button";
+import { Play } from "lucide-react";
+
+const HeroSection = () => {
+  return (
+    <section className="relative py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Conteúdo Principal */}
+          <div className="space-y-8">
+            {/* Título Principal */}
+            <div className="space-y-6">
+              <h1 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
+                <span className="text-primary">Cliente paga resultado,</span>
+                <br />
+                não hora trabalhada.
+              </h1>
+
+              <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                Elia é a única plataforma com agentes de IA treinados para o fluxo completo do advogado brasileiro — do diagnóstico com o cliente até a petição final.
+              </p>
+            </div>
+
+            {/* Botões CTA */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button size="lg" className="text-lg px-8 py-6">
+                Experimente 7 dias grátis
+              </Button>
+              <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                Agende sua demonstração
+              </Button>
+            </div>
+
+            {/* Texto de apoio */}
+            <div className="text-sm text-muted-foreground">
+              <p>Sem cartão. Sem pegadinha. Cancela quando quiser.</p>
+              <p>30 minutos. A gente mostra, você decide.</p>
+            </div>
+          </div>
+
+          {/* Área do Vídeo */}
+          <div className="relative">
+            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border-2 border-dashed border-muted-foreground/25">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto">
+                  <Play className="w-8 h-8 text-primary-foreground ml-1" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-lg font-medium">Vídeo de Demonstração</p>
+                  <p className="text-sm text-muted-foreground">
+                    Veja como a Elia funciona na prática
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
