@@ -7,13 +7,13 @@ const BenefitsSection = () => {
       icon: CheckCircle,
       title: "Fluxo Jurídico Completo Automatizado",
       description: "8 agentes especializados cobrindo: diagnóstico, tese, atendimento, contratos, jurisprudência, petição inicial, revisão e petição incidental. Do primeiro contato com o cliente à peça final.",
-      color: "text-green-600"
+      color: "text-purple-600"
     },
     {
       icon: Clock,
       title: "Implementação Garantida em 15 Minutos",
       description: "Treinamentos práticos que ensinam exatamente como usar cada agente no seu dia a dia. Não é teoria — é \"clique aqui, faça isso, receba aquilo\".",
-      color: "text-blue-600"
+      color: "text-purple-600"
     },
     {
       icon: TrendingUp,
