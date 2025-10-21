@@ -42,15 +42,12 @@ const BenefitsSection = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-20">
           {pillars.map((pillar, index) => (
             <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-              <CardHeader className="p-0 mb-4">
+              <CardHeader className="p-0 mb-0">
                 <div className="flex items-start gap-4">
                   <div className={`p-3 ${pillar.bgColor} rounded-lg`}>
                     <pillar.icon className={`w-6 h-6 ${pillar.color}`} />
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-muted-foreground mb-2">
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
                     <CardTitle className="text-xl font-semibold text-foreground leading-tight">
                       {pillar.title}
                     </CardTitle>
