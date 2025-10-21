@@ -4,12 +4,12 @@ import { User, Bot, Search, CheckCircle, FileText, Shield, Clock, Loader2, Build
 
 const DemoSection = () => {
   return (
-    <section className="relative py-24 overflow-hidden bg-background">
+    <section className="relative py-12 overflow-hidden bg-background">
       <div className="container mx-auto px-6 relative z-10">
         {/* Eyebrow */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="text-sm px-6 py-3 bg-background border-border">
-            <Building2 className="w-4 h-4 mr-2 text-primary" />
+          <Badge variant="outline" className="text-base px-8 py-4 bg-background border-border">
+            <Building2 className="w-12 h-12 mr-3 text-primary shrink-0" />
             <span className="text-foreground font-medium">Por que escritórios escolhem Elia</span>
           </Badge>
         </div>
@@ -41,7 +41,7 @@ const DemoSection = () => {
         </div>
 
         {/* Chat Interface com Timeline */}
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-3xl lg:max-w-6xl xl:max-w-7xl mx-auto">
           <div className="bg-background border border-border rounded-xl shadow-lg overflow-hidden">
             {/* Chat Header */}
             <div className="border-b border-border bg-muted/30 px-6 py-4">
@@ -65,7 +65,7 @@ const DemoSection = () => {
               {/* User Message */}
               <div className="flex gap-3 w-full justify-end">
                 <div className="flex flex-col min-w-0 max-w-[75%] items-end">
-                  <div className="bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm">
+                  <div className="bg-primary text-primary-foreground rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                     <p className="mb-2">
                       <strong>Cliente:</strong> Banco Itaú
                     </p>
@@ -91,14 +91,14 @@ const DemoSection = () => {
                     <div className="absolute left-6 top-0 bottom-0 w-px bg-border"></div>
 
                     {/* Timeline Steps */}
-                    <div className="space-y-8">
+                    <div className="space-y-6 lg:space-y-8">
                       {/* Step 1: Searching */}
                       <div className="relative flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-muted rounded-full flex items-center justify-center border-2 border-background">
-                          <Search className="h-5 w-5 text-muted-foreground animate-pulse" />
+                        <div className="flex-shrink-0 w-12 h-12 lg:w-12 lg:h-12 bg-muted rounded-full flex items-center justify-center border-2 border-background">
+                          <Search className="h-5 w-5 lg:h-5 lg:w-5 text-muted-foreground animate-pulse" />
                         </div>
                         <div className="flex-1 pt-2">
-                          <div className="bg-muted text-muted-foreground rounded-lg px-4 py-3 text-sm">
+                          <div className="bg-muted text-muted-foreground rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                             <span className="font-medium">Buscando documentos relevantes...</span>
                           </div>
                         </div>
@@ -106,11 +106,11 @@ const DemoSection = () => {
 
                       {/* Step 2: Analyzing */}
                       <div className="relative flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-muted rounded-full flex items-center justify-center border-2 border-background">
-                          <Loader2 className="h-5 w-5 text-muted-foreground animate-spin" />
+                        <div className="flex-shrink-0 w-12 h-12 lg:w-12 lg:h-12 bg-muted rounded-full flex items-center justify-center border-2 border-background">
+                          <Loader2 className="h-5 w-5 lg:h-5 lg:w-5 text-muted-foreground animate-spin" />
                         </div>
                         <div className="flex-1 pt-2">
-                          <div className="bg-muted text-muted-foreground rounded-lg px-4 py-3 text-sm">
+                          <div className="bg-muted text-muted-foreground rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                             <span className="font-medium">Analisando jurisprudência...</span>
                           </div>
                         </div>
@@ -118,11 +118,11 @@ const DemoSection = () => {
 
                       {/* Step 3: Diagnóstico */}
                       <div className="relative flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-amber-50 dark:bg-amber-950/20 rounded-full flex items-center justify-center border-2 border-amber-200 dark:border-amber-800">
-                          <CheckCircle className="h-5 w-5 text-amber-700 dark:text-amber-300" />
+                        <div className="flex-shrink-0 w-12 h-12 lg:w-12 lg:h-12 bg-amber-50 dark:bg-amber-950/20 rounded-full flex items-center justify-center border-2 border-amber-200 dark:border-amber-800">
+                          <CheckCircle className="h-5 w-5 lg:h-5 lg:w-5 text-amber-700 dark:text-amber-300" />
                         </div>
                         <div className="flex-1 pt-2">
-                          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/10 dark:to-orange-950/10 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-3 text-sm">
+                          <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/10 dark:to-orange-950/10 border border-amber-200 dark:border-amber-800 rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                             <div className="flex items-center gap-2 mb-2">
                               <span className="font-semibold text-amber-900 dark:text-amber-100">DIAGNÓSTICO JURÍDICO</span>
                             </div>
@@ -135,11 +135,11 @@ const DemoSection = () => {
 
                       {/* Step 4: Tese */}
                       <div className="relative flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-slate-50 dark:bg-slate-900/30 rounded-full flex items-center justify-center border-2 border-slate-300 dark:border-slate-700">
-                          <FileText className="h-5 w-5 text-slate-700 dark:text-slate-300" />
+                        <div className="flex-shrink-0 w-12 h-12 lg:w-12 lg:h-12 bg-slate-50 dark:bg-slate-900/30 rounded-full flex items-center justify-center border-2 border-slate-300 dark:border-slate-700">
+                          <FileText className="h-5 w-5 lg:h-5 lg:w-5 text-slate-700 dark:text-slate-300" />
                         </div>
                         <div className="flex-1 pt-2">
-                          <div className="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-sm">
+                          <div className="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                             <div className="flex items-center gap-2 mb-2">
                               <span className="font-semibold text-slate-900 dark:text-slate-100">TESE JURÍDICA</span>
                             </div>
@@ -152,11 +152,11 @@ const DemoSection = () => {
 
                       {/* Step 5: Provas */}
                       <div className="relative flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-indigo-50 dark:bg-indigo-950/20 rounded-full flex items-center justify-center border-2 border-indigo-200 dark:border-indigo-800">
-                          <Shield className="h-5 w-5 text-indigo-700 dark:text-indigo-300" />
+                        <div className="flex-shrink-0 w-12 h-12 lg:w-12 lg:h-12 bg-indigo-50 dark:bg-indigo-950/20 rounded-full flex items-center justify-center border-2 border-indigo-200 dark:border-indigo-800">
+                          <Shield className="h-5 w-5 lg:h-5 lg:w-5 text-indigo-700 dark:text-indigo-300" />
                         </div>
                         <div className="flex-1 pt-2">
-                          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/10 dark:to-blue-950/10 border border-indigo-200 dark:border-indigo-800 rounded-lg px-4 py-3 text-sm">
+                          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/10 dark:to-blue-950/10 border border-indigo-200 dark:border-indigo-800 rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                             <div className="flex items-center gap-2 mb-2">
                               <span className="font-semibold text-indigo-900 dark:text-indigo-100">PROVAS SUGERIDAS</span>
                             </div>
@@ -172,11 +172,11 @@ const DemoSection = () => {
 
                       {/* Final Status */}
                       <div className="relative flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
-                          <CheckCircle className="h-5 w-5 text-primary" />
+                        <div className="flex-shrink-0 w-12 h-12 lg:w-12 lg:h-12 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                          <CheckCircle className="h-5 w-5 lg:h-5 lg:w-5 text-primary" />
                         </div>
                         <div className="flex-1 pt-2">
-                          <div className="bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 text-sm">
+                          <div className="bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 lg:px-5 lg:py-3 text-sm lg:text-base">
                             <div className="flex items-center gap-2">
                               <span className="font-semibold text-primary">Análise concluída em 2min 47s</span>
                             </div>
