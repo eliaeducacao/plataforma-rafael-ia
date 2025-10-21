@@ -4,12 +4,12 @@ import { User, Bot, Search, CheckCircle, FileText, Shield, Clock, Loader2, Build
 
 const DemoSection = () => {
   return (
-    <section className="relative py-12 overflow-hidden bg-background">
+    <section className="relative py-4 overflow-hidden bg-background">
       <div className="container mx-auto px-6 relative z-10">
         {/* Eyebrow */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <Badge variant="outline" className="text-base px-8 py-4 bg-background border-border">
-            <Building2 className="w-12 h-12 mr-3 text-primary shrink-0" />
+            <Building2 className="size-6! mr-3 text-primary shrink-0" />
             <span className="text-foreground font-medium">Por que escritórios escolhem Elia</span>
           </Badge>
         </div>
@@ -74,8 +74,8 @@ const DemoSection = () => {
                     </p>
                   </div>
                 </div>
-                <Avatar className="h-6 w-6 bg-muted text-muted-foreground flex-shrink-0 mt-1 flex items-center justify-center">
-                  <User className="h-3 w-3" />
+                <Avatar className="h-12 w-12 bg-muted text-muted-foreground flex-shrink-0 mt-1 flex items-center justify-center">
+                  <User className="size-5" />
                 </Avatar>
               </div>
 
