@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Scale } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -8,7 +8,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Logo e Descrição */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-primary">Elia</h3>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
+                <Scale className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <span className="text-2xl font-bold text-primary">Elia</span>
+            </div>
             <p className="text-muted-foreground text-sm leading-relaxed">
               A única plataforma com agentes de IA treinados para o fluxo completo do advogado brasileiro.
             </p>

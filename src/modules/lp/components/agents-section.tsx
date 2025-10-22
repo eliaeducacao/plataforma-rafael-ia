@@ -4,7 +4,7 @@ import { AgentCard, AgentCardSkeleton } from "@/modules/agents-library/component
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Separator } from "@/shared/components/ui/separator";
-import { CheckCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 type AgentsSectionProps = {
   agents: Agent[] | undefined;
@@ -78,47 +78,75 @@ const AgentsSection = ({
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Opção 1: Teste Grátis */}
-            <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl group">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <CardContent className="p-8 text-center relative">
-                <h4 className="text-xl font-semibold mb-3">
-                  Teste grátis por 7 dias
-                </h4>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Experimente todos os agentes no seu ritmo, sem cartão de crédito
-                </p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="p-8 hover:shadow-lg transition-shadow">
+              <CardContent className="p-0 space-y-6">
+                <div className="flex items-center justify-center gap-3">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    Teste Grátis
+                  </h3>
+                </div>
 
-                <Button size="lg" className="w-full text-lg py-6 group-hover:scale-105 transition-transform duration-300">
-                  Começar teste grátis
-                </Button>
+                <div className="space-y-4">
+                  <p className="text-muted-foreground">
+                    Se você quer testar a Elia no seu ritmo, sem compromisso:
+                  </p>
 
-                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Cancela quando quiser</span>
+                  <Button size="lg" className="w-full">
+                    Experimente 7 dias grátis
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      <span>Sem cartão. Sem pegadinha.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      <span>Cancela quando quiser.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-600">✓</span>
+                      <span>Acesso completo à plataforma</span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Opção 2: Demonstração */}
-            <Card className="relative overflow-hidden border-2 hover:border-blue-400 transition-all duration-300 hover:shadow-xl group">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <CardContent className="p-8 text-center relative">
-                <h4 className="text-xl font-semibold mb-3">
-                  Agende uma demonstração
-                </h4>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Veja como a Elia resolve seu caso específico em tempo real
-                </p>
+            <Card className="p-8 hover:shadow-lg transition-shadow">
+              <CardContent className="p-0 space-y-6">
+                <div className="flex items-center justify-center gap-3">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    Demonstração
+                  </h3>
+                </div>
 
-                <Button variant="outline" size="lg" className="w-full text-lg py-6 group-hover:scale-105 transition-transform duration-300">
-                  Agendar demonstração
-                </Button>
+                <div className="space-y-4">
+                  <p className="text-muted-foreground">
+                    Se você quer ver como a Elia resolve o seu caso específico antes de testar:
+                  </p>
 
-                <div className="mt-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Personalizada para você</span>
+                  <Button variant="outline" size="lg" className="w-full">
+                    Agende sua demonstração
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600">✓</span>
+                      <span>30 minutos personalizados</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600">✓</span>
+                      <span>A gente mostra, você decide</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600">✓</span>
+                      <span>Casos específicos da sua área</span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
