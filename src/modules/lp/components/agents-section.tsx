@@ -53,129 +53,142 @@ const AgentsSection = ({
         </ScrollAnimated>
 
         {/* Grid de Agentes */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {isLoading ? (
-            // Skeleton loading state
-            Array.from({ length: 6 }).map((_, index) => (
-              <AgentCardSkeleton key={index} index={index} />
-            ))
-          ) : (
-            // Actual agents
-            agents?.map((agent, index) => (
-              <AgentCard
-                key={agent._id}
-                agent={agent}
-                index={index}
-                onSelectAgent={onSelectAgent}
-              />
-            ))
-          )}
-        </div>
+        <ScrollAnimated
+          animationType="scroll-bottom"
+          delay={200}
+        >
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {isLoading ? (
+              // Skeleton loading state
+              Array.from({ length: 6 }).map((_, index) => (
+                <AgentCardSkeleton index={index} />
+              ))
+            ) : (
+              // Actual agents
+              agents?.map((agent, index) => (
+                <AgentCard
+                  agent={agent}
+                  index={index}
+                  onSelectAgent={onSelectAgent}
+                />
+
+              ))
+            )}
+          </div>
+        </ScrollAnimated>
 
         {/* CTA Intermediário */}
         <div className="mt-16">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
-              Pronto para acelerar seu trabalho?
-            </h3>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Escolha a forma que funciona melhor para você conhecer a Elia
-            </p>
-          </div>
+          <ScrollAnimated animationType="scroll-txt">
+            <div className="text-center mb-10">
+              <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+                Pronto para acelerar seu trabalho?
+              </h3>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Escolha a forma que funciona melhor para você conhecer a Elia
+              </p>
+            </div>
+          </ScrollAnimated>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="p-8 hover:shadow-lg transition-shadow">
-              <CardContent className="p-0 space-y-6">
-                <div className="flex items-center justify-center gap-3">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    Teste Grátis
-                  </h3>
-                </div>
+          <ScrollAnimated animationType="scroll-bottom" delay={200}>
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card className="p-8 hover:shadow-lg transition-shadow">
+                <CardContent className="p-0 space-y-6">
+                  <div className="flex items-center justify-center gap-3">
+                    <h3 className="text-xl font-semibold text-foreground">
+                      Teste Grátis
+                    </h3>
+                  </div>
 
-                <div className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Se você quer testar a Elia no seu ritmo, sem compromisso:
-                  </p>
+                  <div className="space-y-4">
+                    <p className="text-muted-foreground">
+                      Se você quer testar a Elia no seu ritmo, sem compromisso:
+                    </p>
 
-                  <Button size="lg" className="w-full">
-                    Experimente 7 dias grátis
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
+                    <Button size="lg" className="w-full">
+                      Experimente 7 dias grátis
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
 
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Sem cartão. Sem pegadinha.</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Cancela quando quiser.</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      <span>Acesso completo à plataforma</span>
+                    <div className="space-y-2 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-600">✓</span>
+                        <span>Sem cartão. Sem pegadinha.</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-600">✓</span>
+                        <span>Cancela quando quiser.</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-green-600">✓</span>
+                        <span>Acesso completo à plataforma</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card className="p-8 hover:shadow-lg transition-shadow">
-              <CardContent className="p-0 space-y-6">
-                <div className="flex items-center justify-center gap-3">
-                  <h3 className="text-xl font-semibold text-foreground">
-                    Demonstração
-                  </h3>
-                </div>
+              <Card className="p-8 hover:shadow-lg transition-shadow">
+                <CardContent className="p-0 space-y-6">
+                  <div className="flex items-center justify-center gap-3">
+                    <h3 className="text-xl font-semibold text-foreground">
+                      Demonstração
+                    </h3>
+                  </div>
 
-                <div className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Se você quer ver como a Elia resolve o seu caso específico antes de testar:
-                  </p>
+                  <div className="space-y-4">
+                    <p className="text-muted-foreground">
+                      Se você quer ver como a Elia resolve o seu caso específico antes de testar:
+                    </p>
 
-                  <Button variant="outline" size="lg" className="w-full">
-                    Agende sua demonstração
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
+                    <Button variant="outline" size="lg" className="w-full">
+                      Agende sua demonstração
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
 
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <span className="text-blue-600">✓</span>
-                      <span>30 minutos personalizados</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-blue-600">✓</span>
-                      <span>A gente mostra, você decide</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-blue-600">✓</span>
-                      <span>Casos específicos da sua área</span>
+                    <div className="space-y-2 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600">✓</span>
+                        <span>30 minutos personalizados</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600">✓</span>
+                        <span>A gente mostra, você decide</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600">✓</span>
+                        <span>Casos específicos da sua área</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </CardContent>
+              </Card>
+            </div>
+          </ScrollAnimated>
 
           {/* Separador visual */}
-          <div className="flex items-center justify-center mt-10 mb-6 max-w-md mx-auto">
-            <Separator className="flex-1" />
-            <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
-            <Separator className="flex-1" />
-          </div>
+          <ScrollAnimated animationType="scroll-bottom" delay={400}>
+            <div className="flex items-center justify-center mt-10 mb-6 max-w-md mx-auto">
+              <Separator className="flex-1" />
+              <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
+              <Separator className="flex-1" />
+            </div>
+          </ScrollAnimated>
 
           {/* CTA adicional */}
-          <div className="text-center">
-            <p className="text-muted-foreground mb-4">
-              Ainda tem dúvidas? Fale com nosso time
-            </p>
-            <Button variant="ghost" className="text-primary hover:text-primary/80">
-              Falar com especialista →
-            </Button>
-          </div>
+          <ScrollAnimated animationType="scroll-bottom" delay={600}>
+            <div className="text-center">
+              <p className="text-muted-foreground mb-4">
+                Ainda tem dúvidas? Fale com nosso time
+              </p>
+              <Button variant="ghost" className="text-primary hover:text-primary/80">
+                Falar com especialista →
+              </Button>
+            </div>
+          </ScrollAnimated>
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 };
 
