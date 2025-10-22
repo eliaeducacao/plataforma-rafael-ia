@@ -1,18 +1,10 @@
-import { Badge } from "@/shared/components/ui/badge";
 import { Avatar } from "@/shared/components/ui/avatar";
-import { User, Bot, CheckCircle, Building2 } from "lucide-react";
+import { User, Bot, CheckCircle } from "lucide-react";
 
 const DemoSection = () => {
   return (
     <section className="relative pt-8 pb-16 lg:pt-12 lg:pb-20 overflow-hidden bg-background">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Eyebrow */}
-        <div className="text-center mb-6 sm:mb-8">
-          <Badge variant="outline" className="text-sm sm:text-base px-4 sm:px-8 py-3 sm:py-4 bg-background border-border">
-            <Building2 className="size-4 sm:size-6! mr-2 sm:mr-3 text-primary shrink-0" />
-            <span className="text-foreground font-medium">Por que escritórios escolhem Elia</span>
-          </Badge>
-        </div>
 
         {/* Título Principal */}
         <div className="text-center max-w-5xl mx-auto">

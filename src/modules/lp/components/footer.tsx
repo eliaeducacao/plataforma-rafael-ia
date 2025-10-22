@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Scale } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Linkedin, Instagram, Youtube, Scale } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -18,17 +18,61 @@ const Footer = () => {
               A única plataforma com agentes de IA treinados para o fluxo completo do advogado brasileiro.
             </p>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm">
-                <Facebook className="w-4 h-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+              >
+                <a
+                  href="https://www.facebook.com/profile.php?id=61576700462622"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm">
-                <Twitter className="w-4 h-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+              >
+                <a
+                  href="https://www.instagram.com/eliaeducacao/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm">
-                <Linkedin className="w-4 h-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+              >
+                <a
+                  href="https://www.linkedin.com/in/rafael-roni-0404ba13a/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-4 h-4" />
+                </a>
               </Button>
-              <Button variant="ghost" size="sm">
-                <Instagram className="w-4 h-4" />
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+              >
+                <a
+                  href="https://www.youtube.com/@eliaeducacaoadv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-4 h-4" />
+                </a>
               </Button>
             </div>
           </div>
