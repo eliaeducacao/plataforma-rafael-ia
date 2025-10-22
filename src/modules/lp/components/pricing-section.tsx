@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
-import { Check, Shield, Clock, Zap } from "lucide-react";
+import { Check, Clock, Zap } from "lucide-react";
 
 const PricingSection = () => {
   const features = [
@@ -57,20 +57,6 @@ const PricingSection = () => {
               <Button size="lg" className="w-full">
                 Começar Teste Grátis
               </Button>
-
-              <div className="bg-green-50/50 border border-green-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-foreground mb-1">
-                      7 dias para testar. Se não servir pra você, devolvemos 100%.
-                    </h4>
-                    <p className="text-xs text-muted-foreground">
-                      Sem condições. Sem perguntas. Sem burocracia.
-                    </p>
-                  </div>
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>

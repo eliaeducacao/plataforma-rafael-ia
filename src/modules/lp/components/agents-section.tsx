@@ -146,10 +146,10 @@ const AgentsSection = ({
           </div>
 
           {/* Separador visual */}
-          <div className="flex items-center justify-center mt-12 mb-8">
-            <Separator className="w-24" />
+          <div className="flex items-center justify-center mt-12 mb-8 max-w-md mx-auto">
+            <Separator className="flex-1" />
             <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
-            <Separator className="w-24" />
+            <Separator className="flex-1" />
           </div>
 
           {/* CTA adicional */}
