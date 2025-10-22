@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { ArrowRight, Shield, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { ArrowRight, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 
 const CTASection = () => {
   return (
@@ -98,13 +98,6 @@ const CTASection = () => {
             <p className="text-muted-foreground">
               A matemática é clara: quanto mais você espera, mais dinheiro você deixa na mesa.
             </p>
-          </div>
-
-          <div className="flex items-center justify-center gap-2">
-            <Shield className="w-4 h-4 text-green-600" />
-            <span className="text-sm font-medium text-foreground">
-              Garantia de 7 dias - 100% do dinheiro de volta
-            </span>
           </div>
 
           {/* Redes Sociais */}

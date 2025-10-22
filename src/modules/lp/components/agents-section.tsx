@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Separator } from "@/shared/components/ui/separator";
 import { ArrowRight } from "lucide-react";
+import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 type AgentsSectionProps = {
   agents: Agent[] | undefined;
@@ -30,22 +31,26 @@ const AgentsSection = ({
     <section className="py-16 lg:py-20 bg-secondary/30">
       <div className="container mx-auto px-6">
         {/* Título da Seção */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
-            8 agentes por área do Direito. Cada um treinado para uma etapa específica do seu trabalho.
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-            Do primeiro atendimento à petição final, você tem um especialista para cada tarefa. Escolha a área que você atua e veja como cada agente acelera sua rotina.
-          </p>
-        </div>
+        <ScrollAnimated animationType="scroll-txt">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
+              8 agentes por área do Direito. Cada um treinado para uma etapa específica do seu trabalho.
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+              Do primeiro atendimento à petição final, você tem um especialista para cada tarefa. Escolha a área que você atua e veja como cada agente acelera sua rotina.
+            </p>
+          </div>
+        </ScrollAnimated>
 
         {/* Category Selector */}
-        <CategorySelector
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={onCategoryChange}
-          isLoading={isCategoriesLoading}
-        />
+        <ScrollAnimated animationType="scroll-bottom" delay={200}>
+          <CategorySelector
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={onCategoryChange}
+            isLoading={isCategoriesLoading}
+          />
+        </ScrollAnimated>
 
         {/* Grid de Agentes */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

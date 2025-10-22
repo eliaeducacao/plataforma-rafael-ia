@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
-import { Check, Clock, Zap } from "lucide-react";
+import { Check, Clock, Shield, Zap } from "lucide-react";
 
 const PricingSection = () => {
   const features = [
@@ -22,7 +22,7 @@ const PricingSection = () => {
           </h2>
         </div>
 
-        <div className="max-w-2xl mx-auto mb-12 lg:mb-16">
+        <div className="max-w-2xl mx-auto mb-12 space-y-6 lg:mb-16">
           <Card className="relative border-2 border-primary">
             <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
               <Badge variant="secondary" className="bg-primary text-primary-foreground text-xs sm:text-sm">
@@ -64,6 +64,13 @@ const PricingSection = () => {
               </Button>
             </CardContent>
           </Card>
+
+          <div className="flex items-center justify-center gap-2">
+            <Shield className="w-4 h-4 text-green-600" />
+            <span className="text-sm font-medium text-foreground">
+              Garantia de 7 dias - 100% do dinheiro de volta
+            </span>
+          </div>
         </div>
 
         <div className="max-w-3xl mx-auto">

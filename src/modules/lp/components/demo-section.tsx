@@ -1,5 +1,6 @@
 import { Avatar } from "@/shared/components/ui/avatar";
 import { User, Bot, CheckCircle } from "lucide-react";
+import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const DemoSection = () => {
   return (
@@ -7,34 +8,38 @@ const DemoSection = () => {
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
 
         {/* Título Principal */}
-        <div className="text-center max-w-5xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground mb-6 lg:mb-8 leading-tight">
-            Seu cliente envia o caso às{" "}
-            <span className="text-purple-600 dark:text-purple-400">14h</span>. Às{" "}
-            <span className="text-purple-600 dark:text-purple-400">14h03</span>{" "}
-            você responde com diagnóstico completo
-          </h2>
+        <ScrollAnimated animationType="scroll-txt">
+          <div className="text-center max-w-5xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground mb-6 lg:mb-8 leading-tight">
+              Seu cliente envia o caso às{" "}
+              <span className="text-purple-600 dark:text-purple-400">14h</span>. Às{" "}
+              <span className="text-purple-600 dark:text-purple-400">14h03</span>{" "}
+              você responde com diagnóstico completo
+            </h2>
 
-          <div className="space-y-4 lg:space-y-6">
-            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground font-medium">
-              Seu concorrente ainda nem visualizou a mensagem
-            </p>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
-              Velocidade impressiona. Profundidade convence. Elia entrega os dois — e o cliente percebe a diferença antes de falar com mais alguém
-            </p>
+            <div className="space-y-4 lg:space-y-6">
+              <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground font-medium">
+                Seu concorrente ainda nem visualizou a mensagem
+              </p>
+              <p className="text-base sm:text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
+                Velocidade impressiona. Profundidade convence. Elia entrega os dois — e o cliente percebe a diferença antes de falar com mais alguém
+              </p>
+            </div>
           </div>
-        </div>
+        </ScrollAnimated>
 
         {/* Micro-título */}
-        <div className="text-center py-6 lg:py-8">
-          <p className="text-base sm:text-lg text-muted-foreground font-medium px-4">
-            Veja um caso real analisado pela Elia:
-          </p>
-        </div>
+        <ScrollAnimated animationType="scroll-bottom" delay={300}>
+          <div className="text-center py-6 lg:py-8">
+            <p className="text-base sm:text-lg text-muted-foreground font-medium px-4">
+              Veja um caso real analisado pela Elia:
+            </p>
+          </div>
+        </ScrollAnimated>
 
         {/* Chat Interface com Timeline */}
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-background border border-border rounded-xl shadow-lg overflow-hidden">
+        <ScrollAnimated animationType="perspectivax" delay={500}>
+          <div className="max-w-6xl mx-auto bg-background border border-border rounded-xl shadow-lg overflow-hidden">
             {/* Chat Header */}
             <div className="border-b border-border bg-muted/30 px-3 sm:px-4 py-2 sm:py-3">
               <div className="flex items-center gap-2 sm:gap-3">
@@ -184,16 +189,18 @@ const DemoSection = () => {
               </div>
             </div>
           </div>
-        </div>
+        </ScrollAnimated>
 
         {/* Transição Final */}
-        <div className="text-center mt-16">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Esse diagnóstico foi gerado pelo <span className="font-bold text-primary">Agente Diagnóstico</span> — 1 dos 8 agentes especializados que cobrem todo o fluxo jurídico do seu escritório.
-            </p>
+        <ScrollAnimated animationType="scroll-top" delay={700}>
+          <div className="text-center mt-16">
+            <div className="max-w-4xl mx-auto">
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Esse diagnóstico foi gerado pelo <span className="font-bold text-primary">Agente Diagnóstico</span> — 1 dos 8 agentes especializados que cobrem todo o fluxo jurídico do seu escritório.
+              </p>
+            </div>
           </div>
-        </div>
+        </ScrollAnimated>
       </div>
     </section>
   );
