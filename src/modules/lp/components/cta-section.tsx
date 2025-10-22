@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { ArrowRight, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const CTASection = () => {
@@ -93,74 +93,6 @@ const CTASection = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-            {/* Redes Sociais */}
-            <div className="space-y-4">
-              <p className="text-center text-muted-foreground">
-                Acompanhe nossas atualizações e novidades
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                >
-                  <a
-                    href="https://www.facebook.com/profile.php?id=61576700462622"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook"
-                  >
-                    <Facebook className="w-4 h-4 mr-2" />
-                    Facebook
-                  </a>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                >
-                  <a
-                    href="https://www.instagram.com/eliaeducacao/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="w-4 h-4 mr-2" />
-                    Instagram
-                  </a>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                >
-                  <a
-                    href="https://www.linkedin.com/in/rafael-roni-0404ba13a/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin className="w-4 h-4 mr-2" />
-                    LinkedIn
-                  </a>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                >
-                  <a
-                    href="https://www.youtube.com/@eliaeducacaoadv"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="YouTube"
-                  >
-                    <Youtube className="w-4 h-4 mr-2" />
-                    YouTube
-                  </a>
-                </Button>
-              </div>
             </div>
           </ScrollAnimated>
         </div>
