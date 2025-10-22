@@ -4,8 +4,7 @@ import { AgentCard, AgentCardSkeleton } from "@/modules/agents-library/component
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Separator } from "@/shared/components/ui/separator";
-import { Badge } from "@/shared/components/ui/badge";
-import { Play, Sparkles, Clock, Shield, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 type AgentsSectionProps = {
   agents: Agent[] | undefined;
@@ -84,16 +83,6 @@ const AgentsSection = ({
             <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl group">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <CardContent className="p-8 text-center relative">
-                <div className="mb-6">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles className="w-8 h-8 text-primary" />
-                  </div>
-                  <Badge variant="secondary" className="mb-4">
-                    <Shield className="w-3 h-3 mr-1" />
-                    Sem compromisso
-                  </Badge>
-                </div>
-
                 <h4 className="text-xl font-semibold mb-3">
                   Teste grátis por 7 dias
                 </h4>
@@ -116,16 +105,6 @@ const AgentsSection = ({
             <Card className="relative overflow-hidden border-2 hover:border-blue-400 transition-all duration-300 hover:shadow-xl group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <CardContent className="p-8 text-center relative">
-                <div className="mb-6">
-                  <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Play className="w-8 h-8 text-blue-500" />
-                  </div>
-                  <Badge variant="outline" className="mb-4">
-                    <Clock className="w-3 h-3 mr-1" />
-                    30 minutos
-                  </Badge>
-                </div>
-
                 <h4 className="text-xl font-semibold mb-3">
                   Agende uma demonstração
                 </h4>

@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
-import { ArrowRight, Calendar, Play, Shield } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 
 const CTASection = () => {
   return (
@@ -20,9 +20,7 @@ const CTASection = () => {
             <Card className="p-8 hover:shadow-lg transition-shadow">
               <CardContent className="p-0 space-y-6">
                 <div className="flex items-center justify-center gap-3">
-                  <div className="p-3 bg-green-50 rounded-lg">
-                    <Play className="w-6 h-6 text-green-600" />
-                  </div>
+
                   <h3 className="text-xl font-semibold text-foreground">
                     Teste Grátis
                   </h3>
@@ -59,9 +57,6 @@ const CTASection = () => {
             <Card className="p-8 hover:shadow-lg transition-shadow">
               <CardContent className="p-0 space-y-6">
                 <div className="flex items-center justify-center gap-3">
-                  <div className="p-3 bg-blue-50 rounded-lg">
-                    <Calendar className="w-6 h-6 text-blue-600" />
-                  </div>
                   <h3 className="text-xl font-semibold text-foreground">
                     Demonstração
                   </h3>

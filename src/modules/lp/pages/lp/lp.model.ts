@@ -47,9 +47,18 @@ export function useLpModel() {
     window.location.href = '/login';
   };
 
+  // Ordenar categorias para que "Gerais" seja a última
+  const sortedCategories = categories
+    ? [...categories].sort((a, b) => {
+        if (a.name.toLowerCase() === 'gerais') return 1;
+        if (b.name.toLowerCase() === 'gerais') return -1;
+        return a.order - b.order;
+      })
+    : [];
+
   return {
     agents: filteredAgents,
-    categories: categories || [],
+    categories: sortedCategories,
     selectedCategory,
     isAgentsLoading,
     isCategoriesLoading,

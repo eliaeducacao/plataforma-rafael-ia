@@ -3,7 +3,7 @@ import { Play } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <section className="relative py-20 lg:py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Conteúdo Principal */}
