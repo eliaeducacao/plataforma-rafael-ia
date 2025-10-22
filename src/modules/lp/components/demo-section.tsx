@@ -4,29 +4,47 @@ import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const DemoSection = () => {
   return (
-    <section className="relative pt-8 pb-16 lg:pt-12 lg:pb-20 overflow-hidden bg-background">
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+    <section className="relative bg-background">
+      <div className="w-full">
 
-        {/* Título Principal */}
-        <ScrollAnimated animationType="scroll-txt">
-          <div className="text-center max-w-5xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-foreground mb-6 lg:mb-8 leading-tight">
+        {/* Primeira frase - Sticky */}
+        <div className="h-[200vh] relative">
+          <div className="sticky top-[300px] z-10 text-center max-w-5xl mx-auto px-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-foreground leading-tight">
               Seu cliente envia o caso às{" "}
-              <span className="text-purple-600 dark:text-purple-400">14h</span>. Às{" "}
+              <span className="text-purple-600 dark:text-purple-400">14h</span>
+            </h2>
+          </div>
+        </div>
+
+        {/* Pontinhos - Sticky */}
+        <div className="h-[200vh] relative">
+          <div className="sticky top-[300px] z-10 flex justify-center items-center space-x-4">
+            <div className="w-6 h-6 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-6 h-6 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-6 h-6 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
+        </div>
+
+        {/* Segunda frase - Sticky */}
+        <div className="h-[200vh] relative">
+          <div className="sticky top-[300px] z-10 text-center max-w-5xl mx-auto px-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-foreground leading-tight mb-8">
+              Às{" "}
               <span className="text-purple-600 dark:text-purple-400">14h03</span>{" "}
               você responde com diagnóstico completo
             </h2>
 
-            <div className="space-y-4 lg:space-y-6">
-              <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground font-medium">
+            <div className="space-y-6">
+              <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-medium">
                 Seu concorrente ainda nem visualizou a mensagem
               </p>
-              <p className="text-base sm:text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                 Velocidade impressiona. Profundidade convence. Elia entrega os dois — e o cliente percebe a diferença antes de falar com mais alguém
               </p>
             </div>
           </div>
-        </ScrollAnimated>
+        </div>
 
         {/* Micro-título */}
         <ScrollAnimated animationType="scroll-bottom" delay={300}>
@@ -192,7 +210,7 @@ const DemoSection = () => {
         </ScrollAnimated>
 
         {/* Transição Final */}
-        <ScrollAnimated animationType="scroll-top" delay={700}>
+        <ScrollAnimated animationType="scroll-top" delay={200}>
           <div className="text-center mt-16">
             <div className="max-w-4xl mx-auto">
               <p className="text-xl text-muted-foreground leading-relaxed">

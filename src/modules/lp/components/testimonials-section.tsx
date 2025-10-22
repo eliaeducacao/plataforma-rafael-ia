@@ -1,142 +1,151 @@
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
-import { Star } from "lucide-react";
+import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const TestimonialsSection = () => {
   const testimonials = [
     {
       id: 1,
-      name: "Dr. Rafael Lefoco",
-      role: "Advogado Civil",
-      company: "Escritório Lefoco & Associados",
-      avatar: "/avatars/rafael.jpg",
-      content: "A Elia revolucionou meu escritório. Em 3 minutos tenho um diagnóstico completo que antes demorava horas. Meus clientes ficam impressionados com a velocidade e qualidade da resposta.",
-      rating: 5,
-      highlight: "3 minutos vs horas"
+      name: "Daniela Pasqua Andreoli",
+      role: "Advogada e sócia titular do escritório Pasqua Sociedade de Advogados Integrante da Comissão Especial de Direito do Terceiro Setor da Ordem dos Advogados do Brasil, Seção São Paulo.",
+      company: "PASQUA",
+      companyFull: "SOCIEDADE DE ADVOGADOS",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      content: "Como advogada, tenho o prazer de compartilhar minha experiência com a inteligência artificial da Jurídico AI. Esta ferramenta revolucionou completamente minha prática jurídica, oferecendo análises precisas e insights valiosos que antes demandavam horas de pesquisa manual. A capacidade da IA de processar vastas quantidades de dados jurídicos e identificar padrões relevantes tem sido fundamental para o sucesso dos meus casos.",
+      isLarge: true
     },
     {
       id: 2,
-      name: "Dra. Maria Silva",
-      role: "Advogada Trabalhista",
-      company: "Silva Advocacia",
-      avatar: "/avatars/maria.jpg",
-      content: "A precisão dos agentes é impressionante. Eles entendem o contexto jurídico brasileiro como nenhuma outra IA. Minha produtividade aumentou 300%.",
-      rating: 5,
-      highlight: "300% mais produtiva"
+      name: "Maria Adelma Augusta dos Santos",
+      role: "Advogada e assessora jurídica",
+      company: "ADVOCACIA E ASSESSORIA JURIDICA",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      content: "Me ajuda muito. Agora não tenho mais acúmulo de serviço e nem necessito de vários programas para me auxiliar. A Elia centraliza tudo que preciso em uma única plataforma, economizando tempo e aumentando minha produtividade significativamente.",
+      isLarge: false
     },
     {
       id: 3,
-      name: "Dr. João Santos",
-      role: "Advogado Criminal",
-      company: "Santos & Partners",
-      avatar: "/avatars/joao.jpg",
-      content: "Implementei em 15 minutos exatamente como prometido. Não precisei de treinamento complexo. A interface é intuitiva e os resultados são profissionais.",
-      rating: 5,
-      highlight: "Implementação em 15min"
-    },
-    {
-      id: 4,
-      name: "Dra. Ana Costa",
-      role: "Advogada Empresarial",
-      company: "Costa Legal",
-      avatar: "/avatars/ana.jpg",
-      content: "Os contratos gerados pela Elia são impecáveis. Economizo 4 horas por contrato e a qualidade é superior ao que eu fazia manualmente.",
-      rating: 5,
-      highlight: "4h economizadas por contrato"
-    },
-    {
-      id: 5,
-      name: "Dr. Carlos Mendes",
-      role: "Advogado Tributário",
-      company: "Mendes Advocacia",
-      avatar: "/avatars/carlos.jpg",
-      content: "A pesquisa de jurisprudência ficou 10x mais rápida. O agente encontra casos relevantes que eu demoraria dias para localizar.",
-      rating: 5,
-      highlight: "10x mais rápida"
-    },
-    {
-      id: 6,
-      name: "Dra. Fernanda Lima",
-      role: "Advogada Família",
-      company: "Lima & Associados",
-      avatar: "/avatars/fernanda.jpg",
-      content: "Meus clientes ficam impressionados com a rapidez do atendimento. Respondo em minutos com diagnósticos completos e teses jurídicas sólidas.",
-      rating: 5,
-      highlight: "Resposta em minutos"
+      name: "Larissa Nayara de Oliveira",
+      role: "Advogada",
+      company: "",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      content: "O JurídicoAI tem feito parte do meu cotidiano como advogada, muitas peças que gastava dias para a produção, agora consigo fazer em poucas horas. A qualidade dos documentos gerados é excepcional e me permite focar no que realmente importa: a estratégia do caso.",
+      isLarge: false
     }
   ];
 
   return (
-    <section className="py-16 lg:py-20 bg-secondary/30">
+    <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-6">
         {/* Título da Seção */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
-            Quem usa recomenda
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Advogados de todo o Brasil já estão usando a Elia para acelerar seus processos e impressionar seus clientes
-          </p>
-        </div>
+        <ScrollAnimated animationType="scroll-txt">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6">
+              <span className="text-foreground">Quem usa </span>
+              <span className="text-primary">recomenda</span>
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Veja a experiência de nossos clientes
+            </p>
+          </div>
+        </ScrollAnimated>
 
-        {/* Grid de Depoimentos */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
-            <Card key={testimonial.id} className="hover:shadow-lg transition-all duration-300 group">
-              <CardContent className="p-6">
-                {/* Header do Depoimento */}
-                <div className="flex items-start gap-4 mb-4">
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {testimonial.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    <p className="text-xs text-muted-foreground">{testimonial.company}</p>
+        {/* Grid de Depoimentos - Layout 2 colunas */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Card Grande - Esquerda */}
+          <ScrollAnimated animationType="scroll-left" delay={200}>
+            <Card className="h-full">
+              <CardContent className="p-8">
+                {/* Logo da Empresa */}
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-lg">PA</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-green-600">PASQUA</h3>
+                    <p className="text-sm text-muted-foreground">SOCIEDADE DE ADVOGADOS</p>
                   </div>
                 </div>
 
-                {/* Rating */}
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-
-                {/* Highlight */}
-                <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block">
-                  {testimonial.highlight}
-                </div>
-
                 {/* Conteúdo do Depoimento */}
-                <blockquote className="text-muted-foreground leading-relaxed">
-                  "{testimonial.content}"
-                </blockquote>
+                <p className="text-foreground leading-relaxed mb-8 text-lg">
+                  {testimonials[0]?.content}
+                </p>
+
+                {/* Autor */}
+                <div className="flex items-center">
+                  <Avatar className="w-16 h-16 mr-4">
+                    <AvatarImage src={testimonials[0]?.avatar} alt={testimonials[0]?.name} />
+                    <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                      {testimonials[0]?.name?.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h4 className="font-bold text-foreground text-lg">{testimonials[0]?.name}</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {testimonials[0]?.role}
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
+          </ScrollAnimated>
 
-        {/* Estatísticas */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div className="space-y-2">
-            <div className="text-3xl font-bold text-primary">500+</div>
-            <div className="text-sm text-muted-foreground">Advogados Ativos</div>
-          </div>
-          <div className="space-y-2">
-            <div className="text-3xl font-bold text-primary">98%</div>
-            <div className="text-sm text-muted-foreground">Taxa de Satisfação</div>
-          </div>
-          <div className="space-y-2">
-            <div className="text-3xl font-bold text-primary">15min</div>
-            <div className="text-sm text-muted-foreground">Tempo de Implementação</div>
-          </div>
-          <div className="space-y-2">
-            <div className="text-3xl font-bold text-primary">300%</div>
-            <div className="text-sm text-muted-foreground">Aumento de Produtividade</div>
+          {/* Cards Pequenos - Direita */}
+          <div className="space-y-8">
+            {/* Card 1 */}
+            <ScrollAnimated animationType="scroll-right" delay={400}>
+              <Card>
+                <CardContent className="p-6">
+                  {/* Logo da Empresa */}
+                  <div className="flex items-center mb-4">
+                    <div className="w-8 h-8 bg-foreground rounded flex items-center justify-center mr-3">
+                      <span className="text-white font-bold text-sm">⚖</span>
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {testimonials[1]?.company}
+                    </p>
+                  </div>
+
+                  {/* Conteúdo do Depoimento */}
+                  <p className="text-foreground leading-relaxed mb-4">
+                    "{testimonials[1]?.content}"
+                  </p>
+
+                  {/* Autor */}
+                  <div>
+                    <h4 className="font-bold text-foreground">{testimonials[1]?.name}</h4>
+                    <p className="text-sm text-muted-foreground">{testimonials[1]?.role}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </ScrollAnimated>
+
+            {/* Card 2 */}
+            <ScrollAnimated animationType="scroll-right" delay={600}>
+              <Card>
+                <CardContent className="p-6">
+                  {/* Conteúdo do Depoimento */}
+                  <p className="text-foreground leading-relaxed mb-4">
+                    "{testimonials[2]?.content}"
+                  </p>
+
+                  {/* Autor */}
+                  <div className="flex items-center">
+                    <Avatar className="w-12 h-12 mr-3">
+                      <AvatarImage src={testimonials[2]?.avatar} alt={testimonials[2]?.name} />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {testimonials[2]?.name?.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h4 className="font-bold text-foreground">{testimonials[2]?.name}</h4>
+                      <p className="text-sm text-muted-foreground">{testimonials[2]?.role}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </ScrollAnimated>
           </div>
         </div>
       </div>
