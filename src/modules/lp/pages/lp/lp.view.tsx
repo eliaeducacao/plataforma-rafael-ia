@@ -6,6 +6,7 @@ import AgentsSection from "../../components/agents-section";
 import BenefitsSection from "../../components/benefits-section";
 import TestimonialsSection from "../../components/testimonials-section";
 import PricingSection from "../../components/pricing-section";
+import PerformanceSection from "../../components/performance-section";
 import CTASection from "../../components/cta-section";
 import Footer from "../../components/footer";
 
@@ -28,6 +29,7 @@ export function LpView() {
       <BenefitsSection />
       <TestimonialsSection />
       <PricingSection />
+      <PerformanceSection />
       <CTASection />
       <Footer />
     </div>

@@ -55,7 +55,13 @@ export function useLpModel() {
   }
 
   const handleSelectAgent = () => {
-    window.location.href = '/login';
+    const ctaSection = document.getElementById('cta-section');
+    if (ctaSection) {
+      ctaSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   };
 
   return {

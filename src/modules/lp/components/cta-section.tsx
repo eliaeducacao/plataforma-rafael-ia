@@ -4,7 +4,7 @@ import { ArrowRight, Facebook, Instagram, Linkedin, Youtube } from "lucide-react
 
 const CTASection = () => {
   return (
-    <section className="py-16 lg:py-20 bg-background">
+    <section id="cta-section" className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto text-center space-y-12">
           <div className="space-y-6">
@@ -90,16 +90,6 @@ const CTASection = () => {
               </CardContent>
             </Card>
           </div>
-
-          <div className="bg-muted/30 rounded-lg p-6">
-            <p className="text-lg font-medium text-foreground mb-2">
-              Todo dia que você gasta 4 horas formatando petição é um dia que você poderia estar fechando um novo cliente.
-            </p>
-            <p className="text-muted-foreground">
-              A matemática é clara: quanto mais você espera, mais dinheiro você deixa na mesa.
-            </p>
-          </div>
-
           {/* Redes Sociais */}
           <div className="space-y-4">
             <p className="text-center text-muted-foreground">
