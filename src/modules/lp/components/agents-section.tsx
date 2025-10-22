@@ -27,7 +27,7 @@ const AgentsSection = ({
 }: AgentsSectionProps) => {
 
   return (
-    <section className="py-20 bg-secondary/30">
+    <section className="py-16 lg:py-20 bg-secondary/30">
       <div className="container mx-auto px-6">
         {/* Título da Seção */}
         <div className="text-center mb-16">
@@ -68,8 +68,8 @@ const AgentsSection = ({
         </div>
 
         {/* CTA Intermediário */}
-        <div className="mt-20">
-          <div className="text-center mb-12">
+        <div className="mt-16">
+          <div className="text-center mb-10">
             <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
               Pronto para acelerar seu trabalho?
             </h3>
@@ -125,7 +125,7 @@ const AgentsSection = ({
           </div>
 
           {/* Separador visual */}
-          <div className="flex items-center justify-center mt-12 mb-8 max-w-md mx-auto">
+          <div className="flex items-center justify-center mt-10 mb-6 max-w-md mx-auto">
             <Separator className="flex-1" />
             <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
             <Separator className="flex-1" />

@@ -28,7 +28,7 @@ const BenefitsSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
@@ -39,7 +39,7 @@ const BenefitsSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           {pillars.map((pillar, index) => (
             <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
               <CardHeader className="p-0 mb-0">

@@ -4,7 +4,7 @@ import { User, Bot, CheckCircle, Building2 } from "lucide-react";
 
 const DemoSection = () => {
   return (
-    <section className="relative overflow-hidden bg-background">
+    <section className="relative py-16 lg:py-20 overflow-hidden bg-background">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Eyebrow */}
         <div className="text-center mb-6 sm:mb-8">
@@ -34,7 +34,7 @@ const DemoSection = () => {
         </div>
 
         {/* Micro-título */}
-        <div className="text-center py-8 lg:py-12">
+        <div className="text-center py-6 lg:py-8">
           <p className="text-base sm:text-lg text-muted-foreground font-medium px-4">
             Veja um caso real analisado pela Elia:
           </p>
@@ -195,7 +195,7 @@ const DemoSection = () => {
         </div>
 
         {/* Transição Final */}
-        <div className="text-center mt-20">
+        <div className="text-center mt-16">
           <div className="max-w-4xl mx-auto">
             <p className="text-xl text-muted-foreground leading-relaxed">
               Esse diagnóstico foi gerado pelo <span className="font-bold text-primary">Agente Diagnóstico</span> — 1 dos 8 agentes especializados que cobrem todo o fluxo jurídico do seu escritório.

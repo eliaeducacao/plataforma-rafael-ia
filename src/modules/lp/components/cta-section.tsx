@@ -4,7 +4,7 @@ import { ArrowRight, Shield } from "lucide-react";
 
 const CTASection = () => {
   return (
-    <section className="py-20 bg-background">
+    <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto text-center space-y-12">
           <div className="space-y-6">

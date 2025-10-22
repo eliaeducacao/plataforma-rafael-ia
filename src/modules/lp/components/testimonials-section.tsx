@@ -67,7 +67,7 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-secondary/30">
+    <section className="py-16 lg:py-20 bg-secondary/30">
       <div className="container mx-auto px-6">
         {/* Título da Seção */}
         <div className="text-center mb-16">
@@ -89,7 +89,7 @@ const TestimonialsSection = () => {
                   <Avatar className="w-12 h-12">
                     <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
                     <AvatarFallback className="bg-primary text-primary-foreground">
-                    {testimonial.name.split(' ').map(n => n[0]).join('')}
+                      {testimonial.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
