@@ -48,7 +48,7 @@ const BenefitsSection = () => {
               animationType={index % 2 === 0 ? "scroll-left" : "scroll-right"}
               delay={200 + (index * 200)}
             >
-              <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow">
+              <Card className="p-4 sm:p-6 hover:shadow-lg transition-shadow h-full flex flex-col">
                 <CardHeader className="p-0 mb-0">
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className={`p-2 sm:p-3 ${pillar.bgColor} rounded-lg`}>
@@ -61,7 +61,7 @@ const BenefitsSection = () => {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="p-0 mt-3 sm:mt-4">
+                <CardContent className="p-0 mt-3 sm:mt-4 flex-1">
                   <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                     {pillar.description}
                   </p>
