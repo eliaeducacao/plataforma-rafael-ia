@@ -1,6 +1,7 @@
 import { useLpModel } from "./lp.model";
 import HeroSection from "../../components/hero-section";
 import DemoSection from "../../components/demo-section";
+import ChatDemoSection from "../../components/chat-demo-section";
 import AgentsSection from "../../components/agents-section";
 import BenefitsSection from "../../components/benefits-section";
 import TestimonialsSection from "../../components/testimonials-section";
@@ -14,6 +15,7 @@ export function LpView() {
     <div className="min-h-screen bg-background">
       <HeroSection />
       <DemoSection />
+      <ChatDemoSection />
       <AgentsSection
         agents={model.agents}
         categories={model.categories}

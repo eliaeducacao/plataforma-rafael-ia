@@ -4,7 +4,7 @@ import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const HeroSection = () => {
   return (
-    <section className="relative py-16 lg:py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <section className="relative py-16 lg:py-30 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Conteúdo Principal */}
