@@ -3,13 +3,13 @@ import { Play } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative py-12 lg:py-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <section className="relative py-16 lg:py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Conteúdo Principal */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Título Principal */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               <h1 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
                 <span className="text-primary">Cliente paga resultado,</span>
                 <br />

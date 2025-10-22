@@ -4,7 +4,7 @@ import { User, Bot, CheckCircle, Building2 } from "lucide-react";
 
 const DemoSection = () => {
   return (
-    <section className="relative py-16 lg:py-20 overflow-hidden bg-background">
+    <section className="relative pt-8 pb-16 lg:pt-12 lg:pb-20 overflow-hidden bg-background">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Eyebrow */}
         <div className="text-center mb-6 sm:mb-8">
