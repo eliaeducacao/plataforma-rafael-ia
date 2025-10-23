@@ -29,14 +29,14 @@ const AgentsSection = ({
 
   return (
     <section className="py-16 lg:py-20 bg-secondary/30">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Título da Seção */}
         <ScrollAnimated animationType="scroll-txt">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
               8 agentes por área do Direito. Cada um treinado para uma etapa específica do seu trabalho.
             </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto px-4">
               Do primeiro atendimento à petição final, você tem um especialista para cada tarefa. Escolha a área que você atua e veja como cada agente acelera sua rotina.
             </p>
           </div>
@@ -50,14 +50,9 @@ const AgentsSection = ({
             onCategoryChange={onCategoryChange}
             isLoading={isCategoriesLoading}
           />
-        </ScrollAnimated>
 
-        {/* Grid de Agentes */}
-        <ScrollAnimated
-          animationType="scroll-bottom"
-          delay={200}
-        >
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Grid de Agentes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {isLoading ? (
               // Skeleton loading state
               Array.from({ length: 6 }).map((_, index) => (

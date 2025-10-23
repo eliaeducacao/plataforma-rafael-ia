@@ -7,7 +7,7 @@ const ChatDemoSection = () => {
     <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Micro-título */}
-        <ScrollAnimated animationType="scroll-bottom" delay={300}>
+        <ScrollAnimated animationType="scroll-bottom" delay={100}>
           <div className="text-center py-6 lg:py-8">
             <p className="text-base sm:text-lg text-muted-foreground font-medium px-4">
               Veja um caso real analisado pela Elia:
@@ -16,7 +16,7 @@ const ChatDemoSection = () => {
         </ScrollAnimated>
 
         {/* Chat Interface com Timeline */}
-        <ScrollAnimated animationType="perspectivax" delay={500}>
+        <ScrollAnimated animationType="perspectivax" delay={200}>
           <div className="max-w-6xl mx-auto bg-background border border-border rounded-xl shadow-lg overflow-hidden">
             {/* Chat Header */}
             <div className="border-b border-border bg-muted/30 px-3 sm:px-4 py-2 sm:py-3">

@@ -46,12 +46,12 @@ const HeroSection = () => {
             <div className="relative">
               <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border-2 border-dashed border-muted-foreground/25">
                 <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto">
-                    <Play className="w-8 h-8 text-primary-foreground ml-1" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary rounded-full flex items-center justify-center mx-auto">
+                    <Play className="w-6 h-6 sm:w-8 sm:h-8 text-primary-foreground ml-1" />
                   </div>
                   <div className="space-y-2">
-                    <p className="text-lg font-medium">Vídeo de Demonstração</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base sm:text-lg font-medium">Vídeo de Demonstração</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Veja como a Elia funciona na prática
                     </p>
                   </div>
