@@ -10,8 +10,8 @@ const TestimonialsSection = () => {
       role: "Advogada e sócia titular do escritório Pasqua Sociedade de Advogados Integrante da Comissão Especial de Direito do Terceiro Setor da Ordem dos Advogados do Brasil, Seção São Paulo.",
       company: "PASQUA",
       companyFull: "SOCIEDADE DE ADVOGADOS",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
-      content: "Como advogada, tenho o prazer de compartilhar minha experiência com a inteligência artificial da Jurídico AI. Esta ferramenta revolucionou completamente minha prática jurídica, oferecendo análises precisas e insights valiosos que antes demandavam horas de pesquisa manual. A capacidade da IA de processar vastas quantidades de dados jurídicos e identificar padrões relevantes tem sido fundamental para o sucesso dos meus casos.",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face",
+      content: "Como advogada, tenho o prazer de compartilhar minha experiência com a inteligência artificial da Elia. Esta ferramenta revolucionou completamente minha prática jurídica, oferecendo análises precisas e insights valiosos que antes demandavam horas de pesquisa manual. A capacidade da IA de processar vastas quantidades de dados jurídicos e identificar padrões relevantes tem sido fundamental para o sucesso dos meus casos.",
       isLarge: true
     },
     {
@@ -19,7 +19,7 @@ const TestimonialsSection = () => {
       name: "Maria Adelma Augusta dos Santos",
       role: "Advogada e assessora jurídica",
       company: "ADVOCACIA E ASSESSORIA JURIDICA",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
       content: "Me ajuda muito. Agora não tenho mais acúmulo de serviço e nem necessito de vários programas para me auxiliar. A Elia centraliza tudo que preciso em uma única plataforma, economizando tempo e aumentando minha produtividade significativamente.",
       isLarge: false
     },
@@ -28,19 +28,19 @@ const TestimonialsSection = () => {
       name: "Larissa Nayara de Oliveira",
       role: "Advogada",
       company: "",
-      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-      content: "O JurídicoAI tem feito parte do meu cotidiano como advogada, muitas peças que gastava dias para a produção, agora consigo fazer em poucas horas. A qualidade dos documentos gerados é excepcional e me permite focar no que realmente importa: a estratégia do caso.",
+      avatar: "https://images.unsplash.com/photo-1594824487628-81c7a8d0e58a?w=150&h=150&fit=crop&crop=face",
+      content: "A Elia tem feito parte do meu cotidiano como advogada, muitas peças que gastava dias para a produção, agora consigo fazer em poucas horas. A qualidade dos documentos gerados é excepcional e me permite focar no que realmente importa: a estratégia do caso.",
       isLarge: false
     }
   ];
 
   return (
     <section className="py-16 lg:py-20 bg-background">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6">
         {/* Título da Seção */}
         <ScrollAnimated animationType="scroll-txt">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-6xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
               <span className="text-foreground">Quem usa </span>
               <span className="text-primary">recomenda</span>
             </h2>
@@ -51,11 +51,11 @@ const TestimonialsSection = () => {
         </ScrollAnimated>
 
         {/* Grid de Depoimentos - Layout 2 colunas */}
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Card Grande - Esquerda */}
           <ScrollAnimated animationType="scroll-left" delay={200}>
             <Card className="h-full">
-              <CardContent className="p-8">
+              <CardContent className="p-6 sm:p-8">
                 {/* Logo da Empresa */}
                 <div className="flex items-center mb-6">
                   <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
@@ -96,7 +96,7 @@ const TestimonialsSection = () => {
             {/* Card 1 */}
             <ScrollAnimated animationType="scroll-right" delay={400}>
               <Card>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   {/* Logo da Empresa */}
                   <div className="flex items-center mb-4">
                     <div className="w-8 h-8 bg-foreground rounded flex items-center justify-center mr-3">
@@ -124,7 +124,7 @@ const TestimonialsSection = () => {
             {/* Card 2 */}
             <ScrollAnimated animationType="scroll-right" delay={600}>
               <Card>
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   {/* Conteúdo do Depoimento */}
                   <p className="text-foreground leading-relaxed mb-4">
                     "{testimonials[2]?.content}"
