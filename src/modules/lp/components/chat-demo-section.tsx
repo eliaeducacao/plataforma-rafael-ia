@@ -9,7 +9,13 @@ const ChatDemoSection = () => {
         {/* Micro-título */}
         <ScrollAnimated animationType="scroll-bottom" delay={100}>
           <div className="text-center py-6 lg:py-8">
-            <p className="text-base sm:text-lg text-muted-foreground font-medium px-4">
+            <p
+              className="text-muted-foreground font-medium px-4"
+              style={{
+                fontSize: 'clamp(1.125rem, 2.5vw, 2rem)',
+                lineHeight: '1.2'
+              }}
+            >
               Veja um caso real analisado pela Elia:
             </p>
           </div>
