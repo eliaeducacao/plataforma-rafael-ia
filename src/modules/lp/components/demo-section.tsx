@@ -34,7 +34,7 @@ const DemoSection = () => {
 
               <div className="space-y-6">
                 <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-medium">
-                  (Seu concorrente ainda nem visualizou a mensagem)
+                  (enquanto seu concorrente ainda nem visualizou a mensagem)
                 </p>
               </div>
             </ScrollAnimated>
