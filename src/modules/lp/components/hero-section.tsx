@@ -1,6 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { Play } from "lucide-react";
 import { ScrollAnimated } from "@/shared/components/scroll-animated";
+import { Scale } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -50,6 +51,16 @@ const HeroSection = () => {
           {/* Área do Vídeo */}
           <ScrollAnimated animationType="scroll-right" delay={300}>
             <div className="relative">
+              {/* Logo da Elia no topo do vídeo */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+                <div className="flex items-center space-x-2 bg-background px-4 py-2 rounded-lg shadow-lg border">
+                  <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
+                    <Scale className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                  <span className="text-lg font-bold text-primary">Elia</span>
+                </div>
+              </div>
+
               <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border-2 border-dashed border-muted-foreground/25">
                 <div className="text-center space-y-4">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary rounded-full flex items-center justify-center mx-auto">
