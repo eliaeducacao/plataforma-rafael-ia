@@ -9,6 +9,7 @@ import '@/index.css';
 import '@/shared/styles/markdown.css';
 
 import HomePage from '@/modules/home/pages/home';
+import LpPage from '@/modules/lp';
 import LoginPage from '@/modules/auth/pages/login';
 import ChatPage from '@/modules/chat/pages';
 import AgentsPage from '@/modules/agents-library/pages';
@@ -40,6 +41,7 @@ createRoot(document.getElementById('root')!).render(
           <Switch>
             {/* Rotas Públicas */}
             <Route path="/" component={HomePage} />
+            <Route path="/lp" component={LpPage} />
             <Route path="/login" component={LoginPage} />
             <Route path="/reset-password" component={ResetPassPage} />
             <Route path="/create-user" component={CreateUserPage} />

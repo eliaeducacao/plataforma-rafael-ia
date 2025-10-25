@@ -68,9 +68,9 @@ export default function MultiFileUpload({
         continue;
       }
 
-      // Verificar tamanho individual (10MB por arquivo)
-      if (file.size > 10 * 1024 * 1024) {
-        newErrors.push(`${file.name}: Arquivo muito grande (máximo 10MB)`);
+      // Verificar tamanho individual (50MB por arquivo)
+      if (file.size > 50 * 1024 * 1024) {
+        newErrors.push(`${file.name}: Arquivo muito grande (máximo 50MB)`);
         continue;
       }
 

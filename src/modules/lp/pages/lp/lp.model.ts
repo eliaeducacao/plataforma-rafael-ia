@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 
 import { Agent, Category } from '@/shared/types';
 
-export function useHomeModel() {
+export function useLpModel() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const { data: agents, isLoading: isAgentsLoading } = useQuery<Agent[]>({
@@ -54,6 +54,16 @@ export function useHomeModel() {
     setSelectedCategory(categoryId);
   }
 
+  const handleSelectAgent = () => {
+    const ctaSection = document.getElementById('cta-section');
+    if (ctaSection) {
+      ctaSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
+
   return {
     agents: filteredAgents,
     categories: sortedCategories,
@@ -61,5 +71,6 @@ export function useHomeModel() {
     isAgentsLoading,
     isCategoriesLoading,
     handleCategoryChange,
+    handleSelectAgent,
   };
 }
