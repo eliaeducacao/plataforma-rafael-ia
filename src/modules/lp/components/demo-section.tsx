@@ -8,7 +8,13 @@ const DemoSection = () => {
         <div className="h-[200vh] relative">
           <div className="sticky top-1/2 -translate-y-1/2 z-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
             <ScrollAnimated animationType="scroll-txt">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-foreground leading-tight">
+              <h2
+                className="font-bold text-foreground leading-tight"
+                style={{
+                  fontSize: 'clamp(1.5rem, 3.5vw, 4.5rem)',
+                  lineHeight: '1.1'
+                }}
+              >
                 Seu cliente envia o caso às <span className="text-purple-600 dark:text-purple-400">14h</span> ...
               </h2>
             </ScrollAnimated>
