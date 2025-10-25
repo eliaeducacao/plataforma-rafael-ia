@@ -12,7 +12,13 @@ const HeroSection = () => {
             <div className="space-y-8">
               {/* Título Principal */}
               <div className="space-y-6">
-                <h1 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
+                <h1
+                  className="font-bold text-foreground leading-tight"
+                  style={{
+                    fontSize: 'clamp(1.875rem, 4vw, 3.75rem)',
+                    lineHeight: '1.1'
+                  }}
+                >
                   <span className="text-primary">Cliente paga resultado,</span>
                   <br />
                   não hora trabalhada.
