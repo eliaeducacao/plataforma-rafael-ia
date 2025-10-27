@@ -69,16 +69,16 @@ const AgentsSection = ({
 
         {/* CTA Intermediário */}
         <div className="mt-16">
-          <div className="text-center mb-10">
-            <h3 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
-              Agora você realmente sabe como utilizar a Inteligência Artificial a seu favor
-            </h3>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto px-4">
-              Escolha a melhor forma para você conhecer a Elia
-            </p>
-          </div>
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div className="text-center">
+              <h3 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
+                Agora você realmente sabe como utilizar a Inteligência Artificial a seu favor
+              </h3>
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
+                Escolha a melhor forma para você conhecer a Elia
+              </p>
+            </div>
 
-          <div>
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="p-8 hover:shadow-lg transition-shadow">
                 <CardContent className="p-0 space-y-6">
@@ -152,23 +152,23 @@ const AgentsSection = ({
                 </CardContent>
               </Card>
             </div>
-          </div>
 
-          {/* Separador visual */}
-          <div className="flex items-center justify-center mt-10 mb-6 max-w-md mx-auto">
-            <Separator className="flex-1" />
-            <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
-            <Separator className="flex-1" />
-          </div>
+            {/* Separador visual */}
+            <div className="flex items-center justify-center mt-10 mb-6 max-w-md mx-auto">
+              <Separator className="flex-1" />
+              <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
+              <Separator className="flex-1" />
+            </div>
 
-          {/* CTA adicional */}
-          <div className="text-center">
-            <p className="text-muted-foreground mb-4">
-              Ainda tem dúvidas? Fale com nosso time
-            </p>
-            <Button variant="ghost" className="text-primary hover:text-primary/80">
-              Falar com especialista →
-            </Button>
+            {/* CTA adicional */}
+            <div className="text-center">
+              <p className="text-muted-foreground mb-4">
+                Ainda tem dúvidas? Fale com nosso time
+              </p>
+              <Button variant="ghost" className="text-primary hover:text-primary/80">
+                Falar com especialista →
+              </Button>
+            </div>
           </div>
         </div>
       </div >
