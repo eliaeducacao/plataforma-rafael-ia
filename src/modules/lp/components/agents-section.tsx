@@ -5,7 +5,6 @@ import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Separator } from "@/shared/components/ui/separator";
 import { ArrowRight } from "lucide-react";
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 type AgentsSectionProps = {
   agents: Agent[] | undefined;
@@ -31,61 +30,55 @@ const AgentsSection = ({
     <section className="py-16 lg:py-20 bg-secondary/30">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Título da Seção */}
-        <ScrollAnimated animationType="scroll-txt">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
-              8 agentes por área do Direito. Cada um treinado para uma etapa específica do seu trabalho.
-            </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto px-4">
-              Do primeiro atendimento à petição final, você tem um especialista para cada tarefa. Escolha a área que você atua e veja como cada agente acelera sua rotina.
-            </p>
-          </div>
-        </ScrollAnimated>
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
+            8 agentes por área do Direito. Cada um treinado para uma etapa específica do seu trabalho.
+          </h2>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto px-4">
+            Do primeiro atendimento à petição final, você tem um especialista para cada tarefa. Escolha a área que você atua e veja como cada agente acelera sua rotina.
+          </p>
+        </div>
 
         {/* Category Selector */}
-        <ScrollAnimated animationType="scroll-bottom" delay={200}>
-          <CategorySelector
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={onCategoryChange}
-            isLoading={isCategoriesLoading}
-          />
+        <CategorySelector
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={onCategoryChange}
+          isLoading={isCategoriesLoading}
+        />
 
-          {/* Grid de Agentes */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {isLoading ? (
-              // Skeleton loading state
-              Array.from({ length: 6 }).map((_, index) => (
-                <AgentCardSkeleton index={index} />
-              ))
-            ) : (
-              // Actual agents
-              agents?.map((agent, index) => (
-                <AgentCard
-                  agent={agent}
-                  index={index}
-                  onSelectAgent={onSelectAgent}
-                />
+        {/* Grid de Agentes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {isLoading ? (
+            // Skeleton loading state
+            Array.from({ length: 6 }).map((_, index) => (
+              <AgentCardSkeleton index={index} />
+            ))
+          ) : (
+            // Actual agents
+            agents?.map((agent, index) => (
+              <AgentCard
+                agent={agent}
+                index={index}
+                onSelectAgent={onSelectAgent}
+              />
 
-              ))
-            )}
-          </div>
-        </ScrollAnimated>
+            ))
+          )}
+        </div>
 
         {/* CTA Intermediário */}
         <div className="mt-16">
-          <ScrollAnimated animationType="scroll-txt">
-            <div className="text-center mb-10">
-              <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
-                Pronto para acelerar seu trabalho?
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div className="text-center">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 sm:mb-6 px-4">
+                Agora você realmente sabe como utilizar a Inteligência Artificial a seu favor
               </h3>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Escolha a forma que funciona melhor para você conhecer a Elia
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
+                Escolha a melhor forma para você conhecer a Elia
               </p>
             </div>
-          </ScrollAnimated>
 
-          <ScrollAnimated animationType="scroll-bottom" delay={200}>
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="p-8 hover:shadow-lg transition-shadow">
                 <CardContent className="p-0 space-y-6">
@@ -159,19 +152,15 @@ const AgentsSection = ({
                 </CardContent>
               </Card>
             </div>
-          </ScrollAnimated>
 
-          {/* Separador visual */}
-          <ScrollAnimated animationType="scroll-bottom" delay={400}>
+            {/* Separador visual */}
             <div className="flex items-center justify-center mt-10 mb-6 max-w-md mx-auto">
               <Separator className="flex-1" />
               <span className="px-4 text-sm text-muted-foreground font-medium">ou</span>
               <Separator className="flex-1" />
             </div>
-          </ScrollAnimated>
 
-          {/* CTA adicional */}
-          <ScrollAnimated animationType="scroll-bottom" delay={600}>
+            {/* CTA adicional */}
             <div className="text-center">
               <p className="text-muted-foreground mb-4">
                 Ainda tem dúvidas? Fale com nosso time
@@ -180,7 +169,7 @@ const AgentsSection = ({
                 Falar com especialista →
               </Button>
             </div>
-          </ScrollAnimated>
+          </div>
         </div>
       </div >
     </section >

@@ -1,22 +1,25 @@
 import { Avatar } from "@/shared/components/ui/avatar";
 import { User, Bot, CheckCircle } from "lucide-react";
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const ChatDemoSection = () => {
   return (
     <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Micro-título */}
-        <ScrollAnimated animationType="scroll-bottom" delay={100}>
-          <div className="text-center py-6 lg:py-8">
-            <p className="text-base sm:text-lg text-muted-foreground font-medium px-4">
-              Veja um caso real analisado pela Elia:
-            </p>
-          </div>
-        </ScrollAnimated>
+        <div className="text-center py-6 lg:py-8">
+          <p
+            className="text-muted-foreground font-medium px-4"
+            style={{
+              fontSize: 'clamp(1.125rem, 2.5vw, 2rem)',
+              lineHeight: '1.2'
+            }}
+          >
+            Veja um caso real analisado pela Elia:
+          </p>
+        </div>
 
         {/* Chat Interface com Timeline */}
-        <ScrollAnimated animationType="perspectivax" delay={200}>
+        <div>
           <div className="max-w-6xl mx-auto bg-background border border-border rounded-xl shadow-lg overflow-hidden">
             {/* Chat Header */}
             <div className="border-b border-border bg-muted/30 px-3 sm:px-4 py-2 sm:py-3">
@@ -167,18 +170,16 @@ const ChatDemoSection = () => {
               </div>
             </div>
           </div>
-        </ScrollAnimated>
+        </div>
 
         {/* Transição Final */}
-        <ScrollAnimated animationType="scroll-top" delay={200}>
-          <div className="text-center mt-16">
-            <div className="max-w-4xl mx-auto">
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                Esse diagnóstico foi gerado pelo <span className="font-bold text-primary">Agente Diagnóstico</span> — 1 dos 8 agentes especializados que cobrem todo o fluxo jurídico do seu escritório.
-              </p>
-            </div>
+        <div className="text-center mt-16">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Esse diagnóstico foi gerado pelo <span className="font-bold text-primary">Agente Diagnóstico</span> — 1 dos 8 agentes especializados que cobrem todo o fluxo jurídico do seu escritório.
+            </p>
           </div>
-        </ScrollAnimated>
+        </div>
       </div>
     </section>
   );

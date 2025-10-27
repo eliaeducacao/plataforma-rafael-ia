@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui
 import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Check, Shield } from "lucide-react";
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const PricingSection = () => {
   const features = [
@@ -17,15 +16,13 @@ const PricingSection = () => {
   return (
     <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
-        <ScrollAnimated animationType="scroll-txt">
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 leading-tight px-4">
-              Invista no seu escritório com inteligência artificial
-            </h2>
-          </div>
-        </ScrollAnimated>
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 leading-tight px-4">
+            Invista no seu escritório com inteligência artificial
+          </h2>
+        </div>
 
-        <ScrollAnimated animationType="scroll-bottom" delay={200}>
+        <div>
           <div className="max-w-2xl mx-auto mb-12 space-y-6 lg:mb-16">
             <Card className="relative border-2 border-primary">
               <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
@@ -73,7 +70,7 @@ const PricingSection = () => {
               </span>
             </div>
           </div>
-        </ScrollAnimated>
+        </div>
 
       </div>
     </section>

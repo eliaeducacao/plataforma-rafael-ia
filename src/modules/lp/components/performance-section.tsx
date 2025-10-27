@@ -1,23 +1,20 @@
 import { Card } from "@/shared/components/ui/card";
 import { TrendingUp } from "lucide-react";
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 export default function PerformanceSection() {
   return (
     <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
-        <ScrollAnimated animationType="scroll-txt">
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
-              Performance em Documentos Jurídicos
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Tempo médio para gerar uma petição inicial completa
-            </p>
-          </div>
-        </ScrollAnimated>
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-3xl lg:text-5xl font-bold text-foreground mb-6">
+            Performance em Documentos Jurídicos
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Tempo médio para gerar uma petição inicial completa
+          </p>
+        </div>
 
-        <ScrollAnimated animationType="scroll-bottom" delay={200}>
+        <div>
           <div className="w-full">
             <Card className="p-4 sm:p-6 lg:p-8">
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8 items-center">
@@ -101,7 +98,7 @@ export default function PerformanceSection() {
               </div>
             </Card>
           </div>
-        </ScrollAnimated>
+        </div>
       </div>
     </section>
   );
