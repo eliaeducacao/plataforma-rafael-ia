@@ -71,7 +71,7 @@ const AgentsSection = ({
         <div className="mt-16">
           <div className="max-w-4xl mx-auto space-y-12">
             <div className="text-center">
-              <h3 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 sm:mb-6 px-4">
                 Agora você realmente sabe como utilizar a Inteligência Artificial a seu favor
               </h3>
               <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
