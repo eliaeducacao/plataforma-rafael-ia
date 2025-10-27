@@ -51,8 +51,8 @@ const HeroSection = () => {
           {/* Área do Vídeo */}
           <ScrollAnimated animationType="scroll-right" delay={300}>
             <div className="relative">
-              {/* Logo da Elia no topo do vídeo */}
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
+              {/* Logo da Elia no topo direito do vídeo */}
+              <div className="absolute -top-6 -right-6 z-20">
                 <div className="flex items-center space-x-2 bg-background px-4 py-2 rounded-lg shadow-lg border">
                   <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-lg">
                     <Scale className="w-5 h-5 text-primary-foreground" />

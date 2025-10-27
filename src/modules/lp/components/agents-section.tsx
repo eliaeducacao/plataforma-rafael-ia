@@ -76,11 +76,11 @@ const AgentsSection = ({
         <div className="mt-16">
           <ScrollAnimated animationType="scroll-txt">
             <div className="text-center mb-10">
-              <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
-                Pronto para acelerar seu trabalho?
+              <h3 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 px-4">
+                Agora você realmente sabe como utilizar a Inteligência Artificial a seu favor
               </h3>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Escolha a forma que funciona melhor para você conhecer a Elia
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-4xl mx-auto px-4">
+                Escolha a melhor forma para você conhecer a Elia
               </p>
             </div>
           </ScrollAnimated>
