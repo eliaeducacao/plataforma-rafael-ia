@@ -1,25 +1,22 @@
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { ArrowRight } from "lucide-react";
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const CTASection = () => {
   return (
     <section id="cta-section" className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto text-center space-y-12">
-          <ScrollAnimated animationType="scroll-txt">
-            <div className="space-y-6">
-              <h2 className="text-3xl lg:text-5xl font-bold text-foreground leading-tight">
-                Pronto para revolucionar seu escritório?
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Escolha a opção que melhor se adapta ao seu ritmo e comece a ver resultados desde o primeiro dia
-              </p>
-            </div>
-          </ScrollAnimated>
+          <div className="space-y-6">
+            <h2 className="text-3xl lg:text-5xl font-bold text-foreground leading-tight">
+              Pronto para revolucionar seu escritório?
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Escolha a opção que melhor se adapta ao seu ritmo e comece a ver resultados desde o primeiro dia
+            </p>
+          </div>
 
-          <ScrollAnimated animationType="scroll-bottom" delay={200}>
+          <div>
             <div className="grid md:grid-cols-2 gap-8">
               <Card className="p-8 hover:shadow-lg transition-shadow">
                 <CardContent className="p-0 space-y-6">
@@ -94,7 +91,7 @@ const CTASection = () => {
                 </CardContent>
               </Card>
             </div>
-          </ScrollAnimated>
+          </div>
         </div>
       </div>
     </section>

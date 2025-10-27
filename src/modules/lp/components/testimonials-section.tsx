@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
 
 const TestimonialsSection = () => {
   const testimonials = [
@@ -38,22 +37,20 @@ const TestimonialsSection = () => {
     <section className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Título da Seção */}
-        <ScrollAnimated animationType="scroll-txt">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-              <span className="text-foreground">Quem usa </span>
-              <span className="text-primary">recomenda</span>
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Veja a experiência de nossos clientes
-            </p>
-          </div>
-        </ScrollAnimated>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
+            <span className="text-foreground">Quem usa </span>
+            <span className="text-primary">recomenda</span>
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            Veja a experiência de nossos clientes
+          </p>
+        </div>
 
         {/* Grid de Depoimentos - Layout 2 colunas */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Card Grande - Esquerda */}
-          <ScrollAnimated animationType="scroll-left" delay={200}>
+          <div>
             <Card className="h-full">
               <CardContent className="p-6 sm:p-8">
                 {/* Logo da Empresa */}
@@ -89,12 +86,12 @@ const TestimonialsSection = () => {
                 </div>
               </CardContent>
             </Card>
-          </ScrollAnimated>
+          </div>
 
           {/* Cards Pequenos - Direita */}
           <div className="space-y-8">
             {/* Card 1 */}
-            <ScrollAnimated animationType="scroll-right" delay={400}>
+            <div>
               <Card>
                 <CardContent className="p-4 sm:p-6">
                   {/* Logo da Empresa */}
@@ -119,10 +116,10 @@ const TestimonialsSection = () => {
                   </div>
                 </CardContent>
               </Card>
-            </ScrollAnimated>
+            </div>
 
             {/* Card 2 */}
-            <ScrollAnimated animationType="scroll-right" delay={600}>
+            <div>
               <Card>
                 <CardContent className="p-4 sm:p-6">
                   {/* Conteúdo do Depoimento */}
@@ -145,7 +142,7 @@ const TestimonialsSection = () => {
                   </div>
                 </CardContent>
               </Card>
-            </ScrollAnimated>
+            </div>
           </div>
         </div>
       </div>

@@ -1,43 +1,30 @@
-import { ScrollAnimated } from "@/shared/components/scroll-animated";
-
 const DemoSection = () => {
   return (
-    <section className="relative bg-background pt-40">
-      <div className="w-full space-y-[50%]">
-        {/* Primeira frase - Sticky */}
-        <div className="h-[200vh] relative">
-          <div className="sticky top-1/2 -translate-y-1/2 z-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
-            <ScrollAnimated animationType="scroll-txt">
-              <h2
-                className="font-bold text-foreground leading-tight"
-                style={{
-                  fontSize: 'clamp(1.5rem, 3.5vw, 4.5rem)',
-                  lineHeight: '1.1'
-                }}
-              >
-                Seu cliente envia o caso às <span className="text-purple-600 dark:text-purple-400">14h</span> ...
-              </h2>
-            </ScrollAnimated>
-          </div>
-        </div>
+    <section className="relative bg-background py-12 lg:py-16">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto space-y-8">
+          {/* Primeira frase */}
+          <h2
+            className="font-bold text-foreground leading-tight text-center"
+            style={{
+              fontSize: 'clamp(1.25rem, 2.5vw, 3rem)',
+              lineHeight: '1.1'
+            }}
+          >
+            Seu cliente envia o caso às <span className="text-purple-600 dark:text-purple-400">14h</span> ...
+          </h2>
 
+          {/* Segunda frase */}
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
+              Às{" "}
+              <span className="text-purple-600 dark:text-purple-400">14h03</span>{" "}
+              você responde com diagnóstico completo
+            </h2>
 
-        {/* Segunda frase - Sticky */}
-        <div className="h-[200vh] relative">
-          <div className="sticky top-1/2 -translate-y-1/2 z-10 text-center max-w-5xl mx-auto px-4 sm:px-6">
-            <ScrollAnimated animationType="scroll-txt-smooth">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-foreground leading-tight mb-8">
-                Às{" "}
-                <span className="text-purple-600 dark:text-purple-400">14h03</span>{" "}
-                você responde com diagnóstico completo
-              </h2>
-
-              <div className="space-y-6">
-                <p className="text-xl sm:text-2xl lg:text-3xl text-muted-foreground font-medium">
-                  (enquanto seu concorrente ainda nem visualizou a mensagem)
-                </p>
-              </div>
-            </ScrollAnimated>
+            <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground font-medium">
+              (enquanto seu concorrente ainda nem visualizou a mensagem)
+            </p>
           </div>
         </div>
       </div>
