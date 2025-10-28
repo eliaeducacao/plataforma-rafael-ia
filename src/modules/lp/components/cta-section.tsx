@@ -2,7 +2,12 @@ import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { ArrowRight } from "lucide-react";
 
-const CTASection = () => {
+interface CTASectionProps {
+  onStartTrial: () => void;
+  isStartingTrial: boolean;
+}
+
+const CTASection = ({ onStartTrial, isStartingTrial }: CTASectionProps) => {
   return (
     <section id="cta-section" className="py-16 lg:py-20 bg-background">
       <div className="container mx-auto px-6">
@@ -32,9 +37,9 @@ const CTASection = () => {
                       Se você quer testar a Elia no seu ritmo, sem compromisso:
                     </p>
 
-                    <Button size="lg" className="w-full">
-                      Experimente 7 dias grátis
-                      <ArrowRight className="ml-2 w-4 h-4" />
+                    <Button size="lg" className="w-full" onClick={onStartTrial} disabled={isStartingTrial}>
+                      {isStartingTrial ? 'Carregando...' : 'Experimente 7 dias grátis'}
+                      {!isStartingTrial && <ArrowRight className="ml-2 w-4 h-4" />}
                     </Button>
 
                     <div className="space-y-2 text-sm text-muted-foreground">

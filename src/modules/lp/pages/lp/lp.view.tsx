@@ -14,7 +14,7 @@ export function LpView() {
   const model = useLpModel();
   return (
     <div className="min-h-screen bg-background">
-      <HeroSection />
+      <HeroSection onStartTrial={model.handleStartTrial} isStartingTrial={model.isStartingTrial} />
       <DemoSection />
       <ChatDemoSection />
       <AgentsSection
@@ -28,9 +28,9 @@ export function LpView() {
       />
       <BenefitsSection />
       <TestimonialsSection />
-      <PricingSection />
+      <PricingSection onStartTrial={model.handleStartTrial} isStartingTrial={model.isStartingTrial} />
       <PerformanceSection />
-      <CTASection />
+      <CTASection onStartTrial={model.handleStartTrial} isStartingTrial={model.isStartingTrial} />
       <Footer />
     </div>
   );

@@ -3,7 +3,12 @@ import { Button } from "@/shared/components/ui/button";
 import { Badge } from "@/shared/components/ui/badge";
 import { Check, Shield } from "lucide-react";
 
-const PricingSection = () => {
+interface PricingSectionProps {
+  onStartTrial: () => void;
+  isStartingTrial: boolean;
+}
+
+const PricingSection = ({ onStartTrial, isStartingTrial }: PricingSectionProps) => {
   const features = [
     "8 agentes especializados",
     "Treinamentos práticos",
@@ -57,8 +62,8 @@ const PricingSection = () => {
                   ))}
                 </div>
 
-                <Button size="lg" className="w-full text-base sm:text-lg">
-                  Começar Teste Grátis
+                <Button size="lg" className="w-full text-base sm:text-lg" onClick={onStartTrial} disabled={isStartingTrial}>
+                  {isStartingTrial ? 'Carregando...' : 'Começar Teste Grátis'}
                 </Button>
               </CardContent>
             </Card>

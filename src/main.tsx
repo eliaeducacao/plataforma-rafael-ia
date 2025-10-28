@@ -17,6 +17,7 @@ import ResetPassPage from '@/modules/auth/pages/reset-pass';
 import CreateUserPage from '@/modules/auth/pages/create-user';
 import ConfirmEmailPage from '@/modules/auth/pages/confirm-email';
 import EmailToResetPassPage from '@/modules/auth/pages/email-to-reset-pass';
+import CheckEmailPage from '@/modules/auth/pages/check-email';
 
 import { ProtectedRoute } from '@/modules/auth/components/protected-route';
 import { AuthProvider } from '@/modules/auth/providers/auth-provider';
@@ -47,6 +48,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/create-user" component={CreateUserPage} />
             <Route path="/confirm-email" component={ConfirmEmailPage} />
             <Route path="/email-to-reset-pass" component={EmailToResetPassPage} />
+            <Route path="/check-email" component={CheckEmailPage} />
             <Route path="/auth/callback">
               <div>Verificando autenticação...</div>
             </Route>
