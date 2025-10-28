@@ -1,8 +1,10 @@
 import { api } from '@/shared/lib/axios';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useState, useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
 
 import { Agent, Category } from '@/shared/types';
+import { AxiosError } from 'axios';
 
 export function useLpModel() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -20,6 +22,34 @@ export function useLpModel() {
     queryFn: async () => {
       const { data } = await api.get<Category[]>('/webhook/api/v1/categories');
       return data;
+    },
+  });
+
+  // Mutation para criar checkout do Stripe
+  const createCheckoutMutation = useMutation({
+    mutationFn: async () => {
+      const cancelUrl = window.location.origin;
+      const successUrl = `${window.location.origin}/check-email`;
+
+      const { data } = await api.post(
+        '/webhook/8d37c0bd-4bb1-485b-8206-88fa4bae5c64/stripe/prices/price_1SMvWsBHoqMVqqO2ZOjouBjy/checkout/trial',
+        {
+          cancel_url: cancelUrl,
+          success_url: successUrl,
+        }
+      );
+      return data;
+    },
+    onSuccess: data => {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error('Erro ao redirecionar para o checkout');
+      }
+    },
+    onError: (error: AxiosError) => {
+      console.error('Erro ao criar checkout:', error);
+      toast.error('Erro ao iniciar o teste gratuito. Tente novamente.');
     },
   });
 
@@ -64,6 +94,10 @@ export function useLpModel() {
     }
   };
 
+  const handleStartTrial = () => {
+    createCheckoutMutation.mutate();
+  };
+
   return {
     agents: filteredAgents,
     categories: sortedCategories,
@@ -72,5 +106,7 @@ export function useLpModel() {
     isCategoriesLoading,
     handleCategoryChange,
     handleSelectAgent,
+    handleStartTrial,
+    isStartingTrial: createCheckoutMutation.isPending,
   };
 }

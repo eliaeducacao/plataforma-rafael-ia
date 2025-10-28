@@ -1,7 +1,12 @@
 import { Button } from "@/shared/components/ui/button";
 import { Play, Scale } from "lucide-react";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  onStartTrial: () => void;
+  isStartingTrial: boolean;
+}
+
+const HeroSection = ({ onStartTrial, isStartingTrial }: HeroSectionProps) => {
   return (
     <section className="relative py-16 lg:py-30 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container mx-auto px-6">
@@ -29,8 +34,8 @@ const HeroSection = () => {
 
             {/* Botões CTA */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="text-lg px-8 py-6">
-                Experimente 7 dias grátis
+              <Button size="lg" className="text-lg px-8 py-6" onClick={onStartTrial} disabled={isStartingTrial}>
+                {isStartingTrial ? 'Carregando...' : 'Experimente 7 dias grátis'}
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6">
                 Agende sua demonstração
