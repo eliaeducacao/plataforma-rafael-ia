@@ -1,5 +1,6 @@
 import { createContext } from "react"
 import { FormSchema as CreateUserFormSchema } from "../pages/create-user/create-user.schema"
+import { StripeSubscriptionStatus } from '@/shared/types';
 
 type ResultResponse = {
   ok: boolean
@@ -26,8 +27,13 @@ export type AuthContextProps = {
   logout: () => Promise<ResultResponse>;
   token: string | null
   user: {
-    email: string
+    _id: string
     name: string
+    email: string
+    code: string
+    status: StripeSubscriptionStatus | null
+    plan: string | null
+    subscription: string | null
   } | null
   isCreateUserPending: boolean
   isResetEmailDisabled: boolean
