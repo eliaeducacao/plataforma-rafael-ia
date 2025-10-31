@@ -12,6 +12,7 @@ import {
   // IconUsers,
   // IconDashboard,
   IconHelp,
+  IconCreditCard,
   IconListDetails,
   IconSchool,
   // IconSettings,
@@ -77,6 +78,11 @@ const data = {
     //   url: "#settings",
     //   icon: IconSettings,
     // },
+    {
+      title: "Planos",
+      url: "/plans",
+      icon: IconCreditCard,
+    },
     {
       title: "Preciso de ajuda",
       url: "https://wa.me/5511913337009",
