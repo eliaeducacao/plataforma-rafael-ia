@@ -19,6 +19,7 @@ import CreateUserPage from '@/modules/auth/pages/create-user';
 import ConfirmEmailPage from '@/modules/auth/pages/confirm-email';
 import EmailToResetPassPage from '@/modules/auth/pages/email-to-reset-pass';
 import CheckEmailPage from '@/modules/auth/pages/check-email';
+import PlansPage from '@/modules/plans/pages';
 
 import { ProtectedRoute } from '@/modules/auth/components/protected-route';
 import { AuthProvider } from '@/modules/auth/providers/auth-provider';
@@ -60,6 +61,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/chats" component={ChatPage} />
               <Route path="/chats/:chatId" component={ChatPage} />
               <Route path="/agents" component={AgentsPage} />
+              <Route path="/plans" component={PlansPage} />
             </ProtectedRoute>
           </Switch>
         </AuthProvider>
