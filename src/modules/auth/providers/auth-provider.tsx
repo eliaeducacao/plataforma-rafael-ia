@@ -153,16 +153,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { mutateAsync: register, isPending: isRegisterPending } = useMutation({
     mutationKey: ['register'],
     mutationFn: async (data: { name: string; email: string; password: string }) => {
-      const response = await api.post('/api/v2/auth/register', {
+      const response = await api.post('/webhook/api/v2/auth/register', {
         name: data.name,
         email: data.email,
         password: data.password,
       });
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: async (_, variables) => {
       toast.success('Conta criada com sucesso! Verifique seu e-mail para confirmar o cadastro.');
-      setLocation('/login');
+      await login({ email: variables.email, password: variables.password });
     },
     onError: (error: AxiosError) => {
       console.log("Erro ao registrar usuário:", error);
