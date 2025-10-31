@@ -16,3 +16,23 @@ export type Agent = {
   category: string;
   prompt: string;
 };
+
+export type Plan = {
+  id: string;
+  description: string;
+  features: string[];
+  isPopular: boolean;
+  currency: string;
+  recurring: 'month' | 'year';
+  amount: string;
+};
+
+export type StripeSubscriptionStatus =
+  | 'trialing'
+  | 'active'
+  | 'past_due'
+  | 'canceled'
+  | 'unpaid'
+  | 'incomplete'
+  | 'incomplete_expired'
+  | 'paused';
