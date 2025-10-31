@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar"
+import { cn } from "@/shared/lib/utils"
 
 export function NavSecondary({
   items,
@@ -22,7 +23,7 @@ export function NavSecondary({
     icon: Icon
   }[]
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const [, navigate] = useLocation()
+  const [location, navigate] = useLocation()
 
   return (
     <SidebarGroup {...props}>
@@ -34,6 +35,7 @@ export function NavSecondary({
                 onClick={() =>
                   item.url.startsWith('http') ? window.open(item.url, '_blank') : navigate(item.url)
                 }
+                className={cn(item.url === location ? "!bg-primary/10 !text-primary" : "")}
               >
                 <item.icon />
                 <span>{item.title}</span>

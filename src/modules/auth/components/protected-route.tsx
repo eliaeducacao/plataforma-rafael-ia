@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useState } from "react"
 import { useAuth } from "../hooks/use-auth"
 import { useLocation } from "wouter"
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -9,6 +9,8 @@ import type { Chat } from '@/modules/chat/types'
 import { AppSidebar } from "@/shared/components/app-sidebar"
 import { SidebarProvider, SidebarInset } from "@/shared/components/ui/sidebar"
 import { InternalHeader } from "@/shared/components/internal-header"
+import { SubscriptionGate } from '@/modules/auth/components/subscription-gate'
+import { useSubscriptionGuardModel } from '@/modules/auth/models/subscription-guard.model'
 
 type ProtectedRouteProps = {
   children: ReactNode
@@ -50,38 +52,32 @@ const queryKeys = {
 };
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { token, logout, user } = useAuth()
+  const { logout, user } = useAuth()
   const [, setLocation] = useLocation()
   const queryClient = useQueryClient()
-  
-  // Estados para chat
+  const subscriptionGuard = useSubscriptionGuardModel()
+
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
   const [editingChatId, setEditingChatId] = useState<string | null>(null)
   const [selectedAgentId] = useSessionStorage<string>('x-selected-agent-id', '')
-  
+
   const activeAgentId = selectedAgentId.replace(/"/g, '')
 
-  // Query para buscar chats sempre que houver agente selecionado
-  const {
-    data: chats,
-    isLoading: isLoadingChats,
-  } = useQuery({
+  const { data: chats, isLoading: isLoadingChats } = useQuery({
     queryKey: queryKeys.chats(activeAgentId),
     queryFn: () => chatApi.getChats(activeAgentId),
-    enabled: !!activeAgentId,
+    enabled: !!activeAgentId && !subscriptionGuard.isRestricted,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     retry: 3,
     refetchOnWindowFocus: false,
   })
 
-  // Mutation para deletar chat
   const deleteChatMutation = useMutation({
     mutationFn: chatApi.deleteChat,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.chats(activeAgentId) })
-      
-      // Se o chat deletado era o selecionado, limpar seleção
+
       if (selectedChatId && chats && Array.isArray(chats)) {
         const remainingChats = chats.filter(chat => chat._id !== selectedChatId)
         if (remainingChats.length > 0 && remainingChats[0]) {
@@ -98,7 +94,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     },
   })
 
-  // Mutation para atualizar título do chat
   const updateChatTitleMutation = useMutation({
     mutationFn: ({ chatId, title }: { chatId: string; title: string }) =>
       chatApi.updateChatTitle(chatId, title),
@@ -110,7 +105,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     },
   })
 
-  // Mutation para criar novo chat
   const createChatMutation = useMutation({
     mutationFn: ({ agentId, title }: { agentId: string; title: string }) =>
       chatApi.createChat(agentId, { title }),
@@ -124,28 +118,27 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     },
   })
 
-  // Handlers
-  const handleSelectChat = (chatId: string) => {
+  const handleSelectChat = subscriptionGuard.wrap((chatId: string) => {
     setSelectedChatId(chatId)
     setLocation(`/chats/${chatId}`)
-  }
+  })
 
-  const handleNewConversation = () => {
+  const handleNewConversation = subscriptionGuard.wrap(() => {
     if (activeAgentId) {
       createChatMutation.mutate({
         agentId: activeAgentId,
         title: 'Novo Chat',
       })
     }
-  }
+  })
 
-  const handleDeleteChat = (chatId: string) => {
+  const handleDeleteChat = subscriptionGuard.wrap((chatId: string) => {
     deleteChatMutation.mutate(chatId)
-  }
+  })
 
-  const handleUpdateChatTitle = (chatId: string, title: string) => {
+  const handleUpdateChatTitle = subscriptionGuard.wrap((chatId: string, title: string) => {
     return updateChatTitleMutation.mutateAsync({ chatId, title })
-  }
+  })
 
   const handleStartEditChat = (chatId: string) => {
     setEditingChatId(chatId)
@@ -155,21 +148,20 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     setEditingChatId(null)
   }
 
-  useEffect(() => { }, [token])
-  
+  const isSubscriptionRestricted = subscriptionGuard.isRestricted
+
   return (
     <SidebarProvider>
-      <AppSidebar 
+      <AppSidebar
         user={{
           avatar: '',
           email: user?.email ?? '',
           name: user?.name ?? ''
-        }} 
+        }}
         onLogout={logout}
-        // Props do chat - sempre presentes agora
-        chats={chats}
-        selectedChatId={selectedChatId}
-        selectedAgentId={activeAgentId}
+        chats={isSubscriptionRestricted ? [] : chats}
+        selectedChatId={isSubscriptionRestricted ? null : selectedChatId}
+        selectedAgentId={isSubscriptionRestricted ? null : activeAgentId}
         onSelectChat={handleSelectChat}
         onNewConversation={handleNewConversation}
         onDeleteChat={handleDeleteChat}
@@ -180,10 +172,19 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
         updateChatTitleMutation={updateChatTitleMutation}
         isCreatingChat={createChatMutation.isPending}
         isLoadingChats={isLoadingChats}
+        isSubscriptionRestricted={isSubscriptionRestricted}
+        restrictionMessage={subscriptionGuard.statusInfo.sidebarMessage}
+        onManageSubscription={subscriptionGuard.goToPlans}
       />
       <SidebarInset>
         <InternalHeader />
-        {children}
+        <SubscriptionGate
+          isBlocking={subscriptionGuard.isBlocking}
+          statusInfo={subscriptionGuard.statusInfo}
+          onManageSubscription={subscriptionGuard.goToPlans}
+        >
+          {children}
+        </SubscriptionGate>
       </SidebarInset>
     </SidebarProvider>
   )

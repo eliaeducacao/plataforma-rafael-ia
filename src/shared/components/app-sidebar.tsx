@@ -112,6 +112,9 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   updateChatTitleMutation: UseMutationResult<Chat, unknown, { chatId: string; title: string }, unknown>
   isCreatingChat?: boolean
   isLoadingChats?: boolean
+  isSubscriptionRestricted?: boolean
+  restrictionMessage?: string
+  onManageSubscription?: () => void
 }
 
 export function AppSidebar({
@@ -130,6 +133,9 @@ export function AppSidebar({
   updateChatTitleMutation,
   isCreatingChat = false,
   isLoadingChats = false,
+  isSubscriptionRestricted = false,
+  restrictionMessage,
+  onManageSubscription,
   ...props
 }: AppSidebarProps) {
   return (
@@ -160,7 +166,18 @@ export function AppSidebar({
             Meus Chats
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            {!selectedAgentId ? (
+            {isSubscriptionRestricted ? (
+              <div className="px-2 py-3 space-y-3">
+                <p className="text-xs text-muted-foreground">
+                  {restrictionMessage ?? 'Sua assinatura está inativa. Escolha um plano para continuar usando os agentes.'}
+                </p>
+                {onManageSubscription ? (
+                  <Button size="sm" className="w-full" onClick={onManageSubscription}>
+                    Gerenciar assinatura
+                  </Button>
+                ) : null}
+              </div>
+            ) : !selectedAgentId ? (
               <div className="px-2 py-3">
                 <p className="text-xs text-muted-foreground text-center">
                   Selecione um agente para ver suas conversas
