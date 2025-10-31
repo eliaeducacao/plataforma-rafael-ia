@@ -104,9 +104,10 @@ export function usePlansModel() {
 
   const isWarningStatus = subscriptionStatus ? warningStatuses.includes(subscriptionStatus) : false;
   const isSubscriptionCanceled = subscriptionStatus === 'canceled';
+  const isSubscriptionActive = subscriptionStatus === 'active' || subscriptionStatus === 'trialing';
 
   const activePlanId = isSubscriptionCanceled ? null : rawActivePlanId;
-  const hasActiveSubscription = isSubscriptionCanceled ? false : Boolean(rawSubscriptionId);
+  const hasActiveSubscription = isSubscriptionActive && Boolean(rawSubscriptionId);
 
   return {
     plans: data ?? [],
