@@ -20,6 +20,7 @@ export type AuthContextProps = {
   sendEmailToResetPassword: ({ email }: { email: string }) => Promise<void>;
   createUser: (data: CreateUserFormSchema) => Promise<void>;
   login: (request: LoginRequest) => Promise<LoginResultResponse>;
+  register: (data: { name: string; email: string; password: string }) => Promise<void>;
   isLoginPending: boolean
   isResetPasswordPending: boolean
   logout: () => Promise<ResultResponse>;
@@ -31,6 +32,7 @@ export type AuthContextProps = {
   isCreateUserPending: boolean
   isResetEmailDisabled: boolean
   isSendEmailToResetPasswordPending: boolean
+  isRegisterPending: boolean
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);

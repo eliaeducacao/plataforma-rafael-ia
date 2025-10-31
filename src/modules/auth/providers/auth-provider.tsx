@@ -144,6 +144,42 @@ useEffect(() => {
     },
   });
 
+  const { mutateAsync: register, isPending: isRegisterPending } = useMutation({
+    mutationKey: ['register'],
+    mutationFn: async (data: { name: string; email: string; password: string }) => {
+      const response = await api.post('/api/v2/auth/register', {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success('Conta criada com sucesso! Verifique seu e-mail para confirmar o cadastro.');
+      setLocation('/login');
+    },
+    onError: (error: AxiosError) => {
+      console.log("Erro ao registrar usuário:", error);
+
+      const errorData = error.response?.data as { error?: string; message?: string };
+      
+      if (error.response?.status === 400) {
+        // E-mail já existe
+        if (errorData?.error === 'EMAIL_ALREADY_EXISTS' || errorData?.message?.toLowerCase().includes('email')) {
+          toast.error('Este e-mail já está cadastrado. Tente fazer login ou recuperar sua senha.');
+        } else if (errorData?.message) {
+          toast.error(errorData.message);
+        } else {
+          toast.error('Erro ao criar conta. Verifique os dados informados.');
+        }
+      } else if (error.response?.status === 500) {
+        toast.error('Erro interno do servidor. Tente novamente mais tarde.');
+      } else {
+        toast.error('Erro ao criar conta. Tente novamente.');
+      }
+    },
+  });
+
   async function logout(): ReturnType<AuthContextProps['logout']> {
     setLocation('/login')
     removeCookie('x-auth-token')
@@ -175,5 +211,5 @@ useEffect(() => {
   }, [token, setUser]);
 
   return <AuthContext value={{ login, isLoginPending, isAuthenticated: !!token, logout, token, user, resetPassword, isResetPasswordPending, createUser, isCreateUserPending, sendEmailToResetPassword, isSendEmailToResetPasswordPending, 
-    isResetEmailDisabled,  }}>{children}</AuthContext>
+    isResetEmailDisabled, register, isRegisterPending }}>{children}</AuthContext>
 }

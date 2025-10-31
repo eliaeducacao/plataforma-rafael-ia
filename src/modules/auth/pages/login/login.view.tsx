@@ -78,9 +78,15 @@ export function LoginView(props: ReturnType<typeof useLoginModel>) {
                 Entrar
               </Button>
 
-              <div className="mt-4 text-center">
-                <Link href="/email-to-reset-pass" className="text-sm text-purple-600 hover:text-purple-500">
+              <div className="mt-4 text-center space-y-2">
+                <Link href="/email-to-reset-pass" className="text-sm text-purple-600 hover:text-purple-500 block">
                   Esqueceu sua senha?
+                </Link>
+                <Link 
+                  href="/register" 
+                  className="text-sm text-purple-600 hover:text-purple-500 block"
+                >
+                  Não possui uma conta? Registre-se
                 </Link>
               </div>
             </form>

@@ -11,6 +11,7 @@ import '@/shared/styles/markdown.css';
 import HomePage from '@/modules/home/pages/home';
 import LpPage from '@/modules/lp';
 import LoginPage from '@/modules/auth/pages/login';
+import RegisterPage from '@/modules/auth/pages/register';
 import ChatPage from '@/modules/chat/pages';
 import AgentsPage from '@/modules/agents-library/pages';
 import ResetPassPage from '@/modules/auth/pages/reset-pass';
@@ -44,6 +45,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/" component={HomePage} />
             <Route path="/lp" component={LpPage} />
             <Route path="/login" component={LoginPage} />
+            <Route path="/register" component={RegisterPage} />
             <Route path="/reset-password" component={ResetPassPage} />
             <Route path="/create-user" component={CreateUserPage} />
             <Route path="/confirm-email" component={ConfirmEmailPage} />
