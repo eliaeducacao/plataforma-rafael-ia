@@ -3,6 +3,7 @@ import { Plan, StripeSubscriptionStatus } from '@/shared/types';
 import { useMutation, useMutationState, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useAuth } from '@/modules/auth/hooks/use-auth';
+import { useMemo } from 'react';
 
 type ApiPlan = {
   id: string;
@@ -28,6 +29,12 @@ function mapPlan(plan: ApiPlan): Plan {
   };
 }
 
+// Função para calcular o preço mensal efetivo
+function getMonthlyPrice(plan: Plan): number {
+  const amount = parseFloat(plan.amount.replace(/[^\d,.-]/g, '').replace(',', '.')) || 0;
+  return plan.recurring === 'year' ? amount / 12 : amount;
+}
+
 export function usePlansModel() {
   const { user } = useAuth();
   const { data, isLoading, isError } = useQuery<Plan[]>({
@@ -37,6 +44,16 @@ export function usePlansModel() {
       return response.data.map(mapPlan);
     },
   });
+
+  // Ordenar planos do mais barato para o mais caro
+  const sortedPlans = useMemo(() => {
+    if (!data) return [];
+    return [...data].sort((a, b) => {
+      const priceA = getMonthlyPrice(a);
+      const priceB = getMonthlyPrice(b);
+      return priceA - priceB;
+    });
+  }, [data]);
 
   const checkoutMutation = useMutation<
     { url: string },
@@ -110,7 +127,7 @@ export function usePlansModel() {
   const hasActiveSubscription = isSubscriptionActive && Boolean(rawSubscriptionId);
 
   return {
-    plans: data ?? [],
+    plans: sortedPlans,
     isLoading,
     isError,
     handleSelectPlan,
